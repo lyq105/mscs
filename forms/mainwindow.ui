@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>730</width>
+    <height>585</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Mscs</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../Resources/elisa_128px_540496_easyicon.net.png</normaloff>../Resources/elisa_128px_540496_easyicon.net.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout"/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>730</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="Openfile"/>
+    <addaction name="action_netgen"/>
+    <addaction name="action_stl"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>显示</string>
+    </property>
+    <addaction name="action_6"/>
+    <addaction name="action_7"/>
+    <addaction name="action_show_massage_box"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>模型</string>
+    </property>
+    <widget class="QMenu" name="menu_7">
+     <property name="title">
+      <string>设置单胞</string>
+     </property>
+     <addaction name="action_10"/>
+    </widget>
+    <addaction name="action"/>
+    <addaction name="menu_7"/>
+    <addaction name="action_5"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>网格剖分</string>
+    </property>
+    <addaction name="actionCellMesh"/>
+    <addaction name="action_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="action_Mscs"/>
+   </widget>
+   <widget class="QMenu" name="menu_6">
+    <property name="title">
+     <string>求解</string>
+    </property>
+    <addaction name="action_8"/>
+    <addaction name="action_9"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_6"/>
+   <addaction name="menu_5"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="actionCellMesh"/>
+   <addaction name="Openfile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="message_box">
+   <property name="windowTitle">
+    <string>程序输出</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="message_contents"/>
+  </widget>
+  <action name="action_Mscs">
+   <property name="text">
+    <string>关于Mscs</string>
+   </property>
+  </action>
+  <action name="actionCellMesh">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/Mesh3D.png</normaloff>:/icons/icons/Mesh3D.png</iconset>
+   </property>
+   <property name="text">
+    <string>剖分单胞</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>剖分几何</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>设置参数</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>设置宏观问题</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>显示单胞</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>显示网格</string>
+   </property>
+  </action>
+  <action name="Openfile">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/document-open.png</normaloff>:/icons/icons/document-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open new file</string>
+   </property>
+  </action>
+  <action name="action_netgen">
+   <property name="text">
+    <string>打开netgen网格文件</string>
+   </property>
+  </action>
+  <action name="action_stl">
+   <property name="text">
+    <string>打开stl文件</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>设置材料参数</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>单胞问题求解</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>均匀化解求解</string>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="text">
+    <string>导入单胞几何</string>
+   </property>
+  </action>
+  <action name="action_show_massage_box">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示信息窗口</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="../resources/Mscs.qrc"/>
+ </resources>
+ <connections/>
+</ui>
