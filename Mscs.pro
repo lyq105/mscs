@@ -5,24 +5,68 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += . forms resources src src/gui
-INCLUDEPATH += . src/gui /usr/include/vtk-5.8/ /usr/include/gmsh/
-LIBS = -lQVTK -lvtkRendering -lvtkCommon -lvtkWidgets -lvtkHybrid -lvtkIO -lvtkFiltering \
-    /usr/lib/x86_64-linux-gnu/libgmsh.so
-QMAKE_CXXFLAGS += -Wno-deprecated -Wunused-parameter
+INCLUDEPATH += . src/gui 
+unix:INCLUDEPATH +=/usr/include/vtk-5.8/
+unix:LIBS = -lQVTK -lvtkRendering -lvtkCommon -lvtkWidgets -lvtkHybrid -lvtkIO -lvtkFiltering
+unix:QMAKE_CXXFLAGS += -Wno-deprecated -Wunused-parameter
+
+win32:INCLUDEPATH += "C:/Program Files/VTK_vs2008/include/vtk-5.10/"
+win32:LIBS +=  "C:/Program Files/VTK_vs2008/lib/vtk-5.10/QVTK.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkRendering.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkWidgets.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkHybrid.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkIO.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkFiltering.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkCommon.lib"
 
 # Input
-HEADERS += src/gui/aboutdialog.h src/gui/mainwindow.h src/gui/meshpara.h \
-    setcelldialog.h \
-    tspara.h \
-    cellmodel.h
-FORMS += forms/aboutdialog.ui forms/mainwindow.ui forms/meshpara.ui \
-    setcelldialog.ui \
-    cellmodel.ui
+# Input
+HEADERS += src/gui/aboutdialog.h \
+           src/gui/analysistype.h \
+           src/gui/cellmodel.h \
+           src/gui/mainwindow.h \
+           src/gui/materiel.h \
+           src/gui/meshpara.h \
+           src/gui/setcelldialog.h \
+           src/gui/sotsinterface.h \
+           src/gui/tspara.h \
+           src/pmcell/CMCell.h \
+           src/pmcell/EllipseGen.h \
+           src/pmcell/EllipseMade.h \
+           src/pmcell/EllipseSurface.h \
+           src/pmcell/Fem.h \
+           src/pmcell/Geometry.h \
+           src/pmcell/Hns.h \
+           src/pmcell/Mesher.h \
+           src/pmcell/PCMCell.h \
+           src/pmcell/Vector2D.h \
+           src/pmcell/Vector3D.h
+FORMS += forms/aboutdialog.ui \
+         forms/analysistype.ui \
+         forms/cellmodel.ui \
+         forms/mainwindow.ui \
+         forms/materiel.ui \
+         forms/meshpara.ui \
+         forms/setcelldialog.ui
 SOURCES += src/mscs_main.cpp \
            src/gui/aboutdialog.cpp \
+           src/gui/analysistype.cpp \
+           src/gui/cellmodel.cpp \
            src/gui/mainwindow.cpp \
+           src/gui/materiel.cpp \
            src/gui/meshpara.cpp \
-    setcelldialog.cpp \
-    tspara.cpp \
-    cellmodel.cpp
+           src/gui/setcelldialog.cpp \
+           src/gui/sotsinterface.cpp \
+           src/gui/tspara.cpp \
+           src/pmcell/CMCell.cpp \
+           src/pmcell/EllipseGen.cpp \
+           src/pmcell/EllipseMade.cpp \
+           src/pmcell/EllipseSurface.cpp \
+           src/pmcell/Fem.cpp \
+           src/pmcell/Geometry.cpp \
+           src/pmcell/Hns.cpp \
+           src/pmcell/Mesher.cpp \
+           src/pmcell/PCMCell.cpp \
+           src/pmcell/Vector2D.cpp \
+           src/pmcell/Vector3D.cpp
 RESOURCES += resources/Mscs.qrc

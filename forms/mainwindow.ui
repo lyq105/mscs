@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
-    <height>585</height>
+    <width>822</width>
+    <height>667</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,72 +28,101 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>730</width>
+     <width>822</width>
      <height>28</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="menu_file">
     <property name="title">
      <string>文件</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="Openfile"/>
-    <addaction name="action_netgen"/>
-    <addaction name="action_stl"/>
+    <addaction name="action_new_project"/>
+    <addaction name="action_openfile"/>
+    <addaction name="action_save"/>
+    <addaction name="action_quit"/>
    </widget>
-   <widget class="QMenu" name="menu_2">
+   <widget class="QMenu" name="menu_view">
     <property name="title">
      <string>显示</string>
     </property>
-    <addaction name="action_6"/>
-    <addaction name="action_7"/>
+    <addaction name="action_show_cell"/>
+    <addaction name="action_show_homogeo"/>
     <addaction name="action_show_massage_box"/>
    </widget>
-   <widget class="QMenu" name="menu_3">
+   <widget class="QMenu" name="menu_model">
     <property name="title">
      <string>模型</string>
     </property>
-    <widget class="QMenu" name="menu_7">
+    <widget class="QMenu" name="menu_set_cell">
      <property name="title">
       <string>设置单胞</string>
      </property>
-     <addaction name="action_10"/>
+     <addaction name="action_gen_cell"/>
+     <addaction name="action_import_cell_geo"/>
+     <addaction name="action_import_cell_mesh"/>
     </widget>
-    <addaction name="action"/>
-    <addaction name="menu_7"/>
-    <addaction name="action_5"/>
+    <widget class="QMenu" name="menu">
+     <property name="title">
+      <string>设置宏观问题</string>
+     </property>
+     <addaction name="action_import_geo"/>
+     <addaction name="action_import_mesh"/>
+    </widget>
+    <widget class="QMenu" name="menu_2">
+     <property name="title">
+      <string>设置材料参数</string>
+     </property>
+     <addaction name="action_new_mat"/>
+     <addaction name="action_view_mat"/>
+    </widget>
+    <addaction name="menu_2"/>
+    <addaction name="menu_set_cell"/>
+    <addaction name="menu"/>
    </widget>
-   <widget class="QMenu" name="menu_4">
+   <widget class="QMenu" name="menu_mesh">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>网格剖分</string>
     </property>
-    <addaction name="actionCellMesh"/>
-    <addaction name="action_2"/>
+    <addaction name="action_mesh_cell"/>
+    <addaction name="action_mesh_homo"/>
     <addaction name="separator"/>
-    <addaction name="action_3"/>
+    <addaction name="action_set_mesh"/>
    </widget>
-   <widget class="QMenu" name="menu_5">
+   <widget class="QMenu" name="menu_help">
     <property name="title">
      <string>帮助</string>
     </property>
     <addaction name="separator"/>
     <addaction name="action_Mscs"/>
    </widget>
-   <widget class="QMenu" name="menu_6">
+   <widget class="QMenu" name="menu_solve">
     <property name="title">
      <string>求解</string>
     </property>
-    <addaction name="action_8"/>
-    <addaction name="action_9"/>
+    <addaction name="action_cell_solve"/>
+    <addaction name="action_homo_solve"/>
    </widget>
-   <addaction name="menu"/>
-   <addaction name="menu_2"/>
-   <addaction name="menu_3"/>
-   <addaction name="menu_4"/>
-   <addaction name="menu_6"/>
-   <addaction name="menu_5"/>
+   <addaction name="menu_file"/>
+   <addaction name="menu_view"/>
+   <addaction name="menu_model"/>
+   <addaction name="menu_mesh"/>
+   <addaction name="menu_solve"/>
+   <addaction name="menu_help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>工具栏</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -98,13 +130,23 @@
     <bool>false</bool>
    </attribute>
    <addaction name="separator"/>
-   <addaction name="actionCellMesh"/>
-   <addaction name="Openfile"/>
+   <addaction name="action_new_project"/>
+   <addaction name="action_openfile"/>
+   <addaction name="action_show_massage_box"/>
+   <addaction name="action_new_mat"/>
+   <addaction name="action_gen_cell"/>
+   <addaction name="action_Mscs"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="message_box">
+   <property name="features">
+    <set>QDockWidget::NoDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
    <property name="windowTitle">
-    <string>程序输出</string>
+    <string>输出</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -112,11 +154,15 @@
    <widget class="QWidget" name="message_contents"/>
   </widget>
   <action name="action_Mscs">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/images/elisa_128px_540496_easyicon.net.png</normaloff>:/images/elisa_128px_540496_easyicon.net.png</iconset>
+   </property>
    <property name="text">
     <string>关于Mscs</string>
    </property>
   </action>
-  <action name="actionCellMesh">
+  <action name="action_mesh_cell">
    <property name="icon">
     <iconset resource="../resources/Mscs.qrc">
      <normaloff>:/icons/icons/Mesh3D.png</normaloff>:/icons/icons/Mesh3D.png</iconset>
@@ -125,43 +171,38 @@
     <string>剖分单胞</string>
    </property>
   </action>
-  <action name="action_2">
+  <action name="action_mesh_homo">
    <property name="text">
     <string>剖分几何</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="action_set_mesh">
    <property name="text">
     <string>设置参数</string>
    </property>
   </action>
-  <action name="action_5">
-   <property name="text">
-    <string>设置宏观问题</string>
-   </property>
-  </action>
-  <action name="action_6">
+  <action name="action_show_cell">
    <property name="text">
     <string>显示单胞</string>
    </property>
   </action>
-  <action name="action_7">
+  <action name="action_show_homogeo">
    <property name="text">
     <string>显示网格</string>
    </property>
   </action>
-  <action name="Openfile">
+  <action name="action_openfile">
    <property name="icon">
     <iconset resource="../resources/Mscs.qrc">
      <normaloff>:/icons/icons/document-open.png</normaloff>:/icons/icons/document-open.png</iconset>
    </property>
    <property name="text">
-    <string>Open new file</string>
+    <string>直接导入计算文件</string>
    </property>
   </action>
-  <action name="action_netgen">
+  <action name="action_import_cell_mesh">
    <property name="text">
-    <string>打开netgen网格文件</string>
+    <string>导入单胞网格</string>
    </property>
   </action>
   <action name="action_stl">
@@ -169,22 +210,17 @@
     <string>打开stl文件</string>
    </property>
   </action>
-  <action name="action">
-   <property name="text">
-    <string>设置材料参数</string>
-   </property>
-  </action>
-  <action name="action_8">
+  <action name="action_cell_solve">
    <property name="text">
     <string>单胞问题求解</string>
    </property>
   </action>
-  <action name="action_9">
+  <action name="action_homo_solve">
    <property name="text">
     <string>均匀化解求解</string>
    </property>
   </action>
-  <action name="action_10">
+  <action name="action_import_cell_geo">
    <property name="text">
     <string>导入单胞几何</string>
    </property>
@@ -193,8 +229,64 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/view-statistics.png</normaloff>:/icons/icons/view-statistics.png</iconset>
+   </property>
    <property name="text">
     <string>显示信息窗口</string>
+   </property>
+  </action>
+  <action name="action_new_project">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/document-new.png</normaloff>:/icons/icons/document-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建分析</string>
+   </property>
+  </action>
+  <action name="action_save">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="action_quit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="action_import_geo">
+   <property name="text">
+    <string>导入几何</string>
+   </property>
+  </action>
+  <action name="action_import_mesh">
+   <property name="text">
+    <string>导入网格</string>
+   </property>
+  </action>
+  <action name="action_new_mat">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/view-list-text.png</normaloff>:/icons/icons/view-list-text.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建材料</string>
+   </property>
+  </action>
+  <action name="action_view_mat">
+   <property name="text">
+    <string>查看材料</string>
+   </property>
+  </action>
+  <action name="action_gen_cell">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/view-choose.png</normaloff>:/icons/icons/view-choose.png</iconset>
+   </property>
+   <property name="text">
+    <string>设置单胞参数</string>
    </property>
   </action>
  </widget>
@@ -202,5 +294,22 @@
  <resources>
   <include location="../resources/Mscs.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>action_quit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

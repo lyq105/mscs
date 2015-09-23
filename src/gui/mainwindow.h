@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "sotsinterface.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,25 +21,45 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void creatSlots();
-    void creatMenu();
-    void creatToolbar();
-    void openSTL(QString stl_filename);
-    void openVtu(QString vtu_filename);
-    void read_neutral_format(QString filename );
-    void meshSTL(QString stl_filename);
+
+
 private slots:
-    void on_action_Mscs_triggered();
+    void about();
+    void show_message_box();
+    void show_message_box(bool checked);
+//    void show_cell();
+//    void show_mesh();
 
-    void on_action_3_triggered();
+//    void open_input();
+//    void solve_cell_problem();
+//    void solve_homo_problem();
+//    void load_cell_mesh();
+//    void add_material();
+    void import_mesh();
+    void import_geo();
+    void new_project();
+    void import_inp();
+    void new_material();
+    void import_cell_mesh();
+    void import_cell_geo();
+    void set_cell();
+//    void
 
-    void on_Openfile_triggered();
-
-    void on_action_show_massage_box_triggered();
-
-    void on_action_show_massage_box_triggered(bool checked);
 
 private:
+    void creatSlots();
+    void creatStatusBar();
+    void creatToolbar();
+
+
+    void openSTL(QString stl_filename);
+    void read_neutral_format(QString filename );
+    void meshSTL(QString stl_filename);
+    void import_bdf(QString bdf_filename);
+    //    void openVtu(QString vtu_filename);
+
+
+    SOTSinterface sots;
     Ui::MainWindow *ui;
     QVTKWidget* qvtkWidget;
     vtkRenderer* renderer;
