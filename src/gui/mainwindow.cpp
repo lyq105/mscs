@@ -48,9 +48,6 @@
 #include <vtkUnstructuredGrid.h>
 #include <vtkPointData.h>
 #include <vtkVertexGlyphFilter.h>
-//#include "Gmsh.h"
-//#include "GModel.h"
-//#include "MElement.h"
 #include <vtkGenericDataObjectReader.h>
 #include <vtkUnstructuredGridVolumeRayCastMapper.h>
 #include <QTextEdit>
@@ -97,20 +94,6 @@ MainWindow::MainWindow(QWidget *parent) :
     renderer->SetBackground(0,0,0);
     renderer->SetBackground2(0,0,0);
 
-        vtkSmartPointer<vtkAxesActor> axes =
-                vtkSmartPointer<vtkAxesActor>::New();
-    //    vtkSmartPointer<vtkOrientationMarkerWidget> widget =
-    //            vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-    //    widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
-    //    widget->SetOrientationMarker( axes );
-    //    widget->SetInteractor( qvtkWidget->GetRenderWindow()->GetInteractor() );
-    //    widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
-    //    widget->SetEnabled( 1 );
-    //    widget->InteractiveOn();
-    //    // renderer->GetRenderWindow()->GetInteractor();
-    //    //->AddActor(axes);
-    //    axes->SetAxisLabels();
-    renderer->AddActor(axes);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     qvtkWidget->GetRenderWindow()->Render();
@@ -304,7 +287,7 @@ void MainWindow::openSTL(QString stl_filename)
     renderer->AddActor(actor);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
     //   return 1;
 
 }
@@ -425,8 +408,8 @@ void MainWindow::import_bdf(QString bdf_filename)
     //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+//    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
 
 }
 
@@ -590,8 +573,8 @@ void MainWindow::read_neutral_format(QString filename )
     //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+//    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
 }
 
 

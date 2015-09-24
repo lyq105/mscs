@@ -22,7 +22,7 @@ class PCMCell : public CMCell
 
 		int Cell_generate(ifstream &,string data_file);
 
-		int cell_generrate();
+        int Cell_generate(string input_file,string data_file);
 	private:
 		vector<EllipseSurface> elliSurfaces_vec;  //存储所有的椭球表面;
 

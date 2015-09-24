@@ -5,7 +5,7 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += . forms resources src src/gui
-INCLUDEPATH += . src/gui 
+INCLUDEPATH += . src/gui src/pmcell
 unix:INCLUDEPATH +=/usr/include/vtk-5.8/
 unix:LIBS = -lQVTK -lvtkRendering -lvtkCommon -lvtkWidgets -lvtkHybrid -lvtkIO -lvtkFiltering
 unix:QMAKE_CXXFLAGS += -Wno-deprecated -Wunused-parameter
