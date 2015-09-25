@@ -1,6 +1,6 @@
 //===========================================================================
 // EllipseMade.h
-// ÍÖÇò¿ÅÁ£Ëæ»úÉú³ÉÀàÍ·ÎÄ¼ş£¨ÅÅ³ı·¨£©
+// æ¤­çƒé¢—ç²’éšæœºç”Ÿæˆç±»å¤´æ–‡ä»¶ï¼ˆæ’é™¤æ³•ï¼‰
 // A class of ellipse mading with random
 //===========================================================================
 #ifndef ELLIPSEMADE_H
@@ -21,17 +21,17 @@ class EllipseMade
 {
 public:
 	//-----------------------------------------------------------------
-	//³ÉÔ±º¯Êı
+	//æˆå‘˜å‡½æ•°
 	EllipseMade() {};
-	void ellip_generation(ifstream &infile,string output_file,string data_file, double mod=0);	//mod=0±íÊ¾²»»­tecplotÍ¼
+	void ellip_generation(ifstream &infile,string output_file,string data_file, double mod=0);	//mod=0è¡¨ç¤ºä¸ç”»tecplotå›¾
 
 
 	// liyq add @ 2015-09-23  
-	void ellip_generation(const string input,string output_file,string data_file, double mod=0);	//mod=0±íÊ¾²»»­tecplotÍ¼
-	void ellip_generation(double* input_value,string output_file,string data_file, double mod=0);	//mod=0±íÊ¾²»»­tecplotÍ¼
+	void ellip_generation(const string input,string output_file,string data_file, double mod=0);	//mod=0è¡¨ç¤ºä¸ç”»tecplotå›¾
+	void ellip_generation(double* input_value,string output_file,string data_file, double mod=0);	//mod=0è¡¨ç¤ºä¸ç”»tecplotå›¾
 private:
 	//-----------------------------------------------------------------
-	//Êı¾İ³ÉÔ±
+	//æ•°æ®æˆå‘˜
 	struct elliparam		
 		{	
 			double x;
@@ -64,12 +64,12 @@ private:
 	struct space_valu space;
 	double ellip_ratio;
 	//-----------------------------------------------------------------
-	//³ÉÔ±º¯Êı
-	string Get_Line(ifstream &)const;																//¶ÁÈ¡ÊäÈëÎÄ¼şÒ»ĞĞ£¬Ìø¹ı×¢ÊÍĞĞ£¨ÒÔ%¿ªÊ¼£©
-	double ellipse_volume(const struct elliparam &,const double&);					//¼ÆËãÍÖÇòÔÚµ¥°ûÖĞµÄÌå»ı
+	//æˆå‘˜å‡½æ•°
+	string Get_Line(ifstream &)const;																//è¯»å–è¾“å…¥æ–‡ä»¶ä¸€è¡Œï¼Œè·³è¿‡æ³¨é‡Šè¡Œï¼ˆä»¥%å¼€å§‹ï¼‰
+	double ellipse_volume(const struct elliparam &,const double&);					//è®¡ç®—æ¤­çƒåœ¨å•èƒä¸­çš„ä½“ç§¯
 	void draw_tecplot(const string&,const double&)const;								//
 	void output_EllipseData(const string &)const;
-	void output_Datafile(const string data_file)const;										//ÊäÈëµ½Ñù±¾Êı¾İÎÄ¼ş
+	void output_Datafile(const string data_file)const;										//è¾“å…¥åˆ°æ ·æœ¬æ•°æ®æ–‡ä»¶
 };
 
 

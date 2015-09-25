@@ -1,6 +1,6 @@
 //===========================================================================
 // Mesher.cpp
-// ËÄÃæÌåÍø¸ñÆÊ·ÖÀà³ÉÔ±º¯Êı
+// å››é¢ä½“ç½‘æ ¼å‰–åˆ†ç±»æˆå‘˜å‡½æ•°
 // Member Functions in a Class of generating tetrahedron elemments
 //===========================================================================
 #include "Mesher.h"
@@ -8,21 +8,21 @@
 #define ZERO 1e-8
 
 //---------------------------------------------------------------------------
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 Mesher::Mesher(CMCell* cmccell)
 {
 	thecell=cmccell;
 	initial();
 }
 //--------------------------------------------------------------------------
-//³õÊ¼»¯
+//åˆå§‹åŒ–
 void Mesher::initial(  )
 {
 	attach_length = global_length / 2.0 ;
 	for( int i=0; i<(int)thecell->surfaces_vec.size(); i++ )
 	{
 		vector<int> nodes;
-		gnodes_vec.push_back(nodes); //³õÊ¼»¯
+		gnodes_vec.push_back(nodes); //åˆå§‹åŒ–
 		vector<int> nodes_z0;
 		gnodes_z0_vec.push_back(nodes_z0);        
 		vector<int> nodes_z1;
@@ -50,14 +50,14 @@ void Mesher::initial(  )
 	debuging_2d = false;
 }
 //---------------------------------------------------------------------------
-//Íø¸ñÉú³É
+//ç½‘æ ¼ç”Ÿæˆ
 int Mesher::Mesh_generate(ifstream &infile)
 {
-	//¶ÁÈ¡Íø¸ñÆÊ·Ö³ß´ç
+	//è¯»å–ç½‘æ ¼å‰–åˆ†å°ºå¯¸
 	istringstream in(Get_Line(infile));
 	double mesh_size;
 	in >> mesh_size;
-	//¶ÁÈëÓĞ¹Ø½çÃæ²ãĞÅÏ¢
+	//è¯»å…¥æœ‰å…³ç•Œé¢å±‚ä¿¡æ¯
 	istringstream in1(Get_Line(infile));
 	int coat, layer_num;
 	double thick_ratio;
@@ -65,82 +65,82 @@ int Mesher::Mesh_generate(ifstream &infile)
 
 	if(mesh_tet_map(mesh_size) == 0 )
 	{
-		hout << "~_~ ÆÊ·ÖÊ§°Ü£¡¿ÉÄÜÔ­Òò£ºÔöÇ¿ÏîÖØµş»òÕß×îĞ¡Ìå»ıµ¥ÔªÓë×î´óÌå»ıµ¥ÔªÏà²îÌ«´ó!" << endl;
+		hout << "~_~ å‰–åˆ†å¤±è´¥ï¼å¯èƒ½åŸå› ï¼šå¢å¼ºé¡¹é‡å æˆ–è€…æœ€å°ä½“ç§¯å•å…ƒä¸æœ€å¤§ä½“ç§¯å•å…ƒç›¸å·®å¤ªå¤§!" << endl;
 		hout << "****************************************************************************************" <<endl;	
 		return 0;
 	}
 	
-	//Êä³öÉú³É±ß½ç²ãÇ°µÄtecplotÍø¸ñÊı¾İ
+	//è¾“å‡ºç”Ÿæˆè¾¹ç•Œå±‚å‰çš„tecplotç½‘æ ¼æ•°æ®
 	//if (export_tecplot_data_before_coating() == 0)
 	//{
-	//	hout << "~_~ Êä³öÉú³É±ß½ç²ãÇ°µÄtecplotÍø¸ñÊı¾İÊ§°Ü£¡" << endl;
+	//	hout << "~_~ è¾“å‡ºç”Ÿæˆè¾¹ç•Œå±‚å‰çš„tecplotç½‘æ ¼æ•°æ®å¤±è´¥ï¼" << endl;
 	//	hout << "*************************************************" << endl;
 	//	return 0;
 	//}
 
 	if (coat==1)
 	{
-		//¾­¹ıÈ·ÈÏmaterialId ==0 ÊÇ»ùÌåµ¥Ôª£¬materialId ==1 ÊÇÍÖÇòµ¥Ôª
+		//ç»è¿‡ç¡®è®¤materialId ==0 æ˜¯åŸºä½“å•å…ƒï¼ŒmaterialId ==1 æ˜¯æ¤­çƒå•å…ƒ
 		clock_t ct0,ct1;
 		ct0 = clock();
-		hout << "-_- ¿ªÊ¼Éú³É½çÃæ²ãÍø¸ñ... " << endl;
+		hout << "-_- å¼€å§‹ç”Ÿæˆç•Œé¢å±‚ç½‘æ ¼... " << endl;
 		if(gen_coating_mesh(thick_ratio, layer_num) == 0)
 		{
-			hout << "~_~ Éú³É½çÃæ²ãÍø¸ñÊ§°Ü£¡" << endl;
+			hout << "~_~ ç”Ÿæˆç•Œé¢å±‚ç½‘æ ¼å¤±è´¥ï¼" << endl;
 			hout << "*******************************************" <<endl;	
 			return 0;
 		}
 
-		hout << "    Êä³ötecplotÍø¸ñÊı¾İ....." << endl;
+		hout << "    è¾“å‡ºtecplotç½‘æ ¼æ•°æ®....." << endl;
 		if (export_tecplot_data() == 0)
 		{
-			hout << "~_~ Êä³ötecplotÍø¸ñÊı¾İÊ§°Ü£¡" << endl;
+			hout << "~_~ è¾“å‡ºtecplotç½‘æ ¼æ•°æ®å¤±è´¥ï¼" << endl;
 			hout << "*******************************************" << endl;
 			return 0;
 		}
 
-		//hout<<"   Êä³öÈıÎ¬¿Õ¼ä¿ÉÊÓ»¯EnsightÍø¸ñÊı¾İ"
+		//hout<<"   è¾“å‡ºä¸‰ç»´ç©ºé—´å¯è§†åŒ–Ensightç½‘æ ¼æ•°æ®"
 		//if (export_Ensight_data() == 0)
 		//{
-		//	hout << "~_~ Êä³öÈıÎ¬¿Õ¼ä¿ÉÊÓ»¯EnsightÍø¸ñÊı¾İÊ§°Ü£¡" << endl;
+		//	hout << "~_~ è¾“å‡ºä¸‰ç»´ç©ºé—´å¯è§†åŒ–Ensightç½‘æ ¼æ•°æ®å¤±è´¥ï¼" << endl;
 		//	hout << "*******************************************" << endl;
 		//	return 0;
 		//}
 
 		ct1 = clock();
-		hout << "    Éú³É½çÃæ²ãºÄÊ±£º" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "Ãë" << endl;
-		hout << "^_^ ½çÃæ²ãÍø¸ñÉú³ÉÍê±Ï!" << endl<<endl;
+		hout << "    ç”Ÿæˆç•Œé¢å±‚è€—æ—¶ï¼š" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "ç§’" << endl;
+		hout << "^_^ ç•Œé¢å±‚ç½‘æ ¼ç”Ÿæˆå®Œæ¯•!" << endl<<endl;
 	}
 	else
 	{
-		//ÔÚ²»Éú³É±ß½ç²ãµÄÇé¿öÏÂ£¬½«ËÄÃæÌåµ¥ÔªÀàĞÍµ¹Îª»ìºÏµ¥ÔªÀàĞÍ
+		//åœ¨ä¸ç”Ÿæˆè¾¹ç•Œå±‚çš„æƒ…å†µä¸‹ï¼Œå°†å››é¢ä½“å•å…ƒç±»å‹å€’ä¸ºæ··åˆå•å…ƒç±»å‹
 		clock_t ct0,ct1;
 		ct0 = clock();
-		hout << "-_- ½«ËÄÃæÌåÍø¸ñ×ª»»...... " << endl;
+		hout << "-_- å°†å››é¢ä½“ç½‘æ ¼è½¬æ¢...... " << endl;
 		if (change_elements_to_blend() == 0)
 		{
-			hout << " ½«ËÄÃæÌåµ¥ÔªÀàĞÍµ¹Îª»ìºÏµ¥ÔªÀàĞÍ²Ù×÷Ê§°Ü£¡" << endl;
+			hout << " å°†å››é¢ä½“å•å…ƒç±»å‹å€’ä¸ºæ··åˆå•å…ƒç±»å‹æ“ä½œå¤±è´¥ï¼" << endl;
 			hout << "*******************************************" << endl;
 			return 0;
 		}
 		ct1 = clock();
-		hout << "    ×ª»»ËÄÃæÌåÍø¸ñºÄÊ±£º" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "Ãë" << endl;
-		hout << "^_^ ×ª»»ËÄÃæÌåÍø¸ñÍê±Ï!" << endl << endl;
+		hout << "    è½¬æ¢å››é¢ä½“ç½‘æ ¼è€—æ—¶ï¼š" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "ç§’" << endl;
+		hout << "^_^ è½¬æ¢å››é¢ä½“ç½‘æ ¼å®Œæ¯•!" << endl << endl;
 	}
 	
-	//È·¶¨ËùÓĞ½ÚµãµÄÏà¹Øµ¥ÔªĞÅÏ¢
+	//ç¡®å®šæ‰€æœ‰èŠ‚ç‚¹çš„ç›¸å…³å•å…ƒä¿¡æ¯
 	deter_nodes_relative_eles();
 
 	return 1;
 }
 //---------------------------------------------------------------------------
-//Êä³ö»ò¶ÁÈ¡Íø¸ñÊı¾İ
+//è¾“å‡ºæˆ–è¯»å–ç½‘æ ¼æ•°æ®
 int Mesher::Mesh_data(int mod)
 {
-	if(mod==0)			//Êä³öÊı¾İ
+	if(mod==0)			//è¾“å‡ºæ•°æ®
 	{
 		//---------------------------------------------------------------------
-		//Êä³öÍø¸ñÊı¾İ
+		//è¾“å‡ºç½‘æ ¼æ•°æ®
 		ofstream oute("Data_Elements.dat");
 		int nume = int(elements_vec.size());
 		oute << nume << endl;
@@ -156,7 +156,7 @@ int Mesher::Mesh_data(int mod)
 		}
 		oute.close();
 		//---------------------------------------------------------------------
-		//Êä³ö½ÚµãÊı¾İ
+		//è¾“å‡ºèŠ‚ç‚¹æ•°æ®
 		ofstream outn("Data_Nodes.dat");
 		outn << int(nodes_vec.size()) << endl;
 		for(int i=0; i<int(nodes_vec.size()); i++)
@@ -166,7 +166,7 @@ int Mesher::Mesh_data(int mod)
 		}
 		outn.close();
 		//---------------------------------------------------------------------
-		//Êä³ö±ß½ç½ÚµãÊı¾İ
+		//è¾“å‡ºè¾¹ç•ŒèŠ‚ç‚¹æ•°æ®
 		ofstream outb("Data_Bnodes.dat");
 		outb << int(bnodes_vec.size()) << endl;
 		for(int i=0; i<int(bnodes_vec.size()); i++)
@@ -175,10 +175,10 @@ int Mesher::Mesh_data(int mod)
 		}
 		outb.close();
 	}
-	else if(mod==1)	//¶ÁÈ¡Êı¾İ
+	else if(mod==1)	//è¯»å–æ•°æ®
 	{
 		//---------------------------------------------------------------------
-		//¶ÁÈ¡Íø¸ñÊı¾İ
+		//è¯»å–ç½‘æ ¼æ•°æ®
 		ifstream ine("Data_Elements.dat");
 		int nume;
 		ine >> nume;
@@ -199,7 +199,7 @@ int Mesher::Mesh_data(int mod)
 		}
 		ine.close();
 		//---------------------------------------------------------------------
-		//¶ÁÈ¡½ÚµãÊı¾İ
+		//è¯»å–èŠ‚ç‚¹æ•°æ®
 		ifstream inn("Data_Nodes.dat");
 		int numn;
 		inn >> numn;
@@ -211,7 +211,7 @@ int Mesher::Mesh_data(int mod)
 		}
 		inn.close();
 		//---------------------------------------------------------------------
-		//¶ÁÈ¡±ß½ç½ÚµãÊı¾İ
+		//è¯»å–è¾¹ç•ŒèŠ‚ç‚¹æ•°æ®
 		ifstream inb("Data_Bnodes.dat");
 		int numb;
 		inb >> numb;
@@ -227,24 +227,24 @@ int Mesher::Mesh_data(int mod)
 	return 1;
 }
 //---------------------------------------------------------------------------
-//Êä³ö»ò¶ÁÈ¡¶ş½øÖÆÍø¸ñÊı¾İ
+//è¾“å‡ºæˆ–è¯»å–äºŒè¿›åˆ¶ç½‘æ ¼æ•°æ®
 int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 {
 	int num1 = CNum/10;
 	int num2 = CNum - num1*10;
 	char ch[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-	if(mod==0)			//Êä³öÊı¾İ
+	if(mod==0)			//è¾“å‡ºæ•°æ®
 	{
 		//---------------------------------------------------------------------
-		//Êä³öÍø¸ñÊı¾İ
+		//è¾“å‡ºç½‘æ ¼æ•°æ®
         size_t en = data_file.rfind('.');
         string title = data_file.substr(0,en);
 		string str = "Mesh";
 		string MeshName = title+str+ch[num1]+ch[num2]+".dat";
 		ofstream out(MeshName.c_str(),ios::binary);
-		if(!out) { hout << "²»ÄÜ´ò¿ªÍø¸ñÊı¾İÎÄ¼ş" << MeshName << "!" << endl;  exit(0); }
+		if(!out) { hout << "ä¸èƒ½æ‰“å¼€ç½‘æ ¼æ•°æ®æ–‡ä»¶" << MeshName << "!" << endl;  exit(0); }
 		//---------------------------------------------------------------------
-		//µ¥ÔªÊı¾İ
+		//å•å…ƒæ•°æ®
 		int nume = int(elements_vec.size());
 		out.write((char *)&nume, sizeof(int));
 		for(int i=0; i<nume; i++)
@@ -256,7 +256,7 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 			out.write((char *)&elements_vec[i].mat, sizeof(int));
 		}
 		//---------------------------------------------------------------------
-		//½ÚµãÊı¾İ
+		//èŠ‚ç‚¹æ•°æ®
 		int numn = int(nodes_vec.size());
 		out.write((char *)&numn, sizeof(int));
 		for(int i=0; i<numn; i++)
@@ -270,25 +270,25 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 			for(int j=0; j<num_relative; j++)	out.write((char *)&nodes_vec[i].relative_eles_vec[j], sizeof(int));
 		}
 		//---------------------------------------------------------------------
-		//±ß½ÚµãÊı¾İ
+		//è¾¹èŠ‚ç‚¹æ•°æ®
 		int numb = int(bnodes_vec.size());
 		out.write((char *)&numb, sizeof(int));
 		for(int i=0; i<numb; i++)	out.write((char *)&bnodes_vec[i],sizeof(int));
 		//---------------------------------------------------------------------
 		out.close();
 	}
-	else if(mod==1)	//¶ÁÈ¡Êı¾İ
+	else if(mod==1)	//è¯»å–æ•°æ®
 	{
 		//---------------------------------------------------------------------
-		//Êä³öÍø¸ñÊı¾İ
+		//è¾“å‡ºç½‘æ ¼æ•°æ®
         size_t en = data_file.rfind('.');
         string title = data_file.substr(0,en);
 		string str = "Mesh";
 		string MeshName = title+str+ch[num1]+ch[num2]+".dat";
 		ifstream in(MeshName.c_str(),ios::binary);
-		if(!in) { hout << "²»ÄÜ´ò¿ªÍø¸ñÊı¾İÎÄ¼ş" << MeshName << "!" << endl;  exit(0); }
+		if(!in) { hout << "ä¸èƒ½æ‰“å¼€ç½‘æ ¼æ•°æ®æ–‡ä»¶" << MeshName << "!" << endl;  exit(0); }
 		//---------------------------------------------------------------------
-		//µ¥ÔªÊı¾İ
+		//å•å…ƒæ•°æ®
 		int nume;
 		in.read((char *)&nume, sizeof(int));
 		Element temp_ele;
@@ -303,7 +303,7 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 			in.read((char *)&elements_vec[i].mat, sizeof(int));
 		}
 		//---------------------------------------------------------------------
-		//½ÚµãÊı¾İ
+		//èŠ‚ç‚¹æ•°æ®
 		int numn;
 		in.read((char *)&numn, sizeof(int));
 		Node temp_node;
@@ -320,7 +320,7 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 			for(int j=0; j<num_relative; j++)		in.read((char *)&nodes_vec[i].relative_eles_vec[j], sizeof(int));
 		}
 		//---------------------------------------------------------------------
-		//±ß½ÚµãÊı¾İ
+		//è¾¹èŠ‚ç‚¹æ•°æ®
 		int numb;
 		in.read((char *)&numb, sizeof(int));
 		bnodes_vec.assign(numb,0);
@@ -331,19 +331,19 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 	return 1;
 }
 //---------------------------------------------------------------------------
-//Ó³Éä·¨Éú³ÉËÄÃæÌåÍø¸ñ£¨Ö÷Òª³ÌĞò¶Î£©
+//æ˜ å°„æ³•ç”Ÿæˆå››é¢ä½“ç½‘æ ¼ï¼ˆä¸»è¦ç¨‹åºæ®µï¼‰
 int Mesher::mesh_tet_map( double glength )
 {
 	clock_t ct_mesh_begin = clock();
 
 	bool debuging_map_mesh = false;
 
-	//È«¾ÖÊ¹ÓÃÆÊ·Ö³ß¶È
+	//å…¨å±€ä½¿ç”¨å‰–åˆ†å°ºåº¦
 	global_length = glength;
-	//µ¥Ôª×îĞ¡Ìå»ı
+	//å•å…ƒæœ€å°ä½“ç§¯
 	min_volume = 0.0 ;
                                 
-	//µ¥°ûµÄ×î´ó×îĞ¡×ø±ê
+	//å•èƒçš„æœ€å¤§æœ€å°åæ ‡
 	x_min=thecell->origin_x ;
 	x_max=thecell->origin_x + thecell->clength ;
 	y_min=thecell->origin_y ;
@@ -353,27 +353,27 @@ int Mesher::mesh_tet_map( double glength )
 
 	nodes_vec.clear();
 
-	hout<< "-_- ¿ªÊ¼ËÄÃæÌåÍø¸ñÆÊ·Ö" << endl<<endl;
+	hout<< "-_- å¼€å§‹å››é¢ä½“ç½‘æ ¼å‰–åˆ†" << endl<<endl;
 	//---------------------------------------------------------------------------
-	hout<< "-_- ¿ªÊ¼Éú³É±³¾°Íø¸ñ£¨ÁùÃæÌå£©......" << endl;
+	hout<< "-_- å¼€å§‹ç”ŸæˆèƒŒæ™¯ç½‘æ ¼ï¼ˆå…­é¢ä½“ï¼‰......" << endl;
 	clock_t ct_background_begin = clock();
 
-	//Éú³É±³¾°Íø¸ñ
-	//¼ÆËãÃ¿Ìõ±ßÉÏ·ÖµÄ¶ÎÊı£¬ceil(num)ÊÇÊıÑ§¿âÀïµÄº¯Êı£¬·µ»Ø²»Ğ¡ÓÚnumµÄÕûÊı(°´¸¡µãÖµ±íÊ¾)
+	//ç”ŸæˆèƒŒæ™¯ç½‘æ ¼
+	//è®¡ç®—æ¯æ¡è¾¹ä¸Šåˆ†çš„æ®µæ•°ï¼Œceil(num)æ˜¯æ•°å­¦åº“é‡Œçš„å‡½æ•°ï¼Œè¿”å›ä¸å°äºnumçš„æ•´æ•°(æŒ‰æµ®ç‚¹å€¼è¡¨ç¤º)
 	int x_sec_num = (int)ceil((x_max-x_min)/glength) ;
 	int y_sec_num = (int)ceil((y_max-y_min)/glength) ;
 	int z_sec_num = (int)ceil((z_max-z_min)/glength) ;
          
 	vector< Hexahedron > hexes_vec;
-	//Éú³É±³¾°Íø¸ñ£¨ÁùÃæÌå£©
+	//ç”ŸæˆèƒŒæ™¯ç½‘æ ¼ï¼ˆå…­é¢ä½“ï¼‰
 	gen_bg_mesh(x_sec_num,y_sec_num,z_sec_num, hexes_vec);
 
-	where_is_nodes.assign(nodes_vec.size(), -2);	//´æ·ÅÃ¿¸ö½ÚµãÊôÓÚ»ùÌå»¹ÊÇÄÄ¸öÍÖÇò
-	is_on_nodes.assign(nodes_vec.size(), 0);			//´æ·Å½ÚµãÊÇ·ñÔÚÍÖÇòºÍ»ùÌåµÄ½»½çÃæÉÏ
+	where_is_nodes.assign(nodes_vec.size(), -2);	//å­˜æ”¾æ¯ä¸ªèŠ‚ç‚¹å±äºåŸºä½“è¿˜æ˜¯å“ªä¸ªæ¤­çƒ
+	is_on_nodes.assign(nodes_vec.size(), 0);			//å­˜æ”¾èŠ‚ç‚¹æ˜¯å¦åœ¨æ¤­çƒå’ŒåŸºä½“çš„äº¤ç•Œé¢ä¸Š
 	where_is_nodes.reserve(nodes_vec.size()*2);
 	is_on_nodes.reserve(nodes_vec.size()*2);
 
-	//¶¨ÒåËÄ±ßĞÎÃæÆ¬
+	//å®šä¹‰å››è¾¹å½¢é¢ç‰‡
 	int num_rec_xfaces=(x_sec_num+1)*y_sec_num*z_sec_num;
 	int num_rec_yfaces=(y_sec_num+1)*x_sec_num*z_sec_num;
 	int num_rec_zfaces=(z_sec_num+1)*x_sec_num*y_sec_num;
@@ -381,61 +381,61 @@ int Mesher::mesh_tet_map( double glength )
 	vector<int> sign_rec_faces(num_rec_faces,-1);
 
 	clock_t ct_background_end = clock();
-	hout << "    Éú³É£¨ÁùÃæÌå£©±³¾°Íø¸ñºÄÊ±£º" << (double)( ct_background_end - ct_background_begin )/CLOCKS_PER_SEC << " Ãë¡£" << endl;
-	hout << "^_^ Éú³É±³¾°Íø¸ñ£¨ÁùÃæÌå£©Íê±Ï¡£" << endl<<endl;
+	hout << "    ç”Ÿæˆï¼ˆå…­é¢ä½“ï¼‰èƒŒæ™¯ç½‘æ ¼è€—æ—¶ï¼š" << (double)( ct_background_end - ct_background_begin )/CLOCKS_PER_SEC << " ç§’ã€‚" << endl;
+	hout << "^_^ ç”ŸæˆèƒŒæ™¯ç½‘æ ¼ï¼ˆå…­é¢ä½“ï¼‰å®Œæ¯•ã€‚" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout << "-_- ¿ªÊ¼µ÷ÕûÉú³ÉµÄÁùÃæÌåÍø¸ñ£¬ÄâºÏ½çÃæ......" << endl;
+	hout << "-_- å¼€å§‹è°ƒæ•´ç”Ÿæˆçš„å…­é¢ä½“ç½‘æ ¼ï¼Œæ‹Ÿåˆç•Œé¢......" << endl;
 	clock_t ct_adj_begin = clock();
 
-	//µ÷ÕûÉú³ÉµÄÁùÃæÌå£¬Ê¹ËùÓĞµÄÁùÃæÌå¶¼ÄÜ²ğ·Ö³ÉËÄÃæÌå£¬¶øÃ»ÓĞËÄÃæÌå¿ç±ß½ç
+	//è°ƒæ•´ç”Ÿæˆçš„å…­é¢ä½“ï¼Œä½¿æ‰€æœ‰çš„å…­é¢ä½“éƒ½èƒ½æ‹†åˆ†æˆå››é¢ä½“ï¼Œè€Œæ²¡æœ‰å››é¢ä½“è·¨è¾¹ç•Œ
 	if(adjust_hexes(hexes_vec,sign_rec_faces) == 0)
 	{
-		hout << " µ÷ÕûÉú³ÉµÄÁùÃæÌå²Ù×÷(adjust_hexes)Ê§°Ü£¡" << endl;
+		hout << " è°ƒæ•´ç”Ÿæˆçš„å…­é¢ä½“æ“ä½œ(adjust_hexes)å¤±è´¥ï¼" << endl;
 		hout << "*********************************************" << endl;
 		return 0;
 	}
 
 	clock_t ct_adj_end = clock();
-	hout << "    µ÷Õû±³¾°ÁùÃæÌåÍø¸ñºÄÊ±£º" << (double)( ct_adj_end - ct_adj_begin )/CLOCKS_PER_SEC << " Ãë¡£" << endl;
-	hout << "^_^ µ÷ÕûÉú³ÉµÄÁùÃæÌåÍø¸ñÍê±Ï¡£" << endl<<endl;
+	hout << "    è°ƒæ•´èƒŒæ™¯å…­é¢ä½“ç½‘æ ¼è€—æ—¶ï¼š" << (double)( ct_adj_end - ct_adj_begin )/CLOCKS_PER_SEC << " ç§’ã€‚" << endl;
+	hout << "^_^ è°ƒæ•´ç”Ÿæˆçš„å…­é¢ä½“ç½‘æ ¼å®Œæ¯•ã€‚" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout << "-_- ¿ªÊ¼²ğ·ÖÁùÃæÌåÎªËÄÃæÌå£¬ÄâºÏ±ß½ç......" << endl;  
+	hout << "-_- å¼€å§‹æ‹†åˆ†å…­é¢ä½“ä¸ºå››é¢ä½“ï¼Œæ‹Ÿåˆè¾¹ç•Œ......" << endl;  
 	clock_t ct_split_begin = clock();
 
-	//²ğ·ÖÁùÃæÌåÎªËÄÃæÌå
+	//æ‹†åˆ†å…­é¢ä½“ä¸ºå››é¢ä½“
 	if(split_hexes(hexes_vec,sign_rec_faces) == 0) 
 	{
-		hout << "²ğ·ÖÁùÃæÌåÎªËÄÃæÌå²Ù×÷Ê§°Ü£¡" << endl;
+		hout << "æ‹†åˆ†å…­é¢ä½“ä¸ºå››é¢ä½“æ“ä½œå¤±è´¥ï¼" << endl;
 		hout << "***********************************" << endl;
 		return 0;
 	}
 
-	hout << "    Éú³É½Úµãnodes: " << (int)nodes_vec.size() << "    Éú³Éµ¥Ôªelements: " << (int)eles_vec.size() << endl;
+	hout << "    ç”ŸæˆèŠ‚ç‚¹nodes: " << (int)nodes_vec.size() << "    ç”Ÿæˆå•å…ƒelements: " << (int)eles_vec.size() << endl;
         
 	clock_t ct_split_end = clock();
-	hout << "    ²ğ·ÖÁùÃæÌåÎªËÄÃæÌåºÄÊ±£º" << (double)( ct_split_end - ct_split_begin )/CLOCKS_PER_SEC << " Ãë¡£" << endl;
-	hout << "^_^ ²ğ·ÖÁùÃæÌåÎªËÄÃæÌåÍê±Ï¡£" << endl<<endl;
+	hout << "    æ‹†åˆ†å…­é¢ä½“ä¸ºå››é¢ä½“è€—æ—¶ï¼š" << (double)( ct_split_end - ct_split_begin )/CLOCKS_PER_SEC << " ç§’ã€‚" << endl;
+	hout << "^_^ æ‹†åˆ†å…­é¢ä½“ä¸ºå››é¢ä½“å®Œæ¯•ã€‚" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout << "-_- È·¶¨Ã¿¸öËÄÃæÌåµÄ²ÄÁÏĞÔÖÊ......" << endl;
+	hout << "-_- ç¡®å®šæ¯ä¸ªå››é¢ä½“çš„ææ–™æ€§è´¨......" << endl;
  	clock_t ct_mat_begin = clock();
 
-	//È·¶¨Ã¿¸öËÄÃæÌåµÄ²ÄÁÏ
+	//ç¡®å®šæ¯ä¸ªå››é¢ä½“çš„ææ–™
 	deter_eles_mat();
 
  	clock_t ct_mat_end = clock();;
-	hout << "    È·¶¨Ã¿¸öËÄÃæÌåµÄ²ÄÁÏĞÔÖÊºÄÊ±£º"<< (double)( ct_mat_end - ct_mat_begin )/CLOCKS_PER_SEC << " Ãë¡£" << endl;
-	hout << "^_^ È·¶¨Ã¿¸öËÄÃæÌåµÄ²ÄÁÏĞÔÖÊÍê±Ï¡£" << endl<<endl;
+	hout << "    ç¡®å®šæ¯ä¸ªå››é¢ä½“çš„ææ–™æ€§è´¨è€—æ—¶ï¼š"<< (double)( ct_mat_end - ct_mat_begin )/CLOCKS_PER_SEC << " ç§’ã€‚" << endl;
+	hout << "^_^ ç¡®å®šæ¯ä¸ªå››é¢ä½“çš„ææ–™æ€§è´¨å®Œæ¯•ã€‚" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout<< "-_- µ÷Õû¿ç½çÃæµ¥Ôª£¬Ê¹ËùÓĞµ¥Ôª²»»á´Ì´©±ß½ç£¬²¢Ïû³ı±¡Ôª¡£" << endl ;
+	hout<< "-_- è°ƒæ•´è·¨ç•Œé¢å•å…ƒï¼Œä½¿æ‰€æœ‰å•å…ƒä¸ä¼šåˆºç©¿è¾¹ç•Œï¼Œå¹¶æ¶ˆé™¤è–„å…ƒã€‚" << endl ;
 	clock_t ct_bound_begin = clock();
 	double alength = glength*0.5 ;
 
-	//¼ì²éÃ¿¸öµ¥ÔªµÄ±ßÊÇ·ñ¹á´©»ùÌåºÍÔöÇ¿²ÄÁÏ
-	//ÕÒ³ö¿ç±ß½çµÄµ¥Ôª£¬²¢ÓÅÏÈ´¦Àíµ¥°û±ß½çÉÏ¿ç±ß½çµÄµ¥Ôª
+	//æ£€æŸ¥æ¯ä¸ªå•å…ƒçš„è¾¹æ˜¯å¦è´¯ç©¿åŸºä½“å’Œå¢å¼ºææ–™
+	//æ‰¾å‡ºè·¨è¾¹ç•Œçš„å•å…ƒï¼Œå¹¶ä¼˜å…ˆå¤„ç†å•èƒè¾¹ç•Œä¸Šè·¨è¾¹ç•Œçš„å•å…ƒ
 	for( int i=0; i<(int)eles_vec.size(); i++ )
 	{
 		int ele_mat = eles_vec[i].materialId;
@@ -456,7 +456,7 @@ int Mesher::mesh_tet_map( double glength )
 		}
 	}
 
-	//Êä³öÊı¾İ
+	//è¾“å‡ºæ•°æ®
 	if( debuging_map_mesh ) hout << " eles_across_boundary_be.size(): " << (int)eles_across_boundary_be.size() << endl;
 	if( debuging_map_mesh ) hout << " eles_across_boundary_bf.size(): " << (int)eles_across_boundary_bf.size() << endl;
 	if( debuging_map_mesh ) hout << " eles_across_boundary_nbf.size(): " << (int)eles_across_boundary_nbf.size() << endl;
@@ -464,13 +464,13 @@ int Mesher::mesh_tet_map( double glength )
 	if( debuging_map_mesh ) hout << " eles_across_boundary_ndmb.size(): " << (int)eles_across_boundary_ndmb.size() << endl;
         
   
-	hout << "    ¿ç±ß½çµ¥ÔªÊı£º" <<(int)(	eles_across_boundary_be.size()+
+	hout << "    è·¨è¾¹ç•Œå•å…ƒæ•°ï¼š" <<(int)(	eles_across_boundary_be.size()+
 																	eles_across_boundary_bf.size()+
 																	eles_across_boundary_dmb.size()+
 																	eles_across_boundary_ndmb.size() ) << endl;
 
-	//¼ÇÂ¼²åÈëµãµÄĞÅÏ¢£¨Ã¿¸öÔªËØÏòÁ¿º¬Èı¸öintĞÍÊı¾İ£¬
-	//Ç°Á½¸öÎª±»²åÈë½ÚµãµÄÏß¶Î¶Ëµã½ÚµãºÅ£¬µÚÈı¸ö²åÈëµÄ½ÚµãºÅ£©
+	//è®°å½•æ’å…¥ç‚¹çš„ä¿¡æ¯ï¼ˆæ¯ä¸ªå…ƒç´ å‘é‡å«ä¸‰ä¸ªintå‹æ•°æ®ï¼Œ
+	//å‰ä¸¤ä¸ªä¸ºè¢«æ’å…¥èŠ‚ç‚¹çš„çº¿æ®µç«¯ç‚¹èŠ‚ç‚¹å·ï¼Œç¬¬ä¸‰ä¸ªæ’å…¥çš„èŠ‚ç‚¹å·ï¼‰
 	vector<vector<int> > inserted_point;
 
 	eles_across_boundary = &eles_across_boundary_be ;
@@ -478,10 +478,10 @@ int Mesher::mesh_tet_map( double glength )
 	vector<Bar> new_edges;
 
 
-	//¼ì²éÓĞÎŞËÄ¸ö½Úµã¶¼ÔÚ½çÃæÉÏµÄµ¥Ôª£¬ÓĞÔò²ğÖ®
+	//æ£€æŸ¥æœ‰æ— å››ä¸ªèŠ‚ç‚¹éƒ½åœ¨ç•Œé¢ä¸Šçš„å•å…ƒï¼Œæœ‰åˆ™æ‹†ä¹‹
 	if( split_grovelling_eles() == 1 )
 	{
-		//¶ÔËÄÖÖ±ß½çµ¥Ôª½øĞĞÑ­»·
+		//å¯¹å››ç§è¾¹ç•Œå•å…ƒè¿›è¡Œå¾ªç¯
 		int debuging = 0;
 		if( deal_with_eles_across_boundary_be(new_edges,debuging) == 0 ) return 0;
 		if( deal_with_eles_across_boundary_bf(new_edges,debuging) == 0 ) return 0;
@@ -497,11 +497,11 @@ int Mesher::mesh_tet_map( double glength )
 	//{
 	//	if (eles_vec[i].materialId == -1)
 	//	{
-	//		hout << "¾¯¸æ-1³öÏÖ£¡" << endl;
+	//		hout << "è­¦å‘Š-1å‡ºç°ï¼" << endl;
 	//	}
 	//}
 
-	//ÅÅĞòºóÉ¾³ıÒ»Ğ©·ÏÆúµ¥Ôª
+	//æ’åºååˆ é™¤ä¸€äº›åºŸå¼ƒå•å…ƒ
 	quick_sort(&deleting_ele);
 	for( int i=(int)deleting_ele.size()-1; i>=0; i-- )
 	{
@@ -509,18 +509,18 @@ int Mesher::mesh_tet_map( double glength )
 		if( debuging_map_mesh ) hout << "erase element: " << deleting_ele[i] << endl;
 	}
 
-	//¼ì²éĞÂÉú³ÉµÄ±ßÖĞÓĞÎŞºÜĞ¡µÄ±ß£¬ÓĞÔòÇå³ı£¨ºÏ²¢½Úµã£©
+	//æ£€æŸ¥æ–°ç”Ÿæˆçš„è¾¹ä¸­æœ‰æ— å¾ˆå°çš„è¾¹ï¼Œæœ‰åˆ™æ¸…é™¤ï¼ˆåˆå¹¶èŠ‚ç‚¹ï¼‰
 //  double min_dis=global_length/4.0;
-//	check_tiny_edges(new_edges,min_dis); £¨´Ë¹¦ÄÜÉĞÎ´Íê³É£©
+//	check_tiny_edges(new_edges,min_dis); ï¼ˆæ­¤åŠŸèƒ½å°šæœªå®Œæˆï¼‰
 
 	clock_t ct_bound_end = clock();
-	hout<< "    µ÷Õû¿ç½çÃæµ¥ÔªºÄÊ±£º" << (double)( ct_bound_end - ct_bound_begin )/CLOCKS_PER_SEC << " Ãë¡£" << endl;
-	hout<< "^_^ µ÷Õû¿ç½çÃæµ¥Ôª³É¹¦Íê³É." << endl;
+	hout<< "    è°ƒæ•´è·¨ç•Œé¢å•å…ƒè€—æ—¶ï¼š" << (double)( ct_bound_end - ct_bound_begin )/CLOCKS_PER_SEC << " ç§’ã€‚" << endl;
+	hout<< "^_^ è°ƒæ•´è·¨ç•Œé¢å•å…ƒæˆåŠŸå®Œæˆ." << endl;
 
 	int min_max_en[2];
 	double min_max_vl[2];
 	cal_min_max_tet_volume(min_max_en,min_max_vl);
-	hout << "      ×îĞ¡Ìå»ı£º" << min_max_vl[0] << " µ¥Ôª£º" << min_max_en[0] << endl;
+	hout << "      æœ€å°ä½“ç§¯ï¼š" << min_max_vl[0] << " å•å…ƒï¼š" << min_max_en[0] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -528,7 +528,7 @@ int Mesher::mesh_tet_map( double glength )
 	//}
 	//hout << eles_vec[min_max_en[0]].materialId << endl;
 
-	hout << "      ×î´óÌå»ı£º" << min_max_vl[1] << " µ¥Ôª£º" << min_max_en[1] << endl;
+	hout << "      æœ€å¤§ä½“ç§¯ï¼š" << min_max_vl[1] << " å•å…ƒï¼š" << min_max_en[1] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -537,16 +537,16 @@ int Mesher::mesh_tet_map( double glength )
 	//hout << eles_vec[min_max_en[1]].materialId << endl;
 	hout << endl;
 	
-	//Êä³öËÄÃæÌåÌå»ı·Ö²¼Çé¿ö
+	//è¾“å‡ºå››é¢ä½“ä½“ç§¯åˆ†å¸ƒæƒ…å†µ
 //	tet_vol_distrib(min_max_vl,"_a");
-	//Êä³öËÄÃæÌåÖÊÁ¿·Ö²¼Çé¿ö
+	//è¾“å‡ºå››é¢ä½“è´¨é‡åˆ†å¸ƒæƒ…å†µ
 //	tet_quality("_a");
 	//---------------------------------------------------------------------------
-	hout<< "-_- ¿ªÊ¼½øĞĞ¹âË³´¦Àí......" << endl;
+	hout<< "-_- å¼€å§‹è¿›è¡Œå…‰é¡ºå¤„ç†......" << endl;
 	clock_t ct_smooth_begin = clock();
 
-	//¹âË³´¦Àí
-	//ÎªÃ¿¸ö½ÚµãÌí¼ÓÏàÁÚ½Úµã£¨Ïà¹Øµ¥Ôª£©
+	//å…‰é¡ºå¤„ç†
+	//ä¸ºæ¯ä¸ªèŠ‚ç‚¹æ·»åŠ ç›¸é‚»èŠ‚ç‚¹ï¼ˆç›¸å…³å•å…ƒï¼‰
 	for( int i=0; i<(int)nodes_vec.size(); i++ )
 	{
 		nodes_vec[i].neigh_nodes_vec.clear();
@@ -574,14 +574,14 @@ int Mesher::mesh_tet_map( double glength )
 	}
 
 	int circle_num = 0 ;
-	//¹âË³ÊÇ¸ö¶à´ÎµÄ¹ı³Ì
+	//å…‰é¡ºæ˜¯ä¸ªå¤šæ¬¡çš„è¿‡ç¨‹
 	while( smoothing_3d(1) && smoothing_3d(0) && circle_num < 15 )
 	{
 		circle_num ++ ;
-		hout << "    ¹âË³´ÎÊı NO: " << circle_num << "´Î" <<endl;
+		hout << "    å…‰é¡ºæ¬¡æ•° NO: " << circle_num << "æ¬¡" <<endl;
 	}
 
-	//¼ì²éÒ»ÏÂÓĞÃ»ÓĞµ¥Ôª²ÄÁÏÊôĞÔÃ»È·¶¨£¬Ö»ÊÇÓÃÀ´¼ì²â³ÌĞòÊÇ·ñÔËĞĞÕı³££¬ÒòÎªºóÃæ¸ÄÁËºÜ¶à£¬²»¸Ò±£Ö¤ÁË
+	//æ£€æŸ¥ä¸€ä¸‹æœ‰æ²¡æœ‰å•å…ƒææ–™å±æ€§æ²¡ç¡®å®šï¼Œåªæ˜¯ç”¨æ¥æ£€æµ‹ç¨‹åºæ˜¯å¦è¿è¡Œæ­£å¸¸ï¼Œå› ä¸ºåé¢æ”¹äº†å¾ˆå¤šï¼Œä¸æ•¢ä¿è¯äº†
 	for( int i=0; i<(int)eles_vec.size(); i++ )
 	{
 		if( eles_vec[i].materialId == -1 )
@@ -593,20 +593,20 @@ int Mesher::mesh_tet_map( double glength )
 											<< eles_vec[i].nodesId[3] ;
 			hout << " material id: -1." <<endl;
 
-			//Ç¿ÖÆÕâĞ©µ¥Ôª²ÄÁÏÎª¿ÅÁ£²ÄÁÏ
+			//å¼ºåˆ¶è¿™äº›å•å…ƒææ–™ä¸ºé¢—ç²’ææ–™
 			eles_vec[i].materialId = 1;
-			hout << "Ç¿ÖÆElement" << i << "materialidÎª1." << endl;
+			hout << "å¼ºåˆ¶Element" << i << "materialidä¸º1." << endl;
 		}
 	}
 
 	clock_t ct_smooth_end = clock();
-	hout<< "    ¹âË³´¦ÀíºÄÊ±£º" << (double)( ct_smooth_end - ct_smooth_begin )/CLOCKS_PER_SEC << " Ãë" << endl;
-	hout<< "    µ¥Ôª£º"<< (int)eles_vec.size() <<" ½Úµã£º" << (int)nodes_vec.size() << endl;
-	hout<< "^_^ ¹âË³´¦Àí³É¹¦Íê±Ï." << endl;
+	hout<< "    å…‰é¡ºå¤„ç†è€—æ—¶ï¼š" << (double)( ct_smooth_end - ct_smooth_begin )/CLOCKS_PER_SEC << " ç§’" << endl;
+	hout<< "    å•å…ƒï¼š"<< (int)eles_vec.size() <<" èŠ‚ç‚¹ï¼š" << (int)nodes_vec.size() << endl;
+	hout<< "^_^ å…‰é¡ºå¤„ç†æˆåŠŸå®Œæ¯•." << endl;
 
 
 	cal_min_max_tet_volume(min_max_en,min_max_vl);
-	hout << "      ×îĞ¡Ìå»ı£º" << min_max_vl[0] << " µ¥Ôª£º" << min_max_en[0] << endl;
+	hout << "      æœ€å°ä½“ç§¯ï¼š" << min_max_vl[0] << " å•å…ƒï¼š" << min_max_en[0] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -614,7 +614,7 @@ int Mesher::mesh_tet_map( double glength )
 	//}
 	//hout << eles_vec[min_max_en[0]].materialId << endl;
 
-	hout << "      ×î´óÌå»ı£º" << min_max_vl[1] << " µ¥Ôª£º" << min_max_en[1] << endl;
+	hout << "      æœ€å¤§ä½“ç§¯ï¼š" << min_max_vl[1] << " å•å…ƒï¼š" << min_max_en[1] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -623,45 +623,45 @@ int Mesher::mesh_tet_map( double glength )
 	//hout << eles_vec[min_max_en[1]].materialId << endl;
 
 	double  min_max_vl_radio = min_max_vl[0]/min_max_vl[1];
-	hout << "      ×îĞ¡Ìå»ıÓë×î´óÌå»ıÖ®±ÈÎª£º" << min_max_vl_radio << endl;
+	hout << "      æœ€å°ä½“ç§¯ä¸æœ€å¤§ä½“ç§¯ä¹‹æ¯”ä¸ºï¼š" << min_max_vl_radio << endl;
 	if(  min_max_vl_radio < 0.01 )
 	{
-		hout << "      Çë×¢Òâ! ÆÊ·Öµ¥ÔªµÄ×îĞ¡Ìå»ıÓë×î´óÌå»ıÏà²îÌ«´ó£¡£¡" << endl;
+		hout << "      è¯·æ³¨æ„! å‰–åˆ†å•å…ƒçš„æœ€å°ä½“ç§¯ä¸æœ€å¤§ä½“ç§¯ç›¸å·®å¤ªå¤§ï¼ï¼" << endl;
 //		return 0;
 	}
 
-	//Êä³öËÄÃæÌåÌå»ı·Ö²¼Çé¿ö
+	//è¾“å‡ºå››é¢ä½“ä½“ç§¯åˆ†å¸ƒæƒ…å†µ
 //	tet_vol_distrib(min_max_vl,"_b");
-	//Êä³öËÄÃæÌåÖÊÁ¿·Ö²¼Çé¿ö
+	//è¾“å‡ºå››é¢ä½“è´¨é‡åˆ†å¸ƒæƒ…å†µ
 //	tet_quality("_b");
 
-	//ÈËÎªÔö¼ÓµÄÌå·Ö±È
+	//äººä¸ºå¢åŠ çš„ä½“åˆ†æ¯”
 //	Reincrese_vol_raito();
 	
 	double vol_ratio = volume_ratio();
-	hout << "      ÍÖÇòÌå»ıÓë»ùÌåÌå»ıÖ®±È£º" << vol_ratio << endl <<endl;
+	hout << "      æ¤­çƒä½“ç§¯ä¸åŸºä½“ä½“ç§¯ä¹‹æ¯”ï¼š" << vol_ratio << endl <<endl;
 
-	 //È·¶¨±ß½ç½ÚµãºÍµ¥Ôª
+	 //ç¡®å®šè¾¹ç•ŒèŠ‚ç‚¹å’Œå•å…ƒ
 	deter_boundary_nodes();
 
 	clock_t ct_mesh_end = clock();
-	hout << "      ¹²ÆÊ·Ö½Úµã£º" << (int)nodes_vec.size() << "  µ¥Ôª£º" << (int)eles_vec.size() << endl;
-	hout << "      Õû¸öÆÊ·Ö¹ı³Ì¹²ºÄÊ±£º" << (double)( ct_mesh_end - ct_mesh_begin )/CLOCKS_PER_SEC << " Ãë" << endl;
-	hout << "^_^ ËÄÃæÌåÍø¸ñÆÊ·Ö³É¹¦!" << endl<<endl; 
+	hout << "      å…±å‰–åˆ†èŠ‚ç‚¹ï¼š" << (int)nodes_vec.size() << "  å•å…ƒï¼š" << (int)eles_vec.size() << endl;
+	hout << "      æ•´ä¸ªå‰–åˆ†è¿‡ç¨‹å…±è€—æ—¶ï¼š" << (double)( ct_mesh_end - ct_mesh_begin )/CLOCKS_PER_SEC << " ç§’" << endl;
+	hout << "^_^ å››é¢ä½“ç½‘æ ¼å‰–åˆ†æˆåŠŸ!" << endl<<endl; 
 
 	return 1;
 }
 
 //---------------------------------------------------------------------------
-//Éú³É±³¾°Íø¸ñ
+//ç”ŸæˆèƒŒæ™¯ç½‘æ ¼
 void Mesher::gen_bg_mesh(int x_sec_num, int y_sec_num, int z_sec_num, vector<Hexahedron> &hexes_v)
 {
 	double dx = (x_max-x_min)/x_sec_num;
 	double dy = (y_max-y_min)/y_sec_num;
 	double dz = (z_max-z_min)/z_sec_num;
-	x_sec_num ++ ;  //x·½ÏòµÈ·ÖµãÊı
-	y_sec_num ++ ;  //y·½ÏòµÈ·ÖµãÊı
-	z_sec_num ++ ;  //z·½ÏòµÈ·ÖµãÊı
+	x_sec_num ++ ;  //xæ–¹å‘ç­‰åˆ†ç‚¹æ•°
+	y_sec_num ++ ;  //yæ–¹å‘ç­‰åˆ†ç‚¹æ•°
+	z_sec_num ++ ;  //zæ–¹å‘ç­‰åˆ†ç‚¹æ•°
 
 	if( dx < global_length ) global_length = dx;
 	if( dy < global_length ) global_length = dy;
@@ -669,7 +669,7 @@ void Mesher::gen_bg_mesh(int x_sec_num, int y_sec_num, int z_sec_num, vector<Hex
 
 	double hex_volume = dx*dy*dz;
         
-	//Éú³É½Úµã
+	//ç”ŸæˆèŠ‚ç‚¹
 	for( int i=0; i<z_sec_num; i++ )
 	{
 		double z = z_min + i * dz ;
@@ -681,22 +681,22 @@ void Mesher::gen_bg_mesh(int x_sec_num, int y_sec_num, int z_sec_num, vector<Hex
 				double x = x_min + k * dx ;
 
 				Node nd(x,y,z);
-				nd.flag = deter_node_flag(i,j,k,z_sec_num-1,y_sec_num-1,x_sec_num-1);	//±ê×¢½ÚµãµÄÎ»ÖÃ
-				if( nd.flag >= 0 ) bnodes_vec.push_back( (int)nodes_vec.size() );				//±ê×¢±ß½ç½ÚµãËùÔÚ½ÚµãÏòÁ¿ÖĞµÄ±àºÅ
+				nd.flag = deter_node_flag(i,j,k,z_sec_num-1,y_sec_num-1,x_sec_num-1);	//æ ‡æ³¨èŠ‚ç‚¹çš„ä½ç½®
+				if( nd.flag >= 0 ) bnodes_vec.push_back( (int)nodes_vec.size() );				//æ ‡æ³¨è¾¹ç•ŒèŠ‚ç‚¹æ‰€åœ¨èŠ‚ç‚¹å‘é‡ä¸­çš„ç¼–å·
 				nodes_vec.push_back(nd);
 			}
 		}
 	}
 
-	//ÁùÃæÌåÊıÄ¿
+	//å…­é¢ä½“æ•°ç›®
 	int num_eles=(x_sec_num-1)*(y_sec_num-1)*(z_sec_num-1);
-	//¾ØĞÎÃæÆ¬µÄÊıÄ¿
+	//çŸ©å½¢é¢ç‰‡çš„æ•°ç›®
 	int num_rec_xfaces=x_sec_num*(y_sec_num-1)*(z_sec_num-1);
 	int num_rec_yfaces=y_sec_num*(x_sec_num-1)*(z_sec_num-1);
 	int num_rec_zfaces=z_sec_num*(x_sec_num-1)*(y_sec_num-1);
 	int num_rec_faces=num_rec_xfaces+num_rec_yfaces+num_rec_zfaces;
 
-	//Éú³ÉÁùÃæÌåµ¥Ôª(8¸ö½ÚµãºÅ£¬6¸ö¾ØĞÎÃæÆ¬ºÅ£©
+	//ç”Ÿæˆå…­é¢ä½“å•å…ƒ(8ä¸ªèŠ‚ç‚¹å·ï¼Œ6ä¸ªçŸ©å½¢é¢ç‰‡å·ï¼‰
 	int now_i=0;
 	for( int i=0; i<z_sec_num-1; i++ )
 	{
@@ -704,7 +704,7 @@ void Mesher::gen_bg_mesh(int x_sec_num, int y_sec_num, int z_sec_num, vector<Hex
 		{
 			for( int k=0; k<x_sec_num-1; k++ )
 			{
-				//Á¢·½ÌåµÄ°Ë¸ö¶¥µã
+				//ç«‹æ–¹ä½“çš„å…«ä¸ªé¡¶ç‚¹
 				int node1_num = i * x_sec_num * y_sec_num + j * x_sec_num + k ;
 				int node2_num = i * x_sec_num * y_sec_num + j * x_sec_num + k + 1 ;
 				int node3_num = i * x_sec_num * y_sec_num + ( j + 1 ) * x_sec_num + k + 1 ;
@@ -730,18 +730,18 @@ void Mesher::gen_bg_mesh(int x_sec_num, int y_sec_num, int z_sec_num, vector<Hex
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İ¸ø¶¨µÄi j kÒÔ¼°×î´ói_max j_max k_max£¬¾ö¶¨¸ø¶¨½ÚµãµÄÎ»ÖÃ£¨½Çµã¡¢±ß½çÏß¡¢±ß½çÃæ¡¢ÄÚ²¿£©
-//0-5: ±ß½çÃæÉÏ£¨·µ»ØÖµ£©
-//6-17: ±ß½çÏß
-//18: ½Çµã£¨ËùÓĞ½Çµã¶¼²»ÄÜÒÆ¶¯£¬¹éÎªÒ»Àà£©
-//²úÉú±³¾°Íø¸ñÊ±Ê¹ÓÃ
-//i--z×ø±ê
-//j--y×ø±ê
-//k--x×ø±ê
+//æ ¹æ®ç»™å®šçš„i j kä»¥åŠæœ€å¤§i_max j_max k_maxï¼Œå†³å®šç»™å®šèŠ‚ç‚¹çš„ä½ç½®ï¼ˆè§’ç‚¹ã€è¾¹ç•Œçº¿ã€è¾¹ç•Œé¢ã€å†…éƒ¨ï¼‰
+//0-5: è¾¹ç•Œé¢ä¸Šï¼ˆè¿”å›å€¼ï¼‰
+//6-17: è¾¹ç•Œçº¿
+//18: è§’ç‚¹ï¼ˆæ‰€æœ‰è§’ç‚¹éƒ½ä¸èƒ½ç§»åŠ¨ï¼Œå½’ä¸ºä¸€ç±»ï¼‰
+//äº§ç”ŸèƒŒæ™¯ç½‘æ ¼æ—¶ä½¿ç”¨
+//i--zåæ ‡
+//j--yåæ ‡
+//k--xåæ ‡
 int Mesher::deter_node_flag(int i, int j, int k, int i_max, int j_max, int k_max)
 {
 	int flag;
-	vector<int> faces_num;   //ÊôÓÚÄÄ¸öÃæ
+	vector<int> faces_num;   //å±äºå“ªä¸ªé¢
 	if( i == 0 )          faces_num.push_back(4);
 	else if( i == i_max ) faces_num.push_back(5);
 
@@ -751,16 +751,16 @@ int Mesher::deter_node_flag(int i, int j, int k, int i_max, int j_max, int k_max
 	if( k == 0 )          faces_num.push_back(0);
 	else if( k == k_max ) faces_num.push_back(1);
 
-	int bfn = (int)faces_num.size();		//¼ÇÂ¼ÔÚ¼¸¸öÃæÄÚ
-	if( bfn == 0 )									//ÄÚ²¿½Úµã
+	int bfn = (int)faces_num.size();		//è®°å½•åœ¨å‡ ä¸ªé¢å†…
+	if( bfn == 0 )									//å†…éƒ¨èŠ‚ç‚¹
 	{
 		flag = -1;	
 	}
-	else if( bfn == 1 )							//±ß½çÃæÉÏµÄ½Úµã	
+	else if( bfn == 1 )							//è¾¹ç•Œé¢ä¸Šçš„èŠ‚ç‚¹	
 	{
 		flag = faces_num[0];	
 	}
-	else if( bfn == 2 )							//ÔÚ±ß½çÏßÉÏ
+	else if( bfn == 2 )							//åœ¨è¾¹ç•Œçº¿ä¸Š
 	{            
 		int min_bfn = min(faces_num[0],faces_num[1]);
 		int max_bfn = max(faces_num[0],faces_num[1]);
@@ -791,67 +791,67 @@ int Mesher::deter_node_flag(int i, int j, int k, int i_max, int j_max, int k_max
 	}
 	else if( bfn == 3 )
 	{
-		//½Çµã£¬²»ÔÙÇø·ÖÊÇÄÄ¸ö½ÇµãÁË£¬ËùÓĞ½ÇµãÒ²²»ÄÜÒÆ¶¯
+		//è§’ç‚¹ï¼Œä¸å†åŒºåˆ†æ˜¯å“ªä¸ªè§’ç‚¹äº†ï¼Œæ‰€æœ‰è§’ç‚¹ä¹Ÿä¸èƒ½ç§»åŠ¨
 		flag = 18;
 	}
 	return flag;
 }
 
 //---------------------------------------------------------------------------
-//º«·Ç20060908Ôö¸Ä
-//¸ù¾İ¸ø¶¨µÄ½ÚµãµÄ±àºÅºÍµ¥°ûµÄx,y,z·½ÏòµÄ×î´ó×îĞ¡Öµ£¬
-// ¾ö¶¨¸ø¶¨½ÚµãµÄÎ»ÖÃ£¨½Çµã¡¢±ß½çÏß¡¢±ß½çÃæ¡¢ÄÚ²¿£©
-//1-3: ±ß½çÃæÉÏ £¨6¸öÃæ¹éÎª3Àà£©
-//4-6: ±ß½çÏß  (12Ìõ±ß½çÏß¹éÎª3Àà)
-//7: ½Çµã£¨ËùÓĞ½Çµã¶¼²»ÄÜÒÆ¶¯£¬¹éÎª1Àà£©
+//éŸ©é20060908å¢æ”¹
+//æ ¹æ®ç»™å®šçš„èŠ‚ç‚¹çš„ç¼–å·å’Œå•èƒçš„x,y,zæ–¹å‘çš„æœ€å¤§æœ€å°å€¼ï¼Œ
+// å†³å®šç»™å®šèŠ‚ç‚¹çš„ä½ç½®ï¼ˆè§’ç‚¹ã€è¾¹ç•Œçº¿ã€è¾¹ç•Œé¢ã€å†…éƒ¨ï¼‰
+//1-3: è¾¹ç•Œé¢ä¸Š ï¼ˆ6ä¸ªé¢å½’ä¸º3ç±»ï¼‰
+//4-6: è¾¹ç•Œçº¿  (12æ¡è¾¹ç•Œçº¿å½’ä¸º3ç±»)
+//7: è§’ç‚¹ï¼ˆæ‰€æœ‰è§’ç‚¹éƒ½ä¸èƒ½ç§»åŠ¨ï¼Œå½’ä¸º1ç±»ï¼‰
 
 int Mesher::deter_node_flag(int node_num)
 {
 	int flag;
-	vector<int> faces_num;   //ÊôÓÚÄÄÖÖÃæ
+	vector<int> faces_num;   //å±äºå“ªç§é¢
 	Node *node = &nodes_vec[node_num];
 
 	if (fabs(node->x - x_min) <= ZERO || fabs(node->x - x_max) <= ZERO)
 	{
-		faces_num.push_back(1);		//ÔÚx×îĞ¡Öµ»ò×î´óÖµµÄÃæÄÚ£¬x²»ÄÜ¶¯£¬y,z¿ÉÒÔ¶¯
+		faces_num.push_back(1);		//åœ¨xæœ€å°å€¼æˆ–æœ€å¤§å€¼çš„é¢å†…ï¼Œxä¸èƒ½åŠ¨ï¼Œy,zå¯ä»¥åŠ¨
 	}
 
 	if (fabs(node->y - y_min) <= ZERO|| fabs(node->y - y_max) <= ZERO)
 	{
-		faces_num.push_back(2);		//ÔÚy×îĞ¡Öµ»ò×î´óÖµµÄÃæÄÚ£¬y²»ÄÜ¶¯£¬x,z¿ÉÒÔ¶¯
+		faces_num.push_back(2);		//åœ¨yæœ€å°å€¼æˆ–æœ€å¤§å€¼çš„é¢å†…ï¼Œyä¸èƒ½åŠ¨ï¼Œx,zå¯ä»¥åŠ¨
 	}
 
 	if( fabs(node->z - z_min) <= ZERO|| fabs(node->z - z_max) <= ZERO)
 	{
-		faces_num.push_back(3);		//ÔÚz×îĞ¡Öµ»ò×î´óÖµµÄÃæÄÚ£¬z²»ÄÜ¶¯£¬x,y¿ÉÒÔ¶¯
+		faces_num.push_back(3);		//åœ¨zæœ€å°å€¼æˆ–æœ€å¤§å€¼çš„é¢å†…ï¼Œzä¸èƒ½åŠ¨ï¼Œx,yå¯ä»¥åŠ¨
 	}
 
-	int bfn = (int)faces_num.size();		//¼ÇÂ¼ÔÚ¼¸¸öÃæÄÚ
-	if( bfn == 0 )									//ÄÚ²¿½Úµã
+	int bfn = (int)faces_num.size();		//è®°å½•åœ¨å‡ ä¸ªé¢å†…
+	if( bfn == 0 )									//å†…éƒ¨èŠ‚ç‚¹
 	{
 		flag = 0;	
 	}
-	else if( bfn == 1 )							//±ß½çÃæÉÏµÄ½Úµã	
+	else if( bfn == 1 )							//è¾¹ç•Œé¢ä¸Šçš„èŠ‚ç‚¹	
 	{
 		flag = faces_num[0];	
 	}
-	else if( bfn == 2 )							//ÔÚ±ß½çÏßÉÏ
+	else if( bfn == 2 )							//åœ¨è¾¹ç•Œçº¿ä¸Š
 	{            
 		int min_bfn = min(faces_num[0],faces_num[1]);
 		int max_bfn = max(faces_num[0],faces_num[1]);
 		if( min_bfn == 1 )
 		{
-			if( max_bfn == 2 ) flag = 4;	//ÔÚxºÍyÃæµÄ½»ÏßÉÏ£¬Ö»ÓĞz¿É¶¯
-			if( max_bfn == 3 ) flag = 5;   //ÔÚxºÍzÃæµÄ½»ÏßÉÏ£¬Ö»ÓĞy¿É¶¯
+			if( max_bfn == 2 ) flag = 4;	//åœ¨xå’Œyé¢çš„äº¤çº¿ä¸Šï¼Œåªæœ‰zå¯åŠ¨
+			if( max_bfn == 3 ) flag = 5;   //åœ¨xå’Œzé¢çš„äº¤çº¿ä¸Šï¼Œåªæœ‰yå¯åŠ¨
 		}
 		else if( min_bfn == 2 )
 		{
-			if( max_bfn == 3 ) flag =6;	//ÔÚyºÍzÃæµÄ½»ÏßÉÏ£¬Ö»ÓĞx¿É¶¯
+			if( max_bfn == 3 ) flag =6;	//åœ¨yå’Œzé¢çš„äº¤çº¿ä¸Šï¼Œåªæœ‰xå¯åŠ¨
 		}
 	}
 	else if( bfn == 3 )
 	{
-		//½Çµã£¬²»ÔÙÇø·ÖÊÇÄÄ¸ö½ÇµãÁË£¬ËùÓĞ½ÇµãÒ²²»ÄÜÒÆ¶¯
+		//è§’ç‚¹ï¼Œä¸å†åŒºåˆ†æ˜¯å“ªä¸ªè§’ç‚¹äº†ï¼Œæ‰€æœ‰è§’ç‚¹ä¹Ÿä¸èƒ½ç§»åŠ¨
 		flag = 7;
 	}
 
@@ -859,42 +859,42 @@ int Mesher::deter_node_flag(int node_num)
 }
 
 //---------------------------------------------------------------------------
-//µ÷ÕûÉú³ÉµÄÁùÃæÌå£¬Ê¹ËùÓĞµÄÁùÃæÌå¶¼ÄÜ²ğ·Ö³ÉËÄÃæÌå£¬¶øÃ»ÓĞËÄÃæÌå¿ç±ß½ç
+//è°ƒæ•´ç”Ÿæˆçš„å…­é¢ä½“ï¼Œä½¿æ‰€æœ‰çš„å…­é¢ä½“éƒ½èƒ½æ‹†åˆ†æˆå››é¢ä½“ï¼Œè€Œæ²¡æœ‰å››é¢ä½“è·¨è¾¹ç•Œ
 int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 {
 	bool debuging = false;
 
 //   hout << "global_length: " << global_length << endl;
 
-	//×îĞ¡¾àÀë·§Öµ£¬Ğ¡ÓÚÕâ¸ö¾àÀë½«½ÚµãÒÆ¶¯µ½½çÃæ£¬´óÓÚÕâ¸ö½ÚµãµÄ¾àÀë×îºÃ²»ÒªÒÆ¶¯
-	//Èı½ÇĞÎÃæÆ¬¶¥µãµ½¶Ô±ß¾àÀëĞ¡ÓÚÕâ¸ö¾àÀë±íÊ¾ÃæÆ¬²»ºÏ·¨£¬¾¡Á¿±ÜÃâ         
+	//æœ€å°è·ç¦»é˜€å€¼ï¼Œå°äºè¿™ä¸ªè·ç¦»å°†èŠ‚ç‚¹ç§»åŠ¨åˆ°ç•Œé¢ï¼Œå¤§äºè¿™ä¸ªèŠ‚ç‚¹çš„è·ç¦»æœ€å¥½ä¸è¦ç§»åŠ¨
+	//ä¸‰è§’å½¢é¢ç‰‡é¡¶ç‚¹åˆ°å¯¹è¾¹è·ç¦»å°äºè¿™ä¸ªè·ç¦»è¡¨ç¤ºé¢ç‰‡ä¸åˆæ³•ï¼Œå°½é‡é¿å…         
 	double min_dis = global_length*3.0/8.0;
 
-	//È·¶¨Ã¿¸ö½ÚµãµÄÎ»ÖÃ£¨ÔÚ»ùÌåÄÚ»¹ÊÇÔöÇ¿ÌåÄÚ£¬»¹ÊÇ½çÃæÉÏ£©
+	//ç¡®å®šæ¯ä¸ªèŠ‚ç‚¹çš„ä½ç½®ï¼ˆåœ¨åŸºä½“å†…è¿˜æ˜¯å¢å¼ºä½“å†…ï¼Œè¿˜æ˜¯ç•Œé¢ä¸Šï¼‰
 	for( int i=0; i<(int)nodes_vec.size(); i++ )
 	{
 		int is_on;
 		where_is_nodes[i] = where_is( &nodes_vec[i],  is_on, i );
 		if( where_is_nodes[i] == -3 ) 
 		{
-			hout << " È·¶¨Ã¿¸ö½ÚµãµÄÎ»ÖÃ²Ù×÷(where_is)Ê§°Ü! " << endl;
+			hout << " ç¡®å®šæ¯ä¸ªèŠ‚ç‚¹çš„ä½ç½®æ“ä½œ(where_is)å¤±è´¥! " << endl;
 			hout << "*******************************************" << endl;
 			return 0;
 		}
 		is_on_nodes[i] = is_on;
 	}
 
-	//±êÖ¾½ÚµãÊÇ·ñ¿ÉÒÔÒÆ¶¯
-	//£¨ÒÑ¾­ÒÆ¶¯µ½ÍÖÇòÃæÉÏµÄ²»¿ÉÒÔÔÙÒÆ¶¯£©
-	//£¨Èç¹û´Ë½ÚµãËùÓĞÏà¹ØÁùÃæÌåÖĞ£¬ÒÑ¾­ÖÁÉÙÓĞÒ»¸öÁùÃæÌåÓĞËÄ¸ö½ÚµãÔÚ½çÃæÉÏ£¬´Ë½ÚµãÒ²²»ÄÜÒÆ¶¯)
-	//	0: ±íÊ¾²»¿ÉÒÔÒÆ¶¯     1: ±íÊ¾¿ÉÒÔÒÆ¶¯
+	//æ ‡å¿—èŠ‚ç‚¹æ˜¯å¦å¯ä»¥ç§»åŠ¨
+	//ï¼ˆå·²ç»ç§»åŠ¨åˆ°æ¤­çƒé¢ä¸Šçš„ä¸å¯ä»¥å†ç§»åŠ¨ï¼‰
+	//ï¼ˆå¦‚æœæ­¤èŠ‚ç‚¹æ‰€æœ‰ç›¸å…³å…­é¢ä½“ä¸­ï¼Œå·²ç»è‡³å°‘æœ‰ä¸€ä¸ªå…­é¢ä½“æœ‰å››ä¸ªèŠ‚ç‚¹åœ¨ç•Œé¢ä¸Šï¼Œæ­¤èŠ‚ç‚¹ä¹Ÿä¸èƒ½ç§»åŠ¨)
+	//	0: è¡¨ç¤ºä¸å¯ä»¥ç§»åŠ¨     1: è¡¨ç¤ºå¯ä»¥ç§»åŠ¨
 	vector<int> movable_ns( nodes_vec.size(), 1 );
 	int pv=0;
 	int pl=0;
-	//¶ÔÃ¿¸öÁùÃæÌå½øĞĞ¿¼ÂÇ
+	//å¯¹æ¯ä¸ªå…­é¢ä½“è¿›è¡Œè€ƒè™‘
 	for( int i=0; i<(int)hexes.size(); i++ )
 	{
-		if( debuging )	//¿ÉÒÔÊä³öµ¥Ôª¼°½Úµã±àºÅºÍ½ÚµãËù´¦Î»ÖÃÇé¿ö
+		if( debuging )	//å¯ä»¥è¾“å‡ºå•å…ƒåŠèŠ‚ç‚¹ç¼–å·å’ŒèŠ‚ç‚¹æ‰€å¤„ä½ç½®æƒ…å†µ
 		{
 			hout << "-----------------------------------------------------------" << endl;
 			hout << "hexahedron " << i << "(" << (int)hexes.size() << "): ";
@@ -934,7 +934,7 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 		}
 
-		//±£´æ8¸ö½ÚµãÊÇ·ñÔÚ½çÃæÉÏµÄĞÅÏ¢£¬²¢ËæÊ±¼ì²é
+		//ä¿å­˜8ä¸ªèŠ‚ç‚¹æ˜¯å¦åœ¨ç•Œé¢ä¸Šçš„ä¿¡æ¯ï¼Œå¹¶éšæ—¶æ£€æŸ¥
 		vector<int> is_on_ln;
 		for( int j=0; j<8; j++ )
 		{
@@ -949,39 +949,39 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 		{
 			int nn = hexes[i].nodesId[j];
 			int win = where_is_nodes[nn];
-			if( win != -1 && is_on_nodes[nn] == 0 )			//·¢ÏÖÔÚ¿ÅÁ£ÄÚµÄ½Úµã
+			if( win != -1 && is_on_nodes[nn] == 0 )			//å‘ç°åœ¨é¢—ç²’å†…çš„èŠ‚ç‚¹
 			{   
 				if( debuging )
 				{
 					hout << "       node: " << j << endl;
 				}
 
-				int nei_i[3];    //Èı¸öÏàÁÚµÄ½Úµã±àºÅ£¨¾Ö²¿±àºÅ£©
+				int nei_i[3];    //ä¸‰ä¸ªç›¸é‚»çš„èŠ‚ç‚¹ç¼–å·ï¼ˆå±€éƒ¨ç¼–å·ï¼‰
 				deter_nei(j,nei_i);
 				int nei_num[3],nei_win[3],nei_is_on[3];
-				for( int k=0; k<3; k++ )		//Í¨¹ıÁùÃæÌå¾Ö²¿±àºÅÕÒµ½Ïà¹Ø½ÚµãµÄÈ«¾Ö±àºÅ²¢È·¶¨Î»ÖÃ
+				for( int k=0; k<3; k++ )		//é€šè¿‡å…­é¢ä½“å±€éƒ¨ç¼–å·æ‰¾åˆ°ç›¸å…³èŠ‚ç‚¹çš„å…¨å±€ç¼–å·å¹¶ç¡®å®šä½ç½®
 				{
 					nei_num[k] = hexes[i].nodesId[nei_i[k]];
 					nei_win[k] = where_is_nodes[nei_num[k]];
 					nei_is_on[k] = is_on_nodes[nei_num[k]];
 				}
-				//Èç¹ûÏàÁÚµÄÈı¸ö½Úµã¶¼ºÍ±¾½ÚµãÔÚÍ¬Ò»¿ÅÁ£ÄÚÔòÌø¹ı£¬·ñÔòÒÆ¶¯µ½½çÃæÉÏ£¨±£Ö¤Èı¸öÏàÁÚ½ÚµãÔÚÍ¬Ò»¸ö¿ÅÁ£ÄÚ»ò¿ÅÁ£±íÃæÉÏ£©£©
+				//å¦‚æœç›¸é‚»çš„ä¸‰ä¸ªèŠ‚ç‚¹éƒ½å’Œæœ¬èŠ‚ç‚¹åœ¨åŒä¸€é¢—ç²’å†…åˆ™è·³è¿‡ï¼Œå¦åˆ™ç§»åŠ¨åˆ°ç•Œé¢ä¸Šï¼ˆä¿è¯ä¸‰ä¸ªç›¸é‚»èŠ‚ç‚¹åœ¨åŒä¸€ä¸ªé¢—ç²’å†…æˆ–é¢—ç²’è¡¨é¢ä¸Šï¼‰ï¼‰
 				if( nei_win[0] == win && nei_win[1] == win && nei_win[2] == win ) continue;
 
-				//±¾½ÚµãÒÔ¼°ÁÚ½Úµãµ½ÍÖÇòÃæµÄÍ¶Ó°µã£¨×¢Òâµ¥°û²àÃæÉÏµÄ½ÚµãÍ¶Ó°Ò²ÒªÔÚ²àÃæÉÏ£©
+				//æœ¬èŠ‚ç‚¹ä»¥åŠé‚»èŠ‚ç‚¹åˆ°æ¤­çƒé¢çš„æŠ•å½±ç‚¹ï¼ˆæ³¨æ„å•èƒä¾§é¢ä¸Šçš„èŠ‚ç‚¹æŠ•å½±ä¹Ÿè¦åœ¨ä¾§é¢ä¸Šï¼‰
 				Node zerop;
 				vector<Node> pnodes(4,zerop);
-				int error[4]={-1,-1,-1,-1};     //±êÖ¾ÊÇ·ñ³É¹¦Í¶Ó°   0£ºÊ§°Ü    1£º³É¹¦
+				int error[4]={-1,-1,-1,-1};     //æ ‡å¿—æ˜¯å¦æˆåŠŸæŠ•å½±   0ï¼šå¤±è´¥    1ï¼šæˆåŠŸ
 				pnodes[0] = project2_elli_surf(nodes_vec[nn],thecell->surfaces_vec[win],&error[0]);
 				pv=pv+1;
-                //µ÷ÕûÓë±¾½Úµã²»ÔÚÍ¬Ò»¿ÅÁ£ÄÚµÄ½Úµãµ½¸Ã¿ÅÁ£µÄ½çÃæÉÏ£¨µ÷ÕûÁÚ½Úµã£¬»òÕßµ÷Õû±¾½Úµã£©
-				//Ê×ÏÈÈ·¶¨ÊÇµ÷ÕûÁÚ½Úµã»¹ÊÇµ÷Õû±¾½Úµã£¬Èç¹ûµ÷ÕûÁÚ½Úµã£¬ÔòÓë±¾½Úµã²»ÔÚÍ¬Ò»¿ÅÁ£ÄÚµÄÁÚ½Úµã¶¼Òªµ÷Õûµ½½çÃæÉÏ£¬Èç¹ûµ÷Õû±¾½Úµã£¬ÔòÆäËû½Úµã¿ÉÒÔ²»ÔÙ¿¼ÂÇ£¬¼ÌĞøÑ­»·
-				//¸ù¾İµ½ÍÖÇòÃæµÄ¾àÀëÀ´ÅĞ¶Ï
+                //è°ƒæ•´ä¸æœ¬èŠ‚ç‚¹ä¸åœ¨åŒä¸€é¢—ç²’å†…çš„èŠ‚ç‚¹åˆ°è¯¥é¢—ç²’çš„ç•Œé¢ä¸Šï¼ˆè°ƒæ•´é‚»èŠ‚ç‚¹ï¼Œæˆ–è€…è°ƒæ•´æœ¬èŠ‚ç‚¹ï¼‰
+				//é¦–å…ˆç¡®å®šæ˜¯è°ƒæ•´é‚»èŠ‚ç‚¹è¿˜æ˜¯è°ƒæ•´æœ¬èŠ‚ç‚¹ï¼Œå¦‚æœè°ƒæ•´é‚»èŠ‚ç‚¹ï¼Œåˆ™ä¸æœ¬èŠ‚ç‚¹ä¸åœ¨åŒä¸€é¢—ç²’å†…çš„é‚»èŠ‚ç‚¹éƒ½è¦è°ƒæ•´åˆ°ç•Œé¢ä¸Šï¼Œå¦‚æœè°ƒæ•´æœ¬èŠ‚ç‚¹ï¼Œåˆ™å…¶ä»–èŠ‚ç‚¹å¯ä»¥ä¸å†è€ƒè™‘ï¼Œç»§ç»­å¾ªç¯
+				//æ ¹æ®åˆ°æ¤­çƒé¢çš„è·ç¦»æ¥åˆ¤æ–­
 				double dis0;
 
 				if( error[0] == 0 )
 				{
-					//Í¶Ó°Ê§°Ü£¬¸³Óèdis0Ò»¸ö×ã¹»´óµÄÊı£¬·ÀÖ¹ÅĞ¶ÏÁÚ½ÚµãÊ±ÔÙÑ¡Ôñ´Ë½Úµã
+					//æŠ•å½±å¤±è´¥ï¼Œèµ‹äºˆdis0ä¸€ä¸ªè¶³å¤Ÿå¤§çš„æ•°ï¼Œé˜²æ­¢åˆ¤æ–­é‚»èŠ‚ç‚¹æ—¶å†é€‰æ‹©æ­¤èŠ‚ç‚¹
 					dis0 = 2.0*global_length;
 					pl=pl+1;
 				}
@@ -996,26 +996,26 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 				if( debuging ) hout << "         nei dis: " ;
 
-				int move_nei=1;			//ÊÇ·ñÄÜ¹»ÒÆ¶¯ÏàÁÚ½ÚµãµÄ±êÖ¾£¬µÈÓÚ0²»¿ÉÒÔÒÆ¶¯£¬µÈÓÚ1¿ÉÒÔÒÆ¶¯
+				int move_nei=1;			//æ˜¯å¦èƒ½å¤Ÿç§»åŠ¨ç›¸é‚»èŠ‚ç‚¹çš„æ ‡å¿—ï¼Œç­‰äº0ä¸å¯ä»¥ç§»åŠ¨ï¼Œç­‰äº1å¯ä»¥ç§»åŠ¨
 
-				//¼ÆËãÁÚ½Úµãµ½ÍÖÇòÃæµÄÍ¶Ó°¾àÀë(nei_dis)
+				//è®¡ç®—é‚»èŠ‚ç‚¹åˆ°æ¤­çƒé¢çš„æŠ•å½±è·ç¦»(nei_dis)
 				for( int k=0; k<3; k++ )
 				{     
-					//Èç¹û¸ÃÁÚ½ÚµãÓë±¾½ÚµãÔÚÍ¬Ò»¿ÅÁ£ÖĞÔòÌø¹ı
+					//å¦‚æœè¯¥é‚»èŠ‚ç‚¹ä¸æœ¬èŠ‚ç‚¹åœ¨åŒä¸€é¢—ç²’ä¸­åˆ™è·³è¿‡
 					if( nei_win[k] == win ) continue;    
 					if( nei_win[k] != -1 && nei_is_on[k] == 0 )
 					{
-						//ÔÚÆäËû¿ÅÁ£ÄÚ£¬Ê×ÏÈÇ¿ÖÆÒÆ¶¯µ½¿ÅÁ£±íÃæ(ÀëÄÄ¸ö±íÃæ½ü¾ÍÒÆ¶¯µ½ÄÄ¸öÉÏ£¬×¢ÒâÓĞ¿ÉÄÜ¿ÅÁ£ÖØµş£©
+						//åœ¨å…¶ä»–é¢—ç²’å†…ï¼Œé¦–å…ˆå¼ºåˆ¶ç§»åŠ¨åˆ°é¢—ç²’è¡¨é¢(ç¦»å“ªä¸ªè¡¨é¢è¿‘å°±ç§»åŠ¨åˆ°å“ªä¸ªä¸Šï¼Œæ³¨æ„æœ‰å¯èƒ½é¢—ç²’é‡å ï¼‰
 						Point pp0 = {nodes_vec[nn].x,nodes_vec[nn].y,nodes_vec[nn].z};
 						Point pp1 = {nodes_vec[nei_num[k]].x,nodes_vec[nei_num[k]].y,nodes_vec[nei_num[k]].z};
 						Point ip0,ip1;
-						//Çópp0ºÍpp1Á½µãÁ¬Ïß»òÑÓ³¤ÏßÓëµÚwin£¨»ònei_win[k]£©¸öÍÖÇòÃæµÄ½»µã£¬ipo·µ»Ø½»µã£¬
-						//perr1==1±íÊ¾Çó½»µã³É¹¦£¬perr1==0±íÊ¾Çó½»µãÊ§°Ü
+						//æ±‚pp0å’Œpp1ä¸¤ç‚¹è¿çº¿æˆ–å»¶é•¿çº¿ä¸ç¬¬winï¼ˆæˆ–nei_win[k]ï¼‰ä¸ªæ¤­çƒé¢çš„äº¤ç‚¹ï¼Œipoè¿”å›äº¤ç‚¹ï¼Œ
+						//perr1==1è¡¨ç¤ºæ±‚äº¤ç‚¹æˆåŠŸï¼Œperr1==0è¡¨ç¤ºæ±‚äº¤ç‚¹å¤±è´¥
 						int perr1 = thecell->surfaces_vec[win]->intersect(pp0,pp1,ip0);
 						int perr2 = thecell->surfaces_vec[nei_win[k]]->intersect(pp0,pp1,ip1);
 
-						//¼Ù¶¨×ÜÊÇÄÜÕÒµ½½»µã
-						//ÇóµÚk¸öÏàÁÚµãµ½½»µãµÄ¾àÀë
+						//å‡å®šæ€»æ˜¯èƒ½æ‰¾åˆ°äº¤ç‚¹
+						//æ±‚ç¬¬kä¸ªç›¸é‚»ç‚¹åˆ°äº¤ç‚¹çš„è·ç¦»
 						double dis1 = nodes_vec[nei_num[k]].distance_to(&ip0);
 						double dis2 = nodes_vec[nei_num[k]].distance_to(&ip1);
 
@@ -1025,26 +1025,26 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 							hout << " dis1: " << dis1 << " dis2: " << dis2 << endl;
 						}
 
-						if( dis1 > dis2 )			//°ÑÕâ¸öÁÚ½ü½ÚµãÖ±½Ó´ÓËüËùÔÚµÄÍÖÇò´Ö±©µÄÀ­µ½±¾½ÚµãËùÔÚÍÖÇò
+						if( dis1 > dis2 )			//æŠŠè¿™ä¸ªé‚»è¿‘èŠ‚ç‚¹ç›´æ¥ä»å®ƒæ‰€åœ¨çš„æ¤­çƒç²—æš´çš„æ‹‰åˆ°æœ¬èŠ‚ç‚¹æ‰€åœ¨æ¤­çƒ
 						{
 							nodes_vec[nei_num[k]].move_to(&ip1);
 							is_on_nodes[nei_num[k]] = 1;
-							movable_ns[nei_num[k]] = 0;      //²»ÄÜÔÙÒÆ¶¯ÁË
+							movable_ns[nei_num[k]] = 0;      //ä¸èƒ½å†ç§»åŠ¨äº†
 							nei_is_on[k] = 1;
 						}
 						else
 						{
-							hout << " dis2 > dis1£¬¿ÉÄÜÓĞÖØµşµÄÍÖÇò£¬Ôİ²»´¦Àí " << endl;
+							hout << " dis2 > dis1ï¼Œå¯èƒ½æœ‰é‡å çš„æ¤­çƒï¼Œæš‚ä¸å¤„ç† " << endl;
 							hout << "*******************************************" << endl;
 							return 0;
 						}
 					}
-                   //²»½öÒªÀ­µ½½»µã´¦»¹Òª×îÖÕ±ä»»µ½ÍÖÇòÃæÉÏ·¨ÏòÍ¶Ó°µã
+                   //ä¸ä»…è¦æ‹‰åˆ°äº¤ç‚¹å¤„è¿˜è¦æœ€ç»ˆå˜æ¢åˆ°æ¤­çƒé¢ä¸Šæ³•å‘æŠ•å½±ç‚¹
 					pnodes[k+1] = project2_elli_surf(nodes_vec[nei_num[k]],thecell->surfaces_vec[win],&error[k+1]);
                                              
 					if( error[k+1] == 0 )
 					{
-						//Í¶Ó°Ê§°Ü£¬¸³Óèdis0Ò»¸ö×ã¹»´óµÄÊı£¬·ÀÖ¹ÅĞ¶ÏÁÚ½ÚµãÊ±ÔÙÑ¡Ôñ´Ë½Úµã
+						//æŠ•å½±å¤±è´¥ï¼Œèµ‹äºˆdis0ä¸€ä¸ªè¶³å¤Ÿå¤§çš„æ•°ï¼Œé˜²æ­¢åˆ¤æ–­é‚»èŠ‚ç‚¹æ—¶å†é€‰æ‹©æ­¤èŠ‚ç‚¹
 						nei_dis[k] = 2.0*global_length;
 					}
 					else
@@ -1058,16 +1058,16 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 				if( debuging ) hout << endl;
 
-				//¼ì²éÊÇ·ñÓ¦¸ÃÒÆ¶¯ÁÚ½Úµãµ½ÍÖÇòÃæÉÏ
+				//æ£€æŸ¥æ˜¯å¦åº”è¯¥ç§»åŠ¨é‚»èŠ‚ç‚¹åˆ°æ¤­çƒé¢ä¸Š
 				for( int k=0; k<3; k++ )
 				{
-					//Èç¹û¸ÃÁÚ½ÚµãÓë±¾½ÚµãÔÚÍ¬Ò»¿ÅÁ£ÖĞÈÔ¾ÉÌø¹ı
+					//å¦‚æœè¯¥é‚»èŠ‚ç‚¹ä¸æœ¬èŠ‚ç‚¹åœ¨åŒä¸€é¢—ç²’ä¸­ä»æ—§è·³è¿‡
 					if( nei_win[k] == win ) continue;
 
 					 if( nei_dis[k] > dis0 || (movable_ns[nei_num[k]] == 0&&nei_dis[k]>min_dis) )
 					{
 						if(debuging) hout << "movable_ns["<<nei_num[k]<<"]: " << movable_ns[nei_num[k]]<< " nei_dis["<<k<<"]: " << nei_dis[k] << endl;
-						move_nei = 0;		//Ö»ÒªÓĞÒ»¸ö²»ÄÜÒÆ¶¯£¬ÆäËûµÄÍâ½ÚµãÄÜÒÆ¶¯Ò²²»ĞĞ
+						move_nei = 0;		//åªè¦æœ‰ä¸€ä¸ªä¸èƒ½ç§»åŠ¨ï¼Œå…¶ä»–çš„å¤–èŠ‚ç‚¹èƒ½ç§»åŠ¨ä¹Ÿä¸è¡Œ
 						break;
 					}
 				}
@@ -1085,11 +1085,11 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 				if( move_nei == 0 )
 				{
-					//¼ì²é±¾½ÚµãÊÇ·ñÄÜÒÆ¶¯£¨ÊÇ·ñÒÑ¾­ÒÆ¶¯¹ı£©
-					if( error[0] == 0 ) continue;				//Í¶Ó°Ê§°Ü£¬ÕâÖÖÇé¿öÔì³ÉÁËÈÔÓĞÒ»Ğ©±ßÏß¿çÔ½ÍÖÇò±ß½çÃæ
-					if( movable_ns[nn] == 0 ) continue;	//ÒÆ¶¯¹ı£¬²»ÄÜÔÙÒÆ¶¯
+					//æ£€æŸ¥æœ¬èŠ‚ç‚¹æ˜¯å¦èƒ½ç§»åŠ¨ï¼ˆæ˜¯å¦å·²ç»ç§»åŠ¨è¿‡ï¼‰
+					if( error[0] == 0 ) continue;				//æŠ•å½±å¤±è´¥ï¼Œè¿™ç§æƒ…å†µé€ æˆäº†ä»æœ‰ä¸€äº›è¾¹çº¿è·¨è¶Šæ¤­çƒè¾¹ç•Œé¢
+					if( movable_ns[nn] == 0 ) continue;	//ç§»åŠ¨è¿‡ï¼Œä¸èƒ½å†ç§»åŠ¨
 
-					if( dis0 > global_length/2.0 ) continue;	//ÒÆ¶¯¾àÀëÌ«Ô¶£¬²»ÒÆ¶¯
+					if( dis0 > global_length/2.0 ) continue;	//ç§»åŠ¨è·ç¦»å¤ªè¿œï¼Œä¸ç§»åŠ¨
 
 					if( debuging )
 					{
@@ -1100,10 +1100,10 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 						hout << endl;
 					}
                                         
-					//ÒÆ¶¯±¾½Úµãºó£¬±¾½ÚµãÔÚÍÖÇò±ß½çÃæÉÏ£¬ËùÒÔÓ¦¸Ã¼ÓÔÚis_on_lnÏòÁ¿ÖĞ		
+					//ç§»åŠ¨æœ¬èŠ‚ç‚¹åï¼Œæœ¬èŠ‚ç‚¹åœ¨æ¤­çƒè¾¹ç•Œé¢ä¸Šï¼Œæ‰€ä»¥åº”è¯¥åŠ åœ¨is_on_lnå‘é‡ä¸­		
 					is_on_ln.push_back(j);
 
-					//ÒÆ¶¯±¾½Úµã
+					//ç§»åŠ¨æœ¬èŠ‚ç‚¹
 					nodes_vec[nn].move_to(&pnodes[0]);
 					is_on_nodes[nn] = 1;
 					movable_ns[nn] = 0;          
@@ -1126,14 +1126,14 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 							hout << "    nei_win: " << nei_win[k] << " project error: " << error[k+1] ;
 							hout << " movable: " << movable_ns[nei_num[k]] << endl;
 						}
-						//Èç¹û¸ÃÁÚ½ÚµãÓë±¾½ÚµãÔÚÍ¬Ò»¿ÅÁ£ÖĞÈÔ¾ÉÌø¹ı
+						//å¦‚æœè¯¥é‚»èŠ‚ç‚¹ä¸æœ¬èŠ‚ç‚¹åœ¨åŒä¸€é¢—ç²’ä¸­ä»æ—§è·³è¿‡
 						if( nei_win[k] == win ) continue;
-						if( error[k+1] == 0 ) continue;   //Í¶Ó°Ê§°Ü£¬ÕâÖÖÇé¿öÔì³ÉÁËÈÔÓĞÒ»Ğ©±ßÏß¿çÔ½ÍÖÇò±ß½çÃæ
-						//¼ì²é½ÚµãÊÇ·ñÄÜÒÆ¶¯£¨ÊÇ·ñÒÑ¾­ÒÆ¶¯¹ı£©
+						if( error[k+1] == 0 ) continue;   //æŠ•å½±å¤±è´¥ï¼Œè¿™ç§æƒ…å†µé€ æˆäº†ä»æœ‰ä¸€äº›è¾¹çº¿è·¨è¶Šæ¤­çƒè¾¹ç•Œé¢
+						//æ£€æŸ¥èŠ‚ç‚¹æ˜¯å¦èƒ½ç§»åŠ¨ï¼ˆæ˜¯å¦å·²ç»ç§»åŠ¨è¿‡ï¼‰
 						if( movable_ns[nei_num[k]] == 0 )
 						{
 							int is_skip=1;
-							//ÒÑ¾­ÔÚ±ğµÄ¿ÅÁ£±íÃæ£¬µ«ÓÖ·Ç³£½ü£¬ÓÚÊÇºõ£¬Ç¿ÖÆÈÏÎªÒÑ¾­ÔÚ±ß½çÉÏÁË£¨°ÑÁ½¸ö¿ÅÁ£Á¬ÆğÀ´£©
+							//å·²ç»åœ¨åˆ«çš„é¢—ç²’è¡¨é¢ï¼Œä½†åˆéå¸¸è¿‘ï¼Œäºæ˜¯ä¹ï¼Œå¼ºåˆ¶è®¤ä¸ºå·²ç»åœ¨è¾¹ç•Œä¸Šäº†ï¼ˆæŠŠä¸¤ä¸ªé¢—ç²’è¿èµ·æ¥ï¼‰
 							if( debuging )
 							{
 								hout << "nei_dis[" << k <<"]: " << nei_dis[k] ;
@@ -1141,15 +1141,15 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 							}
 							if( nei_dis[k] == 0 )
 							{
-								//ÒÑ¾­ÔÚÍÖÇòÉÏÁË
-								//£¨·¢ÉúÕâÖÖÇé¿öÊÇÒòÎª£º×î¿ªÊ¼µÄÊ±ºò°Ñ¸Ã½ÚµãÒÆ¶¯µ½¸ÃÍÖÇòÃæÉÏ£¬
-								//ºóÀ´ÓÖ±»Ç¿ÖÆÈÏÎªÔÚ±ğµÄÍÖÇòÉÏ£¬ÏÖÔÚÓÖĞèÒªËüÔÚ¸ÃÍÖÇòÉÏ£¬°¦£¬Âé·³£©
+								//å·²ç»åœ¨æ¤­çƒä¸Šäº†
+								//ï¼ˆå‘ç”Ÿè¿™ç§æƒ…å†µæ˜¯å› ä¸ºï¼šæœ€å¼€å§‹çš„æ—¶å€™æŠŠè¯¥èŠ‚ç‚¹ç§»åŠ¨åˆ°è¯¥æ¤­çƒé¢ä¸Šï¼Œ
+								//åæ¥åˆè¢«å¼ºåˆ¶è®¤ä¸ºåœ¨åˆ«çš„æ¤­çƒä¸Šï¼Œç°åœ¨åˆéœ€è¦å®ƒåœ¨è¯¥æ¤­çƒä¸Šï¼Œå”‰ï¼Œéº»çƒ¦ï¼‰
 								continue;
 							}
 							else if( nei_dis[k] < min_dis )
 							{
-								//¾àÀëÍÖÇòÃæ·Ç³£½ü£¬Èç¹ûÊÇÔÚ±ğµÄÍÖÇòÉÏ£¬ÔòÇ¿ÖÆÈÏÎªÒ²ÔÚµ±Ç°ÍÖÇòÉÏ£¨Õ³ÔÚÒ»ÆğÁË£©
-								//Èç¹ûÊÇÔÚ»ùÌåÉÏ£¬²»¹ÜËü£¬²»ÒÆ¶¯£¬·ÀÖ¹Éú³ÉËÄ¸ö½Úµã¶¼ÔÚÍÖÇòÃæÉÏµÄµ¥Ôª£¬²»ÓÃµ£ĞÄ£¬¹â»¬´¦Àí»á¸ÄÉÆÆä×´¿ö)
+								//è·ç¦»æ¤­çƒé¢éå¸¸è¿‘ï¼Œå¦‚æœæ˜¯åœ¨åˆ«çš„æ¤­çƒä¸Šï¼Œåˆ™å¼ºåˆ¶è®¤ä¸ºä¹Ÿåœ¨å½“å‰æ¤­çƒä¸Šï¼ˆç²˜åœ¨ä¸€èµ·äº†ï¼‰
+								//å¦‚æœæ˜¯åœ¨åŸºä½“ä¸Šï¼Œä¸ç®¡å®ƒï¼Œä¸ç§»åŠ¨ï¼Œé˜²æ­¢ç”Ÿæˆå››ä¸ªèŠ‚ç‚¹éƒ½åœ¨æ¤­çƒé¢ä¸Šçš„å•å…ƒï¼Œä¸ç”¨æ‹…å¿ƒï¼Œå…‰æ»‘å¤„ç†ä¼šæ”¹å–„å…¶çŠ¶å†µ)
 								if( where_is_nodes[nei_num[k]] != -1 )
 								{
 									where_is_nodes[nei_num[k]] = win;
@@ -1195,7 +1195,7 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 		}
 
-		//¼ì²é´ËÁùÃæÌåµÄ½ÚµãÊÇ·ñ»¹ÄÜÒÆ¶¯£¨Èç¹û´ËÁùÃæÌåÒÑ¾­ÓĞ4¸ö½ÚµãÔÚ½çÃæÉÏ£¬ËùÓĞ½Úµã²»ÄÜÔÙÒÆ¶¯£©
+		//æ£€æŸ¥æ­¤å…­é¢ä½“çš„èŠ‚ç‚¹æ˜¯å¦è¿˜èƒ½ç§»åŠ¨ï¼ˆå¦‚æœæ­¤å…­é¢ä½“å·²ç»æœ‰4ä¸ªèŠ‚ç‚¹åœ¨ç•Œé¢ä¸Šï¼Œæ‰€æœ‰èŠ‚ç‚¹ä¸èƒ½å†ç§»åŠ¨ï¼‰
 		if( is_on_ln.size() >= 4 )
 		{
 			for( int j=0; j<8; j++ )
@@ -1204,10 +1204,10 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 		}
 
-		//È·¶¨µ±Ç°ÁùÃæÌåµÄ²ğ·ÖÂ·¾¶
-		//Ê×ÏÈÈ·¶¨ÄÄĞ©½ÚµãÔÚ¿ÅÁ£ÄÚ
-		vector<int> wb;						//¿çÔ½µÄ¿ÅÁ£±àºÅ
-		vector<vector<int> > wnodes;	//ÊôÓÚÃ¿¸ö¿ÅÁ£µÄ½ÚµãÊı
+		//ç¡®å®šå½“å‰å…­é¢ä½“çš„æ‹†åˆ†è·¯å¾„
+		//é¦–å…ˆç¡®å®šå“ªäº›èŠ‚ç‚¹åœ¨é¢—ç²’å†…
+		vector<int> wb;						//è·¨è¶Šçš„é¢—ç²’ç¼–å·
+		vector<vector<int> > wnodes;	//å±äºæ¯ä¸ªé¢—ç²’çš„èŠ‚ç‚¹æ•°
 		wb.clear();
 		wnodes.clear();
 		for( int j=0; j<8; j++ )
@@ -1244,10 +1244,10 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 					wnodes[nw].push_back(j);
 				}
 
-				//¼ì²éËùÓĞ¿ÉÄÜ¸ú´Ëµã¹¹³ÉËÄÃæÌåµÄ½Úµã£¬
-				//Èç¹ûÔÚÁíÍâ¿ÅÁ£µÄ±íÃæ£¬Ôò¼ì²éµ½¸Ã¿ÅÁ£µÄ¾àÀë£¬
-				//Èç¹ûºÜĞ¡£¬ÔòÇ¿ÖÆÈÏÎªÊÇ´Ë¿ÅÁ£½çÃæÉÏµÄµã£¬
-				//Ö÷Òª»¹ÊÇÎªÁË·ÀÖ¹Á½¸ö¿ÅÁ£ºÜ½üÊ±³öÏÖºÜĞ¡µÄµ¥Ôª
+				//æ£€æŸ¥æ‰€æœ‰å¯èƒ½è·Ÿæ­¤ç‚¹æ„æˆå››é¢ä½“çš„èŠ‚ç‚¹ï¼Œ
+				//å¦‚æœåœ¨å¦å¤–é¢—ç²’çš„è¡¨é¢ï¼Œåˆ™æ£€æŸ¥åˆ°è¯¥é¢—ç²’çš„è·ç¦»ï¼Œ
+				//å¦‚æœå¾ˆå°ï¼Œåˆ™å¼ºåˆ¶è®¤ä¸ºæ˜¯æ­¤é¢—ç²’ç•Œé¢ä¸Šçš„ç‚¹ï¼Œ
+				//ä¸»è¦è¿˜æ˜¯ä¸ºäº†é˜²æ­¢ä¸¤ä¸ªé¢—ç²’å¾ˆè¿‘æ—¶å‡ºç°å¾ˆå°çš„å•å…ƒ
 				for( int k=0; k<8; k++ )
 				{
 					int nn1 = hexes[i].nodesId[k];
@@ -1263,10 +1263,10 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 							hout << " win1: " << win1 << " dis1: " << dis1 << endl;
 						}
 
-						if( dis1 < ZERO ) continue; //ÒÑ¾­ÔÚ½çÃæÉÏÁË
+						if( dis1 < ZERO ) continue; //å·²ç»åœ¨ç•Œé¢ä¸Šäº†
 						if( dis1 < min_dis )
 						{
-							//Ç¿ÖÆÈÏÎª´Ë½ÚµãÔÚwin¿ÅÁ£ÉÏ
+							//å¼ºåˆ¶è®¤ä¸ºæ­¤èŠ‚ç‚¹åœ¨winé¢—ç²’ä¸Š
 							where_is_nodes[nn1]=win;
 						}
 					}
@@ -1274,7 +1274,7 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 		}
 
-		//µ±Ç°ÁùÃæÌåµÄ²ğ·ÖÑùÊ½£¨Áù¸öÃæµÄĞ±Ïß·½Ïò£©
+		//å½“å‰å…­é¢ä½“çš„æ‹†åˆ†æ ·å¼ï¼ˆå…­ä¸ªé¢çš„æ–œçº¿æ–¹å‘ï¼‰
 		int face_style[6];
 		if( debuging ) hout << "face_style initial: " ;
 		for( int j=0; j<6; j++ )
@@ -1299,20 +1299,20 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 			if( wnodes[j].size() == 1 )
 			{
-				//Ö»ÓĞÒ»¸ö½ÚµãÔÚÍ¬Ò»¿ÅÁ£ÄÚ
+				//åªæœ‰ä¸€ä¸ªèŠ‚ç‚¹åœ¨åŒä¸€é¢—ç²’å†…
 				int ann = wnodes[j][0];
 				deter_hex_split_style(ann,-1,face_style);
 			}
 			else if( wnodes[j].size() == 2 )
 			{
-				//Ö»ÓĞÁ½¸ö½ÚµãÔÚÍ¬Ò»¿ÅÁ£ÄÚ
+				//åªæœ‰ä¸¤ä¸ªèŠ‚ç‚¹åœ¨åŒä¸€é¢—ç²’å†…
 				int edge_num = is_edge_of_hex(wnodes[j][0],wnodes[j][1]);
 				deter_hex_split_style(-1,edge_num,face_style);
 			}
 			else if( wnodes[j].size() == 3 || wnodes[j].size() == 4 )
 			{
-				//Ö»ÓĞÒ»¸ö½ÚµãÔÚ¿ÅÁ£Íâ
-				//Ê×ÏÈÕÒ³ö´Ë½Úµã(ÓĞ¿ÉÄÜÃ»ÓĞ´Ë½Úµã£¬¼´ÓĞËÄ¸ö½ÚµãÔÚ½çÃæÉÏ£©
+				//åªæœ‰ä¸€ä¸ªèŠ‚ç‚¹åœ¨é¢—ç²’å¤–
+				//é¦–å…ˆæ‰¾å‡ºæ­¤èŠ‚ç‚¹(æœ‰å¯èƒ½æ²¡æœ‰æ­¤èŠ‚ç‚¹ï¼Œå³æœ‰å››ä¸ªèŠ‚ç‚¹åœ¨ç•Œé¢ä¸Šï¼‰
 				int ann = -1;
 				for( int k=0; k<8; k++ )
 				{
@@ -1384,16 +1384,16 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 		}
 	}
 
-//	±£Ö¤µ¥°û²àÃæÉÏµÄµã»¹ÒªÔÚ²àÃæÉÏ£¬±ßÏßÉÏµÄµã»¹ÒªÔÚ±ßÏßÉÏ£¬½Çµã±£³Ö²»¶¯
+//	ä¿è¯å•èƒä¾§é¢ä¸Šçš„ç‚¹è¿˜è¦åœ¨ä¾§é¢ä¸Šï¼Œè¾¹çº¿ä¸Šçš„ç‚¹è¿˜è¦åœ¨è¾¹çº¿ä¸Šï¼Œè§’ç‚¹ä¿æŒä¸åŠ¨
 	recover_bnodes(bnodes_vec);
 
-	hout << "    ×ÜÍ¶Ó°£º" << pv <<"´Î£¡" ;
-	hout << "    Ê§°Ü£º" << pl << "´Î£¡" << endl;
+	hout << "    æ€»æŠ•å½±ï¼š" << pv <<"æ¬¡ï¼" ;
+	hout << "    å¤±è´¥ï¼š" << pl << "æ¬¡ï¼" << endl;
 /*
 	string file="adjusted_hexes.dat";
 	string oldfile=hout.output_file;
 	ofstream cout_hex( file.c_str() ) ;
-	if ( !cout_hex )  hout << "ÎŞ·¨´ò¿ªÎÄ¼ş£º" << file << endl;
+	if ( !cout_hex )  hout << "æ— æ³•æ‰“å¼€æ–‡ä»¶ï¼š" << file << endl;
 	cout_hex << "TITLE = draw" << endl;
 	cout_hex << "VARIABLES = X, Y, Z" << endl;
 	cout_hex << "ZONE N=" << (int)nodes_vec.size() <<",E=" << (int)hexes.size() << ", F=FEPOINT, ET=BRICK" << endl;
@@ -1416,7 +1416,7 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨¸ø¶¨½ÚµãµÄÎ»ÖÃ£¨»ùÌå¡¢µÚn¸öÍÖÇò£©
+//ç¡®å®šç»™å®šèŠ‚ç‚¹çš„ä½ç½®ï¼ˆåŸºä½“ã€ç¬¬nä¸ªæ¤­çƒï¼‰
 int Mesher::where_is( Node* node,  int &is_on, int node_count )
 {
 	int rvalue = -1;
@@ -1439,15 +1439,15 @@ int Mesher::where_is( Node* node,  int &is_on, int node_count )
 			{
 				if( node_count >= 0 )
 				{
-					hout << node_count << "ºÅ½ÚµãÍ¬Ê±ÔÚ" << already_contained << "ºÍ" << rvalue << "Á½¸öÍÖÇòÌåÄÚ»ò½çÃæÉÏ£¨ÓÚwhere isº¯Êıis_contain < 0ÖĞ£© " << endl;
+					hout << node_count << "å·èŠ‚ç‚¹åŒæ—¶åœ¨" << already_contained << "å’Œ" << rvalue << "ä¸¤ä¸ªæ¤­çƒä½“å†…æˆ–ç•Œé¢ä¸Šï¼ˆäºwhere iså‡½æ•°is_contain < 0ä¸­ï¼‰ " << endl;
 				}
 				else
 				{
-					hout << "·¢ÏÖÓĞ½ÚµãÍ¬Ê±ÔÚ" << already_contained << "ºÍ" << rvalue << "Á½¸öÍÖÇòÌåÄÚ»ò½çÃæÉÏ£¨ÓÚwhere isº¯Êıis_contain < 0ÖĞ£© " << endl;
+					hout << "å‘ç°æœ‰èŠ‚ç‚¹åŒæ—¶åœ¨" << already_contained << "å’Œ" << rvalue << "ä¸¤ä¸ªæ¤­çƒä½“å†…æˆ–ç•Œé¢ä¸Šï¼ˆäºwhere iså‡½æ•°is_contain < 0ä¸­ï¼‰ " << endl;
 				}
 				rvalue = -3;
 			}
-//			break;		//Ö±½ÓÌø³ö
+//			break;		//ç›´æ¥è·³å‡º
 		}
 		else if( is_contain == 0)
 		{
@@ -1462,29 +1462,29 @@ int Mesher::where_is( Node* node,  int &is_on, int node_count )
 			{
 				if( node_count >= 0 )
 				{
-					hout << node_count << "ºÅ½ÚµãÍ¬Ê±ÔÚ" << already_contained << "ºÍ" << rvalue << "Á½¸öÍÖÇòÌåÄÚ»ò½çÃæÉÏ£¨ÓÚwhere isº¯Êıis_contain == 0ÖĞ£© " << endl;
+					hout << node_count << "å·èŠ‚ç‚¹åŒæ—¶åœ¨" << already_contained << "å’Œ" << rvalue << "ä¸¤ä¸ªæ¤­çƒä½“å†…æˆ–ç•Œé¢ä¸Šï¼ˆäºwhere iså‡½æ•°is_contain == 0ä¸­ï¼‰ " << endl;
 				}
 				else
 				{
-					hout << "·¢ÏÖÓĞ½ÚµãÍ¬Ê±ÔÚ" << already_contained << "ºÍ" << rvalue << "Á½¸öÍÖÇòÌåÄÚ»ò½çÃæÉÏ£¨ÓÚwhere isº¯Êıis_contain == 0ÖĞ£© " << endl;
+					hout << "å‘ç°æœ‰èŠ‚ç‚¹åŒæ—¶åœ¨" << already_contained << "å’Œ" << rvalue << "ä¸¤ä¸ªæ¤­çƒä½“å†…æˆ–ç•Œé¢ä¸Šï¼ˆäºwhere iså‡½æ•°is_contain == 0ä¸­ï¼‰ " << endl;
 				}
 				rvalue = -3;
 			}
-//			break;		//Ö±½ÓÌø³ö
+//			break;		//ç›´æ¥è·³å‡º
 		}
 	}
 	return rvalue;
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËã¸ø¶¨½Úµãµ½ÍÖÇòÃæ(sur)µÄÍ¶Ó°µã£¨×¢Òâµ¥°û²àÃæÉÏµÄ½ÚµãÍ¶Ó°Ò²ÒªÔÚ²àÃæÉÏ£©
-//´ó¸Å·½·¨£ºÕÒµ½¸ÃµãÓëÍÖÇòÖĞĞÄµãÁ¬ÏßÓëÍÖÇòÃæµÄ½»µã£¨projectº¯Êı£©£¬½«½»µã×÷ÎªÆğÊ¼µã£¬
-//						Ó¦ÓÃÌİ¶È·½·¨µü´úÇó½â¸ÃµãÔÚÍÖÇòÃæÉÏµÄ·¨ÏòÍ¶Ó°µã£¬Èç¹ûÊÇ²àÃæ¡¢±ßÏßÉÏµã
-//						ÎªÁË±ÜÃâÔú¶Ñ£¬¿ÉÄÜ»áÓÃ·¨ÏòÍ¶Ó°µã±ä»»µ½²àÃæ¡¢±ßÏßÉÏµÄµãÓë±¾µãÁ¬ÏßÓëÍÖÇò
-//						½»µã´úÌæ·¨ÏòÍ¶Ó°µã
-//						µ¥°û²àÃæÉÏµÄµã»¹ÒªÔÚ²àÃæÉÏ£¬±ßÏßÉÏµÄµã»¹ÒªÔÚ±ßÏßÉÏ£¬½Çµã±£³Ö²»¶¯µÄÌØĞÔ
-//						ÔÚadjust_hexes³ÌĞò×îºóµÄrecover_bnodes(bnodes_vec)×Óº¯ÊıÊµÏÖ
-//						Ö»ÓĞproject_normalº¯ÊıÇó½âÊ±·¢É¢µÄÇé¿ö*error==0
+//è®¡ç®—ç»™å®šèŠ‚ç‚¹åˆ°æ¤­çƒé¢(sur)çš„æŠ•å½±ç‚¹ï¼ˆæ³¨æ„å•èƒä¾§é¢ä¸Šçš„èŠ‚ç‚¹æŠ•å½±ä¹Ÿè¦åœ¨ä¾§é¢ä¸Šï¼‰
+//å¤§æ¦‚æ–¹æ³•ï¼šæ‰¾åˆ°è¯¥ç‚¹ä¸æ¤­çƒä¸­å¿ƒç‚¹è¿çº¿ä¸æ¤­çƒé¢çš„äº¤ç‚¹ï¼ˆprojectå‡½æ•°ï¼‰ï¼Œå°†äº¤ç‚¹ä½œä¸ºèµ·å§‹ç‚¹ï¼Œ
+//						åº”ç”¨æ¢¯åº¦æ–¹æ³•è¿­ä»£æ±‚è§£è¯¥ç‚¹åœ¨æ¤­çƒé¢ä¸Šçš„æ³•å‘æŠ•å½±ç‚¹ï¼Œå¦‚æœæ˜¯ä¾§é¢ã€è¾¹çº¿ä¸Šç‚¹
+//						ä¸ºäº†é¿å…æ‰å †ï¼Œå¯èƒ½ä¼šç”¨æ³•å‘æŠ•å½±ç‚¹å˜æ¢åˆ°ä¾§é¢ã€è¾¹çº¿ä¸Šçš„ç‚¹ä¸æœ¬ç‚¹è¿çº¿ä¸æ¤­çƒ
+//						äº¤ç‚¹ä»£æ›¿æ³•å‘æŠ•å½±ç‚¹
+//						å•èƒä¾§é¢ä¸Šçš„ç‚¹è¿˜è¦åœ¨ä¾§é¢ä¸Šï¼Œè¾¹çº¿ä¸Šçš„ç‚¹è¿˜è¦åœ¨è¾¹çº¿ä¸Šï¼Œè§’ç‚¹ä¿æŒä¸åŠ¨çš„ç‰¹æ€§
+//						åœ¨adjust_hexesç¨‹åºæœ€åçš„recover_bnodes(bnodes_vec)å­å‡½æ•°å®ç°
+//						åªæœ‰project_normalå‡½æ•°æ±‚è§£æ—¶å‘æ•£çš„æƒ…å†µ*error==0
 Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
 {
         bool debuging = false;
@@ -1506,26 +1506,26 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
 			hout << " ff: " << sur->fvalue(rp.x, rp.y, rp.z ) << endl;
 		}
 
-        if( node.flag < 0 ) return Node(rp);   //ÄÚ²¿½Úµã
+        if( node.flag < 0 ) return Node(rp);   //å†…éƒ¨èŠ‚ç‚¹
 
         Point rp1=rp;
         int lerror1=0;
         if( node.flag < 6 )
 		{
-                //±ß½çÃæ½Úµã
+                //è¾¹ç•Œé¢èŠ‚ç‚¹
                 if( node.flag == 0 || node.flag == 1 )
 				{
-                        //x²àÃæÉÏµÄµã
+                        //xä¾§é¢ä¸Šçš„ç‚¹
                         rp1.x = node.x;
                 }
                 else if( node.flag == 2 || node.flag == 3 )
 				{
-                        //y²àÃæÉÏµÄµã
+                        //yä¾§é¢ä¸Šçš„ç‚¹
                         rp1.y = node.y;
                 }
                 else if( node.flag == 4 || node.flag == 5 )
 				{
-                        //z²àÃæÉÏµÄµã
+                        //zä¾§é¢ä¸Šçš„ç‚¹
                         rp1.z = node.z;
                 }
                 TDVector pvec(np,rp1);
@@ -1533,24 +1533,24 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
         }
         else if( node.flag < 18 && node.flag >= 6 )
 		{
-                //±ß½çÏß½Úµã
+                //è¾¹ç•Œçº¿èŠ‚ç‚¹
                 if( node.flag == 6 || node.flag == 8 || node.flag == 10 || node.flag == 12 )
 				{
-                        //xÖá·½Ïò±ß½çÏßÉÏµÄµã
+                        //xè½´æ–¹å‘è¾¹ç•Œçº¿ä¸Šçš„ç‚¹
                         rp1.x = node.x + 1;
                         rp1.y = node.y;
                         rp1.z = node.z;
                 }
                 else if( node.flag == 7 || node.flag == 9 || node.flag == 11 || node.flag == 13 )
 				{
-                        //yÖá·½Ïò±ß½çÏßÉÏµÄµã
+                        //yè½´æ–¹å‘è¾¹ç•Œçº¿ä¸Šçš„ç‚¹
                         rp1.x = node.x;
                         rp1.y = node.y + 1;
                         rp1.z = node.z;
                 }
                 else if( node.flag == 14 || node.flag == 15 || node.flag == 16 || node.flag == 17 )
 				{
-                        //zÖá·½Ïò±ß½çÏßÉÏµÄµã
+                        //zè½´æ–¹å‘è¾¹ç•Œçº¿ä¸Šçš„ç‚¹
                         rp1.x = node.x;
                         rp1.y = node.y;
                         rp1.z = node.z + 1;
@@ -1569,14 +1569,14 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
 
         if( lerror1 == 0 )
 		{
-                //ÔÚ²àÃæÄÚ£¨»ò±ß½çÏßÉÏ£©Í¶Ó°Ê§°Ü£¬·µ»Ø·¨ÏòÍ¶Ó°
+                //åœ¨ä¾§é¢å†…ï¼ˆæˆ–è¾¹ç•Œçº¿ä¸Šï¼‰æŠ•å½±å¤±è´¥ï¼Œè¿”å›æ³•å‘æŠ•å½±
                 return Node(rp);
         }
         else
 		{
-                //ÔÚ²àÃæÄÚ£¨»ò±ß½çÏßÉÏ£©Í¶Ó°³É¹¦£¬¼ì²é¾àÀë£¬
-                //Èç¹û²àÃæÍ¶Ó°µã¾àÀëÏà¶Ô·¨ÏòÍ¶Ó°µãºÜÔ¶£¬Ôò»¹ÊÇ·µ»Ø·¨ÏòÍ¶Ó°
-                //Ö÷ÒªÊÇ·ÀÖ¹²àÃæÉÏ½Úµã¼·ÔÚÒ»Æğ
+                //åœ¨ä¾§é¢å†…ï¼ˆæˆ–è¾¹ç•Œçº¿ä¸Šï¼‰æŠ•å½±æˆåŠŸï¼Œæ£€æŸ¥è·ç¦»ï¼Œ
+                //å¦‚æœä¾§é¢æŠ•å½±ç‚¹è·ç¦»ç›¸å¯¹æ³•å‘æŠ•å½±ç‚¹å¾ˆè¿œï¼Œåˆ™è¿˜æ˜¯è¿”å›æ³•å‘æŠ•å½±
+                //ä¸»è¦æ˜¯é˜²æ­¢ä¾§é¢ä¸ŠèŠ‚ç‚¹æŒ¤åœ¨ä¸€èµ·
                 double dis1 = rp.distance_to(np);
                 double dis2 = rp1.distance_to(np);
                 if( dis2 > dis1*2.0 )
@@ -1592,7 +1592,7 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İ¸ø¶¨µÄ½Úµã±àºÅ£¨ÁùÃæÌåµÄ¾Ö²¿±àºÅ£©£¬È·¶¨ÏàÁÚµÄ3¸ö½ÚµãºÅ£¨ÈÔÈ»ÊÇ¾Ö²¿±àºÅ£©
+//æ ¹æ®ç»™å®šçš„èŠ‚ç‚¹ç¼–å·ï¼ˆå…­é¢ä½“çš„å±€éƒ¨ç¼–å·ï¼‰ï¼Œç¡®å®šç›¸é‚»çš„3ä¸ªèŠ‚ç‚¹å·ï¼ˆä»ç„¶æ˜¯å±€éƒ¨ç¼–å·ï¼‰
 int Mesher::deter_nei(int i, int *nei_i)
 {
         switch(i)
@@ -1644,7 +1644,7 @@ int Mesher::deter_nei(int i, int *nei_i)
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İ¸ø¶¨µÄ½ÚµãºÅ£¨»òÕß±ßºÅ£¬Ö»ÄÜÖ¸¶¨Ò»¸ö£©£¬È·¶¨ÁùÃæÌåµÄÆÊ·ÖÑùÊ½£¨¸ø¶¨½Úµã£¨±ß£©ÔÚ¿ÅÁ£ÄÚµÄ±ß)
+//æ ¹æ®ç»™å®šçš„èŠ‚ç‚¹å·ï¼ˆæˆ–è€…è¾¹å·ï¼Œåªèƒ½æŒ‡å®šä¸€ä¸ªï¼‰ï¼Œç¡®å®šå…­é¢ä½“çš„å‰–åˆ†æ ·å¼ï¼ˆç»™å®šèŠ‚ç‚¹ï¼ˆè¾¹ï¼‰åœ¨é¢—ç²’å†…çš„è¾¹)
 int Mesher::deter_hex_split_style(int node_num, int edge_num, int face_style[8])
 {
 	if( node_num != -1 )
@@ -1719,7 +1719,7 @@ int Mesher::deter_hex_split_style(int node_num, int edge_num, int face_style[8])
 }
 
 //---------------------------------------------------------------------------
-//¸ø¶¨Á½¸ö½Úµã£¬ÅĞ¶ÏÊÇ·ñÎªÁùÃæÌåµÄÒ»Ìõ±ß
+//ç»™å®šä¸¤ä¸ªèŠ‚ç‚¹ï¼Œåˆ¤æ–­æ˜¯å¦ä¸ºå…­é¢ä½“çš„ä¸€æ¡è¾¹
 int Mesher::is_edge_of_hex(int n1, int n2)
 {
         int min_n = min(n1,n2);
@@ -1761,12 +1761,12 @@ int Mesher::is_edge_of_hex(int n1, int n2)
 }
 
 //---------------------------------------------------------------------------
-//»Ö¸´ÒÆ¶¯¹ıµÄ±ß½ç½Úµã£¨µ¥°û²àÃæÉÏµÄµã£©
+//æ¢å¤ç§»åŠ¨è¿‡çš„è¾¹ç•ŒèŠ‚ç‚¹ï¼ˆå•èƒä¾§é¢ä¸Šçš„ç‚¹ï¼‰
 int Mesher::recover_bnodes(vector<int> &bnodes)
 {
         bool debuging = false;
 
-        //»Ö¸´ÒÆ¶¯¹ıµÄ±ß½ç½Úµã
+        //æ¢å¤ç§»åŠ¨è¿‡çš„è¾¹ç•ŒèŠ‚ç‚¹
         for( int i=0; i<(int)bnodes.size(); i++ )
 		{                                   
                 Node vertexes[8];
@@ -1854,7 +1854,7 @@ int Mesher::recover_bnodes(vector<int> &bnodes)
                                 node->y = y_max;
                                 break;
                         case 18:
-                                //ËÑË÷°Ë¸ö½Çµã£¬ÒÆ¶¯µ½¾àÀë×î½üµÄÒ»¸ö
+                                //æœç´¢å…«ä¸ªè§’ç‚¹ï¼Œç§»åŠ¨åˆ°è·ç¦»æœ€è¿‘çš„ä¸€ä¸ª
                                 vertexes[0]=Node(x_min,y_min,z_min);
                                 vertexes[1]=Node(x_max,y_min,z_min);
                                 vertexes[2]=Node(x_max,y_max,z_min);
@@ -1893,7 +1893,7 @@ int Mesher::recover_bnodes(vector<int> &bnodes)
 }
 
 //---------------------------------------------------------------------------
-//²ğ·ÖÁùÃæÌå³ÉËÄÃæÌå
+//æ‹†åˆ†å…­é¢ä½“æˆå››é¢ä½“
 int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 {
 	bool debuging = false;
@@ -1949,15 +1949,15 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			face_style[j] = sign_faces[hexes[i].facesId[j]];
 		}
 
-		//ĞŞ¸ÄËÄ±ßĞÎÃæÆ¬µÄĞ±±ß·½Ïò
-		//ÏÈ¼ì²éÊÇ·ñ»á³öÏÖµãµ½Ğ±ÏßµÄ¾àÀë¹ı½üµÄÇé¿ö£¬²¢Ïë°ì·¨Ïû³ı
-		//¾¡Á¿±£Ö¤²»»á³öÏÖµãµ½Ğ±ÏßµÄ¾àÀë¹ı½üµÄÇé¿ö     
+		//ä¿®æ”¹å››è¾¹å½¢é¢ç‰‡çš„æ–œè¾¹æ–¹å‘
+		//å…ˆæ£€æŸ¥æ˜¯å¦ä¼šå‡ºç°ç‚¹åˆ°æ–œçº¿çš„è·ç¦»è¿‡è¿‘çš„æƒ…å†µï¼Œå¹¶æƒ³åŠæ³•æ¶ˆé™¤
+		//å°½é‡ä¿è¯ä¸ä¼šå‡ºç°ç‚¹åˆ°æ–œçº¿çš„è·ç¦»è¿‡è¿‘çš„æƒ…å†µ     
 		for( int j=0; j<6; j++ )
 		{
 			int nnseq[4];
 			if( face_style[j] != -1 )
 			{
-				//Ğ±±ß·½ÏòÒÑ¾­È·¶¨£¬ÈÔÈ»¼ì²é
+				//æ–œè¾¹æ–¹å‘å·²ç»ç¡®å®šï¼Œä»ç„¶æ£€æŸ¥
 				deter_nn_seq(j,face_style[j],nnseq);
 				double dis1 = dis2_line( &nodes_vec[hexes[i].nodesId[nnseq[2]]],
 													 &nodes_vec[hexes[i].nodesId[nnseq[0]]],
@@ -1973,7 +1973,7 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 			else
 			{
-				//Ğ±±ß·½ÏòÉĞÎ´È·¶¨£¬È·±£²»»á³öÏÖÔã¸âÇé¿ö
+				//æ–œè¾¹æ–¹å‘å°šæœªç¡®å®šï¼Œç¡®ä¿ä¸ä¼šå‡ºç°ç³Ÿç³•æƒ…å†µ
 				deter_nn_seq(j,0,nnseq);
 				double dis1 = dis2_line( &nodes_vec[hexes[i].nodesId[nnseq[2]]],
 													 &nodes_vec[hexes[i].nodesId[nnseq[0]]],
@@ -2022,7 +2022,7 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 		if( best_split_hex2_tet(hex_info,tets) == 0 )
 		{
 /*
-			hout << "²ğ·ÖÁùÃæÌå(" << i << ")³ÉËÄÃæÌåÊ§°Ü£¬²ğ·Ö³É12¸öËÄÃæÌå!!" << endl;
+			hout << "æ‹†åˆ†å…­é¢ä½“(" << i << ")æˆå››é¢ä½“å¤±è´¥ï¼Œæ‹†åˆ†æˆ12ä¸ªå››é¢ä½“!!" << endl;
 			hout << "  hex_info: " ;
 			for( int i=0; i<14; i++ )
 			{
@@ -2034,7 +2034,7 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 */
 			if( hex2_12tet(hex_info,tets) == 0 ) return 0;
 		}
-		//¸üĞÂ¾ØĞÎÃæÆ¬Ğ±±ß±êÖ¾
+		//æ›´æ–°çŸ©å½¢é¢ç‰‡æ–œè¾¹æ ‡å¿—
 		for( int j=0; j<6; j++ )
 		{
 			int fn = hexes[i].facesId[j];
@@ -2069,9 +2069,9 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İ¸ø¶¨µÄ²àÃæ±àºÅ£¨ÁùÃæÌåµÄ²àÃæ¾Ö²¿±àºÅ£©£¬ÒÔ¼°Ğ±±ß·½Ïò£¬È·¶¨Ò»¸ö½Úµã±àºÅÊı×é
-//Êı×éÄÚÈİ£ºĞ±±ß½Úµã1¡¢Ğ±±ß½Úµã2¡¢·ÇĞ±±ß½Úµã1¡¢·ÇĞ±±ß½Úµã2
-//Ò²¾ÍÊÇ²àÃæËÄ±ßĞÎÈçºÎ·ÖÈı½ÇĞÎ£¨±£Ö¤nnseq[4]ÖĞ0,1,2ºÅ½ÚµãºÍ0,1,3ºÅ½Úµã¸÷×é³ÉÒ»¸öÈı½ÇĞÎ£©
+//æ ¹æ®ç»™å®šçš„ä¾§é¢ç¼–å·ï¼ˆå…­é¢ä½“çš„ä¾§é¢å±€éƒ¨ç¼–å·ï¼‰ï¼Œä»¥åŠæ–œè¾¹æ–¹å‘ï¼Œç¡®å®šä¸€ä¸ªèŠ‚ç‚¹ç¼–å·æ•°ç»„
+//æ•°ç»„å†…å®¹ï¼šæ–œè¾¹èŠ‚ç‚¹1ã€æ–œè¾¹èŠ‚ç‚¹2ã€éæ–œè¾¹èŠ‚ç‚¹1ã€éæ–œè¾¹èŠ‚ç‚¹2
+//ä¹Ÿå°±æ˜¯ä¾§é¢å››è¾¹å½¢å¦‚ä½•åˆ†ä¸‰è§’å½¢ï¼ˆä¿è¯nnseq[4]ä¸­0,1,2å·èŠ‚ç‚¹å’Œ0,1,3å·èŠ‚ç‚¹å„ç»„æˆä¸€ä¸ªä¸‰è§’å½¢ï¼‰
 int Mesher::deter_nn_seq(int fn, int style, int nnseq[4])
 {
 	if( fn == 0 )
@@ -2128,11 +2128,11 @@ int Mesher::deter_nn_seq(int fn, int style, int nnseq[4])
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãÒ»µãµ½ÁíÍâÁ½µãÁ¬ÏßµÄ¾àÀë
+//è®¡ç®—ä¸€ç‚¹åˆ°å¦å¤–ä¸¤ç‚¹è¿çº¿çš„è·ç¦»
 double Mesher::dis2_line( Node *n1, Node *n2, Node *n3 )
 {
-	//ÓÉµãp1ÒÔ¼°p2Ö¸Ïòp3µÄÏòÁ¿¹¹³ÉÆ½Ãæ(p2Ö¸Ïòp3µÄÏòÁ¿ÊÇÆ½ÃæµÄ·¨ÏòÁ¿)
-	//Çó¸ÃÆ½ÃæÓëp2µ½p3µÄÁ¬ÏßµÄ½»µã£¬È»ºóÇóp1Óë´Ë½»µãµÄ¾àÀë
+	//ç”±ç‚¹p1ä»¥åŠp2æŒ‡å‘p3çš„å‘é‡æ„æˆå¹³é¢(p2æŒ‡å‘p3çš„å‘é‡æ˜¯å¹³é¢çš„æ³•å‘é‡)
+	//æ±‚è¯¥å¹³é¢ä¸p2åˆ°p3çš„è¿çº¿çš„äº¤ç‚¹ï¼Œç„¶åæ±‚p1ä¸æ­¤äº¤ç‚¹çš„è·ç¦»
 	TDVector vec23(n3->x - n2->x, n3->y - n2->y, n3->z - n2->z);
 	TDVector vec21(n1->x - n2->x, n1->y - n2->y, n1->z - n2->z);
 
@@ -2148,7 +2148,7 @@ double Mesher::dis2_line( Node *n1, Node *n2, Node *n3 )
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İÒÑÓĞµÄ²ÎÊı£¬¾¡Á¿Ìá¹©Ò»¸öÄÜ²ğ·Ö³É6¸öËÄÃæÌåµÄ·½°¸£¨Ö»ĞŞ¸Äsplit_infoÖĞµÈÓÚ-1µÄÔªËØ£©
+//æ ¹æ®å·²æœ‰çš„å‚æ•°ï¼Œå°½é‡æä¾›ä¸€ä¸ªèƒ½æ‹†åˆ†æˆ6ä¸ªå››é¢ä½“çš„æ–¹æ¡ˆï¼ˆåªä¿®æ”¹split_infoä¸­ç­‰äº-1çš„å…ƒç´ ï¼‰
 int Mesher::best_split_hex2_tet(int* hex_info,vector<Tetrahedron> &tets)
 {
 	bool debuging = false;
@@ -2166,7 +2166,7 @@ int Mesher::best_split_hex2_tet(int* hex_info,vector<Tetrahedron> &tets)
 	{
 		if( hex_info[i+8] == -1 )
 		{
-			//ÓÅÏÈÑ¡ÔñÓë¶ÔÃæĞ±±ßÏà·´µÄ·½Ïò
+			//ä¼˜å…ˆé€‰æ‹©ä¸å¯¹é¢æ–œè¾¹ç›¸åçš„æ–¹å‘
 			int ci ;
 			if( i%2 == 0 )
 			{
@@ -2193,7 +2193,7 @@ int Mesher::best_split_hex2_tet(int* hex_info,vector<Tetrahedron> &tets)
 }
 
 //---------------------------------------------------------------------------
-//°ÑÒ»¸öÁùÃæÌå·Ö³É6¸öËÄÃæÌå£¨·Ö·¨¸ù¾İÁù¸öÃæµÄ¾ßÌåÇé¿ö¶ø¶¨£©
+//æŠŠä¸€ä¸ªå…­é¢ä½“åˆ†æˆ6ä¸ªå››é¢ä½“ï¼ˆåˆ†æ³•æ ¹æ®å…­ä¸ªé¢çš„å…·ä½“æƒ…å†µè€Œå®šï¼‰
 int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 {
 	bool debuging = false;
@@ -2210,32 +2210,32 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 		}
 		hout << endl;
 	}
-	vector<Tetrahedron> local_tets;  //ÒÔ¾Ö²¿½Úµã±àºÅ±íÊ¾µÄËÄÃæÌå
+	vector<Tetrahedron> local_tets;  //ä»¥å±€éƒ¨èŠ‚ç‚¹ç¼–å·è¡¨ç¤ºçš„å››é¢ä½“
 
-	//ËÄÌõ¶Ô½ÇÏß
-	//1£º1£­7
-	//2£º2£­8
-	//3£º3£­5
-	//4£º4£­6
+	//å››æ¡å¯¹è§’çº¿
+	//1ï¼š1ï¼7
+	//2ï¼š2ï¼8
+	//3ï¼š3ï¼5
+	//4ï¼š4ï¼6
 	int diag_line = 0;
 	int vertexes[8]={0,0,0,0,0,0,0,0};
 
-	//´æ·Å12¸öÈı½ÇÃæÆ¬
+	//å­˜æ”¾12ä¸ªä¸‰è§’é¢ç‰‡
 	vector<Tri_2D_ele> tri_faces;
 	tri_faces.reserve(20);
 
-	//±êÖ¾12¸öÈı½ÇÃæÊÇ·ñÒÑ¾­´¦Àí¹ı£¨ÒÑ¾­ĞÎ³ÉÁËËÄÃæÌå£©
+	//æ ‡å¿—12ä¸ªä¸‰è§’é¢æ˜¯å¦å·²ç»å¤„ç†è¿‡ï¼ˆå·²ç»å½¢æˆäº†å››é¢ä½“ï¼‰
 	int sign_tri_face[12]={0,0,0,0,0,0,0,0,0,0,0,0};
 
-	//12Ìõ±ßËùÔÚµÄÈı½ÇÃæÆ¬£¨Ã¿¸ö±ßÓĞÁ½¸ö£©£¨12¡Á2µÄÊı×é£¬µÚÒ»¸öÔªËØÖ¸Èı½ÇÃæÆ¬±àºÅ£¬µÚ¶ş¸öÔªËØÖ¸¶ÔÃæµÄ½ÚµãºÅ£©
+	//12æ¡è¾¹æ‰€åœ¨çš„ä¸‰è§’é¢ç‰‡ï¼ˆæ¯ä¸ªè¾¹æœ‰ä¸¤ä¸ªï¼‰ï¼ˆ12Ã—2çš„æ•°ç»„ï¼Œç¬¬ä¸€ä¸ªå…ƒç´ æŒ‡ä¸‰è§’é¢ç‰‡ç¼–å·ï¼Œç¬¬äºŒä¸ªå…ƒç´ æŒ‡å¯¹é¢çš„èŠ‚ç‚¹å·ï¼‰
 	deter_rela_tri_face(hex,tri_faces);
 
 	vector<vector<int> > temp_v1;
-	vector<vector<vector<int> > > node_for_face(12,temp_v1);  //¼ÇÂ¼Ã¿¸ö¿ÉÒÔ¸úÈı½ÇÃæÆ¬¹¹³ÉËÄÃæÌåµÄ½Úµã
+	vector<vector<vector<int> > > node_for_face(12,temp_v1);  //è®°å½•æ¯ä¸ªå¯ä»¥è·Ÿä¸‰è§’é¢ç‰‡æ„æˆå››é¢ä½“çš„èŠ‚ç‚¹
 
-	int sign_diag_line = 0;       //¼ÇÂ¼ÔÚ´¦ÀíÄÄ¸öÈı½ÇÃæÆ¬Ê±¹¹ÔìµÄ¶Ô½ÇÏß
+	int sign_diag_line = 0;       //è®°å½•åœ¨å¤„ç†å“ªä¸ªä¸‰è§’é¢ç‰‡æ—¶æ„é€ çš„å¯¹è§’çº¿
 
-	//¼ÇÂ¼ÊÇ·ñÒÑ¾­ËÑË÷¹ıÈı½ÇÃæÆ¬µÄ¿ÉÓÃ½Úµã£¨ÄÜÓëÖ®¹¹³ÉËÄÃæÌåµÄ½Úµã£©
+	//è®°å½•æ˜¯å¦å·²ç»æœç´¢è¿‡ä¸‰è§’é¢ç‰‡çš„å¯ç”¨èŠ‚ç‚¹ï¼ˆèƒ½ä¸ä¹‹æ„æˆå››é¢ä½“çš„èŠ‚ç‚¹ï¼‰
 	int sign_dealed_tri_faces[12];
 	for( int i=0; i<12; i++ )
 	{
@@ -2243,20 +2243,20 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 	}
 
 	int succeeded = 1;
-	vector<int> i_vec; //±£´æÉÏÒ»¸ö²Ù×÷¹ıµÄÈı½ÇÃæÆ¬£¬ÒÔ±¸ºóÍËÊ±Ê¹ÓÃ
+	vector<int> i_vec; //ä¿å­˜ä¸Šä¸€ä¸ªæ“ä½œè¿‡çš„ä¸‰è§’é¢ç‰‡ï¼Œä»¥å¤‡åé€€æ—¶ä½¿ç”¨
 	for( int i=0; i<12&&i>=0; i++)
 	{
-		if( sign_tri_face[i] > 0 ) continue;		//±íÊ¾ÒÑ¾­¾­¹ı´¦Àí
+		if( sign_tri_face[i] > 0 ) continue;		//è¡¨ç¤ºå·²ç»ç»è¿‡å¤„ç†
 		if(debuging)
 		{
 			hout << "-------------------------------------" << endl;
 			hout << "tri face " << i+1 << endl;
 			hout << "sign_dealed_tri_faces: " << sign_dealed_tri_faces[i] << endl;
 		}
-		//ÊÕ¼¯ÄÜÓëµÚi¸öÈı½ÇÃæÆ¬¹¹³ÉËÄÃæÌåµÄ½Úµã
+		//æ”¶é›†èƒ½ä¸ç¬¬iä¸ªä¸‰è§’é¢ç‰‡æ„æˆå››é¢ä½“çš„èŠ‚ç‚¹
 		if( sign_dealed_tri_faces[i] == 0 )
 		{
-			i_vec.push_back(i);  //¼ÇÂ¼ËÑË÷¹ı¿ÉÓÃ½ÚµãµÄÈı½ÇÃæÆ¬±àºÅ£¬ÒÔ±¸ºóÍËÊ±Ê¹ÓÃ
+			i_vec.push_back(i);  //è®°å½•æœç´¢è¿‡å¯ç”¨èŠ‚ç‚¹çš„ä¸‰è§’é¢ç‰‡ç¼–å·ï¼Œä»¥å¤‡åé€€æ—¶ä½¿ç”¨
 			if( debuging )
 			{
 				hout << "vertexes signal: " ;
@@ -2272,7 +2272,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 				}
 				hout << endl;
 			}
-			//È·¶¨ĞèÒª¼ì²éµÄ4¸ö½Úµã£¨Èı½ÇÃæÆ¬¶ÔÃæµÄËÄ¸ö½Úµã£¬²¢°Ñ×î½üµÄ½Úµã·ÅÔÚ×îºó£©
+			//ç¡®å®šéœ€è¦æ£€æŸ¥çš„4ä¸ªèŠ‚ç‚¹ï¼ˆä¸‰è§’é¢ç‰‡å¯¹é¢çš„å››ä¸ªèŠ‚ç‚¹ï¼Œå¹¶æŠŠæœ€è¿‘çš„èŠ‚ç‚¹æ”¾åœ¨æœ€åï¼‰
 			int check_nn[4];
 			deter_check_nodes(i,tri_faces[i].nodesId[1],check_nn);
 			for( int jj=0; jj<4; jj++ )
@@ -2281,36 +2281,36 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 				int ls[3];
 				if( vertexes[j] == 0 )
 				{
-					//¼ì²éĞ­µ÷ĞÔ£¨ÓëÒÑÓĞ±ß²»ÄÜ½»²æ£©
+					//æ£€æŸ¥åè°ƒæ€§ï¼ˆä¸å·²æœ‰è¾¹ä¸èƒ½äº¤å‰ï¼‰
 					int cf1t = can_form_1tet(tri_faces[i],j,hex,diag_line,ls);
-					//¼ì²éĞèÒªÓÃµ½µÄÈı½ÇÃæÆ¬ÊÇ·ñÒÑ¾­Ê¹ÓÃ¹ı
+					//æ£€æŸ¥éœ€è¦ç”¨åˆ°çš„ä¸‰è§’é¢ç‰‡æ˜¯å¦å·²ç»ä½¿ç”¨è¿‡
 					if( ls[0] < 12 )
 					{
 						int fn = deter_face_num_from_2bar(ls[0],tri_faces[i].edgesId[0]);
-						if( fn < i ) continue;  //±àºÅ½ÏĞ¡µÄÈı½ÇÃæÆ¬Ò»¶¨ÒÑ¾­´¦Àí¹ıÁË
+						if( fn < i ) continue;  //ç¼–å·è¾ƒå°çš„ä¸‰è§’é¢ç‰‡ä¸€å®šå·²ç»å¤„ç†è¿‡äº†
 						if( sign_tri_face[fn] > 0 ) continue;
 					}
 					else if( ls[1] < 12 )
 					{
 						int fn = deter_face_num_from_2bar(ls[1],tri_faces[i].edgesId[0]);
-						if( fn < i ) continue;  //±àºÅ½ÏĞ¡µÄÈı½ÇÃæÆ¬Ò»¶¨ÒÑ¾­´¦Àí¹ıÁË
+						if( fn < i ) continue;  //ç¼–å·è¾ƒå°çš„ä¸‰è§’é¢ç‰‡ä¸€å®šå·²ç»å¤„ç†è¿‡äº†
 						if( sign_tri_face[fn] > 0 ) continue;
 
 						fn = deter_face_num_from_2bar(ls[1],tri_faces[i].edgesId[1]);
-						if( fn < i ) continue;  //±àºÅ½ÏĞ¡µÄÈı½ÇÃæÆ¬Ò»¶¨ÒÑ¾­´¦Àí¹ıÁË
+						if( fn < i ) continue;  //ç¼–å·è¾ƒå°çš„ä¸‰è§’é¢ç‰‡ä¸€å®šå·²ç»å¤„ç†è¿‡äº†
 						if( sign_tri_face[fn] > 0 ) continue;
 
 					}
 					else if( ls[2] < 12 )
 					{
 						int fn = deter_face_num_from_2bar(ls[2],tri_faces[i].edgesId[1]);
-						if( fn < i ) continue;  //±àºÅ½ÏĞ¡µÄÈı½ÇÃæÆ¬Ò»¶¨ÒÑ¾­´¦Àí¹ıÁË
+						if( fn < i ) continue;  //ç¼–å·è¾ƒå°çš„ä¸‰è§’é¢ç‰‡ä¸€å®šå·²ç»å¤„ç†è¿‡äº†
 						if( sign_tri_face[fn] > 0 ) continue;
 					}
 
 					if( cf1t == 1 )
 					{
-						//¼ì²é½Ç¶È£¨Á½¸öÈı½ÇÃæÆ¬µÄ¼Ğ½Ç²»ÄÜ¹ı´ó£©
+						//æ£€æŸ¥è§’åº¦ï¼ˆä¸¤ä¸ªä¸‰è§’é¢ç‰‡çš„å¤¹è§’ä¸èƒ½è¿‡å¤§ï¼‰
 						Tri_2D_ele act_tri(	hex[tri_faces[i].nodesId[0]],
 														hex[tri_faces[i].nodesId[1]],
 														hex[tri_faces[i].nodesId[2]]	);
@@ -2349,13 +2349,13 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 		{
 			vector<int> act_node = node_for_face[i].back();
 			node_for_face[i].pop_back();
-			//Éú³ÉÒ»¸öËÄÃæÌå
+			//ç”Ÿæˆä¸€ä¸ªå››é¢ä½“
 			local_tets.push_back(Tetrahedron(tri_faces[i],act_node[0]));
-			//Èç¹ûÈıÌõĞÂ±ßÖĞÓĞÁ½¸öÎªĞ±±ß£¨ËÄÃæÌåÕıºÃÈ¡ÁùÃæÌåµÄÒ»¸ö½Ç£©£¬ÔòÓ¦±ê¼Ç½Çµã£¬·ÀÖ¹ÏÂ´ÎÔÙËÑË÷
+			//å¦‚æœä¸‰æ¡æ–°è¾¹ä¸­æœ‰ä¸¤ä¸ªä¸ºæ–œè¾¹ï¼ˆå››é¢ä½“æ­£å¥½å–å…­é¢ä½“çš„ä¸€ä¸ªè§’ï¼‰ï¼Œåˆ™åº”æ ‡è®°è§’ç‚¹ï¼Œé˜²æ­¢ä¸‹æ¬¡å†æœç´¢
 			vector<int> tf;
 			int tn = 0;
 
-			//ÊÇ·ñÓĞÖ±±ß(×î¶àÒ»Ìõ£©
+			//æ˜¯å¦æœ‰ç›´è¾¹(æœ€å¤šä¸€æ¡ï¼‰
 			int sn = -1;
 			for( int j=0; j<3; j++ )
 			{
@@ -2365,7 +2365,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 				}
 				else if( act_node[j+1] < 18 )
 				{
-					tf.push_back(act_node[j+1]-12);   //¼ÇÂ¼Ğ±±ß±àºÅ
+					tf.push_back(act_node[j+1]-12);   //è®°å½•æ–œè¾¹ç¼–å·
 				}
 
 				else if( act_node[j+1] == 18 )
@@ -2386,7 +2386,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 					hout << "Sign the node NO. " << tri_faces[i].nodesId[1] << " for used." << endl;
 				}
 			}
-			//´æÔÚÖ±±ß£¬ĞèÒª±ê¼ÇÒÑ¾­´¦Àí¹ıµÄÈı½ÇÃæÆ¬£¬·ñÔò»áÉú³ÉÖØ¸´µ¥Ôª
+			//å­˜åœ¨ç›´è¾¹ï¼Œéœ€è¦æ ‡è®°å·²ç»å¤„ç†è¿‡çš„ä¸‰è§’é¢ç‰‡ï¼Œå¦åˆ™ä¼šç”Ÿæˆé‡å¤å•å…ƒ
 			if( sn > -1 )
 			{
 				vector<int> rela_tri_faces;
@@ -2425,7 +2425,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 			{
 				hout << "Not pass. Back." << endl;
 			}
-			//¹¹ÔìÊ§°Ü£¬Çå³ıÔÚÕâÒ»²½Ëù×öµÄ±ê¼Ç²¢»ØÍËµ½ÉÏÒ»²½
+			//æ„é€ å¤±è´¥ï¼Œæ¸…é™¤åœ¨è¿™ä¸€æ­¥æ‰€åšçš„æ ‡è®°å¹¶å›é€€åˆ°ä¸Šä¸€æ­¥
 			sign_dealed_tri_faces[i]=0;
 			i_vec.pop_back();
 			if(i_vec.size() == 0)
@@ -2508,13 +2508,13 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 }
 
 //---------------------------------------------------------------------------
-//°´¸ø¶¨²ÎÊı£¬°ÑÁùÃæÌå£¨³¤·½Ìå£©µÄ6¸öÃæ·Ö³ÉÈı½ÇÃæÆ¬£¬²¢È·¶¨ÆäÏà»¥¹ØÏµ£¨Ã¿Ìõ±ßÏßÁ½±ßµÄµ¥Ôª£©
+//æŒ‰ç»™å®šå‚æ•°ï¼ŒæŠŠå…­é¢ä½“ï¼ˆé•¿æ–¹ä½“ï¼‰çš„6ä¸ªé¢åˆ†æˆä¸‰è§’é¢ç‰‡ï¼Œå¹¶ç¡®å®šå…¶ç›¸äº’å…³ç³»ï¼ˆæ¯æ¡è¾¹çº¿ä¸¤è¾¹çš„å•å…ƒï¼‰
 int Mesher::deter_rela_tri_face(int *hex,vector<Tri_2D_ele> &tri_faces)
 {
 	Tri_2D_ele temp_tri;
 	tri_faces.assign(12,temp_tri);
-	//Éú³É12¸öÈı½ÇÃæÆ¬
-	//ËùÓĞµÄ½Úµã±àºÅÒÔ¼°±ßµÄ±àºÅ¾ùÎªÓÒÊÖ¶¨Ôò£¬Ä´Ö¸·½Ïò³¯ÁùÃæÌåÄÚ²¿£¬ÇÒĞ±±ßÔÚ×îºó
+	//ç”Ÿæˆ12ä¸ªä¸‰è§’é¢ç‰‡
+	//æ‰€æœ‰çš„èŠ‚ç‚¹ç¼–å·ä»¥åŠè¾¹çš„ç¼–å·å‡ä¸ºå³æ‰‹å®šåˆ™ï¼Œæ‹‡æŒ‡æ–¹å‘æœå…­é¢ä½“å†…éƒ¨ï¼Œä¸”æ–œè¾¹åœ¨æœ€å
 	if( hex[8] == 0 )
 	{
 		tri_faces[0] = Tri_2D_ele(7,4,0,7,8,12);
@@ -2584,10 +2584,10 @@ int Mesher::deter_rela_tri_face(int *hex,vector<Tri_2D_ele> &tri_faces)
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨ĞèÒª¼ì²éµÄ4¸ö½Úµã£¨Èı½ÇÃæÆ¬¶ÔÃæµÄËÄ¸ö½Úµã£¬²¢°Ñ×î½üµÄ½Úµã·ÅÔÚ×îºó£©
-        //½ÚµãµÄË³ĞòÎª£º³¤¶Ô½ÇÏß½Úµã¡¢µÚÒ»Ìõ±ß¶ÔÓ¦µÄĞ±±ß½Úµã¡¢µÚ¶şÌõ±ß¶ÔÓ¦µÄĞ±±ß½Úµã¡¢ÖĞµã¶ÔÓ¦µÄ½Úµã£¨¹¹³ÉÖ±±ßµÄ½Úµã£©
-//i£ºÈı½ÇÃæÆ¬µÄ±àºÅ
-//n£ºÈı½ÇÃæÆ¬µÚ¶ş¸ö½ÚµãµÄ±àºÅ£¨¾Ö²¿±àºÅ£©
+//ç¡®å®šéœ€è¦æ£€æŸ¥çš„4ä¸ªèŠ‚ç‚¹ï¼ˆä¸‰è§’é¢ç‰‡å¯¹é¢çš„å››ä¸ªèŠ‚ç‚¹ï¼Œå¹¶æŠŠæœ€è¿‘çš„èŠ‚ç‚¹æ”¾åœ¨æœ€åï¼‰
+        //èŠ‚ç‚¹çš„é¡ºåºä¸ºï¼šé•¿å¯¹è§’çº¿èŠ‚ç‚¹ã€ç¬¬ä¸€æ¡è¾¹å¯¹åº”çš„æ–œè¾¹èŠ‚ç‚¹ã€ç¬¬äºŒæ¡è¾¹å¯¹åº”çš„æ–œè¾¹èŠ‚ç‚¹ã€ä¸­ç‚¹å¯¹åº”çš„èŠ‚ç‚¹ï¼ˆæ„æˆç›´è¾¹çš„èŠ‚ç‚¹ï¼‰
+//iï¼šä¸‰è§’é¢ç‰‡çš„ç¼–å·
+//nï¼šä¸‰è§’é¢ç‰‡ç¬¬äºŒä¸ªèŠ‚ç‚¹çš„ç¼–å·ï¼ˆå±€éƒ¨ç¼–å·ï¼‰
 int Mesher::deter_check_nodes(int i,int n,int check_nn[4])
 {
 	switch(i)
@@ -2791,27 +2791,27 @@ int Mesher::deter_check_nodes(int i,int n,int check_nn[4])
 }
 
 //---------------------------------------------------------------------------
-//¸ø¶¨Ò»¸öÈı½ÇÃæÆ¬ºÍÒ»¸ö½Úµã£¬ÅĞ¶ÏËüÃÇÊÇ·ñÄÜ¹¹³ÉÒ»¸öËÄÃæÌå£¬Ö÷Òª¿¼ÂÇ±ß½çĞ­µ÷ÎÊÌâ
-//ls[3]: ÈıÌõĞÂ±ßµÄ±àºÅ£¨ÔÚÁùÃæÌåÖĞµÄ±àºÅ£©
+//ç»™å®šä¸€ä¸ªä¸‰è§’é¢ç‰‡å’Œä¸€ä¸ªèŠ‚ç‚¹ï¼Œåˆ¤æ–­å®ƒä»¬æ˜¯å¦èƒ½æ„æˆä¸€ä¸ªå››é¢ä½“ï¼Œä¸»è¦è€ƒè™‘è¾¹ç•Œåè°ƒé—®é¢˜
+//ls[3]: ä¸‰æ¡æ–°è¾¹çš„ç¼–å·ï¼ˆåœ¨å…­é¢ä½“ä¸­çš„ç¼–å·ï¼‰
 int Mesher::can_form_1tet(Tri_2D_ele &tri, int nn, int *hex, int &diag_line, int ls[3])
 {
 	bool debuging=false;
-	//ÅĞ¶ÏÈıÌõĞÂ±ßÊÇ·ñ¸úÒÑÓĞ±ß½çĞ­µ÷£¨ËùÓĞ½Úµã±àºÅ¾ùÎª¾Ö²¿±àºÅ£©
+	//åˆ¤æ–­ä¸‰æ¡æ–°è¾¹æ˜¯å¦è·Ÿå·²æœ‰è¾¹ç•Œåè°ƒï¼ˆæ‰€æœ‰èŠ‚ç‚¹ç¼–å·å‡ä¸ºå±€éƒ¨ç¼–å·ï¼‰
 	for( int i=0; i<3; i++ )
 	{
 		ls[i] = -1;
 		int n0 = tri.nodesId[i];
 		if( debuging ) hout << "n0: " << n0 << " nn: " << nn <<endl;
-		//ÊÇ·ñÖØ¸´
+		//æ˜¯å¦é‡å¤
 		if( n0 == nn ) return 0;
-		//ÊÇ·ñÎªÖ±±ß
+		//æ˜¯å¦ä¸ºç›´è¾¹
 		int ieoh = is_edge_of_hex(n0,nn);
 		if( ieoh >= 0 )
 		{
 			ls[i] = ieoh;
 			continue;
 		}
-		//ÊÇ·ñÎªĞ±±ß£¬Èç¹ûÊÇ£¬Òª¼ì²éÊÇ·ñĞ­µ÷
+		//æ˜¯å¦ä¸ºæ–œè¾¹ï¼Œå¦‚æœæ˜¯ï¼Œè¦æ£€æŸ¥æ˜¯å¦åè°ƒ
 		int style;
 		int is_dia_edge = deter_face_num(n0,nn,&style);
 		if( debuging ) hout << "is dia edge: " << is_dia_edge << endl;
@@ -2827,7 +2827,7 @@ int Mesher::can_form_1tet(Tri_2D_ele &tri, int nn, int *hex, int &diag_line, int
 				return 0;
 			}
 		}
-		//ÊÇ·ñÎª¶Ô½ÇÏß
+		//æ˜¯å¦ä¸ºå¯¹è§’çº¿
 		int min_n=min(n0,nn);
 		if( diag_line == 0 )
 		{
@@ -2852,7 +2852,7 @@ int Mesher::can_form_1tet(Tri_2D_ele &tri, int nn, int *hex, int &diag_line, int
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İ¸ø¶¨µÄÁ½¸ö½ÚµãºÅ£¬ÅĞ¶ÏÊÇÔÚÁùÃæÌåµÄÄÄ¸ö²àÃæÉÏ
+//æ ¹æ®ç»™å®šçš„ä¸¤ä¸ªèŠ‚ç‚¹å·ï¼Œåˆ¤æ–­æ˜¯åœ¨å…­é¢ä½“çš„å“ªä¸ªä¾§é¢ä¸Š
 int Mesher::deter_face_num(int n1, int n2, int *style)
 {
 	int min_n=min(n1,n2);
@@ -2939,7 +2939,7 @@ int Mesher::deter_face_num(int n1, int n2, int *style)
 }
 
 //---------------------------------------------------------------------------
-//¸ø¶¨Á½ÌõÖ±±ßºÅ£¬·µ»Ø¹¹³ÉµÄÈı½ÇÃæÆ¬ºÅ
+//ç»™å®šä¸¤æ¡ç›´è¾¹å·ï¼Œè¿”å›æ„æˆçš„ä¸‰è§’é¢ç‰‡å·
 int Mesher::deter_face_num_from_2bar(int bn1, int bn2)
 {
 	int fn = -1;
@@ -3069,7 +3069,7 @@ int Mesher::deter_face_num_from_2bar(int bn1, int bn2)
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËã¸ø¶¨½Úµãµ½¸ø¶¨Èı½ÇÆ¬ÃæµÄ¼Ğ½Ç(²ğ·ÖÁùÃæÌå³É6¸öËÄÃæÌåÊ±Ê¹ÓÃ£©
+//è®¡ç®—ç»™å®šèŠ‚ç‚¹åˆ°ç»™å®šä¸‰è§’ç‰‡é¢çš„å¤¹è§’(æ‹†åˆ†å…­é¢ä½“æˆ6ä¸ªå››é¢ä½“æ—¶ä½¿ç”¨ï¼‰
 double Mesher::angle_point2_tri(int j, Tri_2D_ele* tri, int *hex, int *check_nn)
 {
 	bool debuging = false;
@@ -3146,10 +3146,10 @@ double Mesher::angle_point2_tri(int j, Tri_2D_ele* tri, int *hex, int *check_nn)
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãÁ½¸öÈı½ÇÃæÆ¬Ö®¼äµÄ¼Ğ½Ç,node1_num node2_num ·Ö±ğÎª²»ÔÚ¹«¹²±ßÉÏµÄ½Úµã
+//è®¡ç®—ä¸¤ä¸ªä¸‰è§’é¢ç‰‡ä¹‹é—´çš„å¤¹è§’,node1_num node2_num åˆ†åˆ«ä¸ºä¸åœ¨å…¬å…±è¾¹ä¸Šçš„èŠ‚ç‚¹
 double Mesher::angle_of_2tri(Tri_2D_ele* tri1, Tri_2D_ele* tri2, int node1_num, int node2_num)
 {
-	//¼ì²étri1 tri2µÄÓĞĞ§ĞÔ£¨²»ÄÜÓĞ½ÚµãÖØ¸´£©
+	//æ£€æŸ¥tri1 tri2çš„æœ‰æ•ˆæ€§ï¼ˆä¸èƒ½æœ‰èŠ‚ç‚¹é‡å¤ï¼‰
 	int nn10 = tri1->nodesId[0];
 	int nn20 = tri2->nodesId[0];
 	for( int i=1; i<3; i++ )
@@ -3166,27 +3166,27 @@ double Mesher::angle_of_2tri(Tri_2D_ele* tri1, Tri_2D_ele* tri2, int node1_num, 
 		}
 	}
 
-	//¼ÆËãtri1µÄ·¨ÏòÁ¿
+	//è®¡ç®—tri1çš„æ³•å‘é‡
 	Node node21 = nodes_vec[tri1->nodesId[1]] - nodes_vec[tri1->nodesId[0]] ;
 	TDVector v11 = TDVector( node21.x, node21.y, node21.z );
 	Node node31 = nodes_vec[tri1->nodesId[2]] - nodes_vec[tri1->nodesId[0]] ;
 	TDVector v12 = TDVector( node31.x, node31.y, node31.z );
 	TDVector normal1 = v11.cro_product( &v12 );
-	//¼ÆËãtri2µÄ·¨ÏòÁ¿
+	//è®¡ç®—tri2çš„æ³•å‘é‡
 	node21 = nodes_vec[tri2->nodesId[1]] - nodes_vec[tri2->nodesId[0]] ;
 	TDVector v21 = TDVector( node21.x, node21.y, node21.z );
 	node31 = nodes_vec[tri2->nodesId[2]] - nodes_vec[tri2->nodesId[0]] ;
 	TDVector v22 = TDVector( node31.x, node31.y, node31.z );
 	TDVector normal2 = v21.cro_product( &v22 );
 
-	//¼ÆËãÁ½¸ö·¨ÏòÁ¿µÄ¼Ğ½Ç
+	//è®¡ç®—ä¸¤ä¸ªæ³•å‘é‡çš„å¤¹è§’
 	double acos_v = normal1.dot_product( &normal2 ) / ( normal1.length() * normal2.length() );
 	double theter1 = acos( acos_v );
-	//Á½ÃæÆ¬¼Ğ½ÇÎª·¨Ïò¼Ğ½ÇµÄÓà½Ç
+	//ä¸¤é¢ç‰‡å¤¹è§’ä¸ºæ³•å‘å¤¹è§’çš„ä½™è§’
 	double theter2 = PI - theter1 ;
 
-	//ÅĞ¶ÏÁ½ÃæÆ¬Á¬½Ó´¦ÊÇ°¼ĞÎ»¹Í¹ĞÎ
-	//ÕÒ³ö²»ÔÚ¹«¹²±ßÉÏµÄÁ½µã
+	//åˆ¤æ–­ä¸¤é¢ç‰‡è¿æ¥å¤„æ˜¯å‡¹å½¢è¿˜å‡¸å½¢
+	//æ‰¾å‡ºä¸åœ¨å…¬å…±è¾¹ä¸Šçš„ä¸¤ç‚¹
 	Node node1, node2;
 	int is_coplane = 1;
 	for ( int i=0; i<3; i++ )
@@ -3256,13 +3256,13 @@ double Mesher::angle_of_2tri(Tri_2D_ele* tri1, Tri_2D_ele* tri2, int node1_num, 
 }
 
 //---------------------------------------------------------------------------
-//°ÑÒ»¸öÁùÃæÌå·Ö³É12¸öËÄÃæÌå£¨ÔÚÖĞĞÄ²åÈëÒ»¸öĞÂ½Úµã£¬ÓÃÀ´´¦Àí²»ÄÜ³É¹¦·Ö³É6¸öËÄÃæÌåµÄÇé¿ö£©
+//æŠŠä¸€ä¸ªå…­é¢ä½“åˆ†æˆ12ä¸ªå››é¢ä½“ï¼ˆåœ¨ä¸­å¿ƒæ’å…¥ä¸€ä¸ªæ–°èŠ‚ç‚¹ï¼Œç”¨æ¥å¤„ç†ä¸èƒ½æˆåŠŸåˆ†æˆ6ä¸ªå››é¢ä½“çš„æƒ…å†µï¼‰
 int Mesher::hex2_12tet(int hex[14], vector<Tetrahedron > &tets, double volume)
 {
 	tets.clear();
 
 	//     vector<Tetrahedron> local_tets;
-	//·Ö³É12¸öËÄÃæÌå£¨ÔÚÁùÃæÌåÖĞĞÄ²åÈëÒ»¸ö½Úµã£©
+	//åˆ†æˆ12ä¸ªå››é¢ä½“ï¼ˆåœ¨å…­é¢ä½“ä¸­å¿ƒæ’å…¥ä¸€ä¸ªèŠ‚ç‚¹ï¼‰
 	Node cen_node = nodes_vec[hex[0]];
 	for( int i=1; i<8; i++ )
 	{
@@ -3347,7 +3347,7 @@ int Mesher::hex2_12tet(int hex[14], vector<Tetrahedron > &tets, double volume)
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨Ã¿¸öËÄÃæÌåµÄ²ÄÁÏ
+//ç¡®å®šæ¯ä¸ªå››é¢ä½“çš„ææ–™
 int Mesher::deter_eles_mat()
 {
 	for( int i=0; i<(int)eles_vec.size(); i++ )
@@ -3358,7 +3358,7 @@ int Mesher::deter_eles_mat()
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨Ò»¸öµ¥ÔªµÄ²ÄÁÏ±àºÅ
+//ç¡®å®šä¸€ä¸ªå•å…ƒçš„ææ–™ç¼–å·
 int Mesher::deter_mat_ele(int ele_num)
 {
 	bool debuging = false;
@@ -3388,10 +3388,10 @@ int Mesher::deter_mat_ele(int ele_num)
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨Ò»¸öµ¥ÔªµÄ²ÄÁÏ±àºÅ
-//·µ»ØÖµ£º-1: ½çÃæÉÏµÄµ¥Ôª
-//					0,1 £º»ùÌå£¬ÔöÇ¿Ïî
-//					-3	: ´íÎó£¬Ó¦¸ÃÍË³ö³ÌĞò
+//ç¡®å®šä¸€ä¸ªå•å…ƒçš„ææ–™ç¼–å·
+//è¿”å›å€¼ï¼š-1: ç•Œé¢ä¸Šçš„å•å…ƒ
+//					0,1 ï¼šåŸºä½“ï¼Œå¢å¼ºé¡¹
+//					-3	: é”™è¯¯ï¼Œåº”è¯¥é€€å‡ºç¨‹åº
 int Mesher::deter_mat_ele(Tetrahedron* act_tet, int mod)
 {
 	bool debuging = false;
@@ -3422,18 +3422,18 @@ int Mesher::deter_mat_ele(Tetrahedron* act_tet, int mod)
 		hout << ions[3] << endl;
 	}
 
-	//È·¶¨´Ëµ¥ÔªµÄ²ÄÁÏ
-	//ÔÚ»ùÌåÖĞ
+	//ç¡®å®šæ­¤å•å…ƒçš„ææ–™
+	//åœ¨åŸºä½“ä¸­
 	if( (wws[0] == -1 || ions[0] == 1) && (wws[1] == -1 || ions[1] == 1) &&
 		(wws[2] == -1 || ions[2] == 1) && (wws[3] == -1 || ions[3] == 1) &&
 		((wws[0] == -1 || wws[1] == -1 || wws[2] == -1 || wws[3] == -1)||
 		(!(wws[0] == wws[1] && wws[0] == wws[2] && wws[0] == wws[3]))))
 	{
-		//ËÄ¸ö½Úµã¶¼ÔÚ»ùÌåÄÚ»òÕß½çÃæÉÏ£¬¶øÇÒÖÁÉÙÒ»¸ö½ÚµãÔÚ»ùÌåÄÚ»òÕß
-		//ËÄ¸ö½ÚµãÔÚ²»Í¬µÄ½çÃæÉÏ£¬¶¼ËµÃ÷´Ëµ¥ÔªÎª»ùÌå
+		//å››ä¸ªèŠ‚ç‚¹éƒ½åœ¨åŸºä½“å†…æˆ–è€…ç•Œé¢ä¸Šï¼Œè€Œä¸”è‡³å°‘ä¸€ä¸ªèŠ‚ç‚¹åœ¨åŸºä½“å†…æˆ–è€…
+		//å››ä¸ªèŠ‚ç‚¹åœ¨ä¸åŒçš„ç•Œé¢ä¸Šï¼Œéƒ½è¯´æ˜æ­¤å•å…ƒä¸ºåŸºä½“
 
-		//news£º×¢ÒâÈç¹ûÍÖÇòÉú³É³ÌĞòÓĞÎÊÌâ¿ÉÄÜ³öÏÖ¿ÅÁ£ÖØµşÇøÓò£¬
-		//ÕâÖÖÇøÓòÄÚµÄµ¥Ôª¿ÉÄÜ»á³öÏÖËùÓĞµÄis_on¶¼ÊÇ1µÄÇé¿ö
+		//newsï¼šæ³¨æ„å¦‚æœæ¤­çƒç”Ÿæˆç¨‹åºæœ‰é—®é¢˜å¯èƒ½å‡ºç°é¢—ç²’é‡å åŒºåŸŸï¼Œ
+		//è¿™ç§åŒºåŸŸå†…çš„å•å…ƒå¯èƒ½ä¼šå‡ºç°æ‰€æœ‰çš„is_onéƒ½æ˜¯1çš„æƒ…å†µ
 		int is_cross_tet=-1;
 		for( int i=0; i<4; i++ )
 		{
@@ -3465,7 +3465,7 @@ int Mesher::deter_mat_ele(Tetrahedron* act_tet, int mod)
 			return 0;
 		}
 	}
-	//µ¥ÔªÔÚÔöÇ¿¿ÅÁ£ÄÚ²¿
+	//å•å…ƒåœ¨å¢å¼ºé¢—ç²’å†…éƒ¨
 	if(wws[0] != -1 && wws[1] != -1 && wws[2] != -1 && wws[3] !=-1 )
 	{
 
@@ -3507,14 +3507,14 @@ int Mesher::deter_mat_ele(Tetrahedron* act_tet, int mod)
 		}
 
 	}
-	//ÔÚ½çÃæÉÏµÄµ¥Ôª
+	//åœ¨ç•Œé¢ä¸Šçš„å•å…ƒ
 	act_tet->materialId = -1 ;
-//	act_tet->materialId = 0 ;	//¶¼°´ÔÚ»ùÌåÉÏµÄÇé¿öËã
+//	act_tet->materialId = 0 ;	//éƒ½æŒ‰åœ¨åŸºä½“ä¸Šçš„æƒ…å†µç®—
 	return -1;
 }
 
 //---------------------------------------------------------------------------
-//ÅĞ¶ÏÒ»¸öµ¥ÔªÊÇ·ñÎª±¡Ôª£¨½Úµãµ½¶ÔÃæÈı½ÇĞÎÃæÆ¬µÄ¾àÀëĞ¡ÓÚglobal_length/5.0);
+//åˆ¤æ–­ä¸€ä¸ªå•å…ƒæ˜¯å¦ä¸ºè–„å…ƒï¼ˆèŠ‚ç‚¹åˆ°å¯¹é¢ä¸‰è§’å½¢é¢ç‰‡çš„è·ç¦»å°äºglobal_length/5.0);
 int Mesher::is_thin_tet(int ele_num)
 {
 	bool debuging = false;
@@ -3544,7 +3544,7 @@ int Mesher::is_thin_tet(int ele_num)
 		hout << endl;
 	}
 
-	//¼ì²éµ¥ÔªÓĞĞ§ĞÔ£¨ÊÇ·ñÒÑ¾­É¾³ı£¨ËÄ¸ö½ÚµãÏàÍ¬£©£©
+	//æ£€æŸ¥å•å…ƒæœ‰æ•ˆæ€§ï¼ˆæ˜¯å¦å·²ç»åˆ é™¤ï¼ˆå››ä¸ªèŠ‚ç‚¹ç›¸åŒï¼‰ï¼‰
 	int nn0 = eles_vec[ele_num].nodesId[0];
 	for( int i=1; i<4; i++ )
 	{
@@ -3587,12 +3587,12 @@ int Mesher::is_thin_tet(int ele_num)
 }
 
 //---------------------------------------------------------------------------
-//ÕÒ³öÒ»¸öËÄÃæÌåËÄ¸öÃæµÄ×î´ó¼Ğ½Ç£¬²¢·µ»ØÏàÓ¦µÄ½ÚµãĞòÁĞ£¨0-1-2  3-2-1Îª¼Ğ½Ç×î´óµÄÁ½Ãæ£©
+//æ‰¾å‡ºä¸€ä¸ªå››é¢ä½“å››ä¸ªé¢çš„æœ€å¤§å¤¹è§’ï¼Œå¹¶è¿”å›ç›¸åº”çš„èŠ‚ç‚¹åºåˆ—ï¼ˆ0-1-2  3-2-1ä¸ºå¤¹è§’æœ€å¤§çš„ä¸¤é¢ï¼‰
 double Mesher::max_angle_of_tet(int ele_num, int *nseq)
 {
-	int nns[6][4];   //Áù×é½Úµã±àºÅ
-	//¹²ÓĞÁùÖÖÇé¿ö£¨ËÄÃæÌåÈÎÒâÁ½¸öÃæµÄ½»½Ç£©
-	//ÊÖĞ´°É£¬Âé·³
+	int nns[6][4];   //å…­ç»„èŠ‚ç‚¹ç¼–å·
+	//å…±æœ‰å…­ç§æƒ…å†µï¼ˆå››é¢ä½“ä»»æ„ä¸¤ä¸ªé¢çš„äº¤è§’ï¼‰
+	//æ‰‹å†™å§ï¼Œéº»çƒ¦
 	nns[0][0] = 0;
 	nns[0][1] = 1;
 	nns[0][2] = 2;
@@ -3618,8 +3618,8 @@ double Mesher::max_angle_of_tet(int ele_num, int *nseq)
 	nns[5][2] = 1;
 	nns[5][3] = 3;
 
-	int nsn[4];        //ËÄ¸ö½Úµã±àºÅ
-	//ÕÒ³ö½Ç¶È×î´óµÄÁ½¸öÃæ
+	int nsn[4];        //å››ä¸ªèŠ‚ç‚¹ç¼–å·
+	//æ‰¾å‡ºè§’åº¦æœ€å¤§çš„ä¸¤ä¸ªé¢
 	double max_ang=0.0;
 	int max_aj = -1;
 	for( int j=0; j<6; j++ )
@@ -3650,13 +3650,13 @@ double Mesher::max_angle_of_tet(int ele_num, int *nseq)
 }
 
 //---------------------------------------------------------------------------
-//°ÑÖ¸¶¨µ¥Ôª·ÖÀà·ÅÈë´ı´¦Àí¼¯ºÏ£¨¿ç±ß½çµÄµ¥Ôª£©
+//æŠŠæŒ‡å®šå•å…ƒåˆ†ç±»æ”¾å…¥å¾…å¤„ç†é›†åˆï¼ˆè·¨è¾¹ç•Œçš„å•å…ƒï¼‰
 int Mesher::put_into_cbev( int ele_num, double alength, int type )
 {
 	bool debuging = false;
 
 	Tetrahedron *act_tet = &eles_vec[ele_num];
-	//Ê×ÏÈÕÒ³öÓĞÒ»¸ö±ßÔÚµ¥°û±ß½çÏßÉÏµÄµ¥Ôª
+	//é¦–å…ˆæ‰¾å‡ºæœ‰ä¸€ä¸ªè¾¹åœ¨å•èƒè¾¹ç•Œçº¿ä¸Šçš„å•å…ƒ
 	if( type < 1 && has_cross_edge_edge( act_tet ) != 0 )
 	{
 		if( debuging ) hout << " Putting ele " << ele_num << " into be." <<endl;
@@ -3664,7 +3664,7 @@ int Mesher::put_into_cbev( int ele_num, double alength, int type )
 		return 1;
 	}
 
-	//ÕÒ³öÓĞÒ»¸öÃæÔÚµ¥°û±ß½çÃæÉÏµÄµ¥Ôª
+	//æ‰¾å‡ºæœ‰ä¸€ä¸ªé¢åœ¨å•èƒè¾¹ç•Œé¢ä¸Šçš„å•å…ƒ
 	if( type < 2 )
 	{
 		int hceeof = has_cross_edge_edge_on_face( act_tet );
@@ -3704,7 +3704,7 @@ int Mesher::put_into_cbev( int ele_num, double alength, int type )
 }
 
 //---------------------------------------------------------------------------
-//ÅĞ¶ÏÒ»¸öµ¥ÔªÊÇ·ñÓĞ±ßÔÚµ¥°û±ß½çÏßÉÏ¿ç±ß½ç
+//åˆ¤æ–­ä¸€ä¸ªå•å…ƒæ˜¯å¦æœ‰è¾¹åœ¨å•èƒè¾¹ç•Œçº¿ä¸Šè·¨è¾¹ç•Œ
 int Mesher::has_cross_edge_edge( Tetrahedron *act_tet )
 {
 	int w1 = where_is_nodes[act_tet->nodesId[0]];
@@ -3807,7 +3807,7 @@ int Mesher::has_cross_edge_edge( Tetrahedron *act_tet )
 int Mesher::is_on_edge( int node_num, int mod )
 {
 	Node *node = &nodes_vec[node_num];
-	//¼ì²é½ÚµãÊÇ·ñÍ¬Ê±ÔÚÁ½¸öÃæÉÏ£¬Èç¹ûÊÇ£¬ÔòËµÃ÷´ËµãÔÚÁ½Ãæ½»ÏßÉÏ
+	//æ£€æŸ¥èŠ‚ç‚¹æ˜¯å¦åŒæ—¶åœ¨ä¸¤ä¸ªé¢ä¸Šï¼Œå¦‚æœæ˜¯ï¼Œåˆ™è¯´æ˜æ­¤ç‚¹åœ¨ä¸¤é¢äº¤çº¿ä¸Š
 	int ofs = 0 ;
 	if( fabs(node->x - x_min) <= ZERO )
 	{
@@ -3834,7 +3834,7 @@ int Mesher::is_on_edge( int node_num, int mod )
 		ofs ++ ;
 	}
 
-	//¼ì²é½çÃæ
+	//æ£€æŸ¥ç•Œé¢
 	if( mod == 1)
 	{
 		if( is_on_nodes[node_num] == 1 ) ofs ++ ;
@@ -3848,15 +3848,15 @@ int Mesher::is_on_edge( int node_num, int mod )
 }
 
 //---------------------------------------------------------------------------
-//¼ì²âËÄÃæÌåÊÇ·ñÓĞ±ßÔÚ±ß½çÏß
-//·µ»ØÖµÎªÔÚ±ß½çÏßÉÏµÄ±ßºÅ
-//      0: Ã»ÓĞ±ßÔÚ±ß½çÏßÉÏ
-//      1: 0-1 ±ß
-//      2: 0-2 ±ß
-//      3: 0-3 ±ß
-//      4: 1-2 ±ß
-//      5: 1-3 ±ß
-//      6: 2-3 ±ß
+//æ£€æµ‹å››é¢ä½“æ˜¯å¦æœ‰è¾¹åœ¨è¾¹ç•Œçº¿
+//è¿”å›å€¼ä¸ºåœ¨è¾¹ç•Œçº¿ä¸Šçš„è¾¹å·
+//      0: æ²¡æœ‰è¾¹åœ¨è¾¹ç•Œçº¿ä¸Š
+//      1: 0-1 è¾¹
+//      2: 0-2 è¾¹
+//      3: 0-3 è¾¹
+//      4: 1-2 è¾¹
+//      5: 1-3 è¾¹
+//      6: 2-3 è¾¹
 int Mesher::is_on_edge(Tetrahedron* act_tet, int mod)
 {
 	int ioe1 = is_on_same_edge( act_tet->nodesId[0],
@@ -3887,13 +3887,13 @@ int Mesher::is_on_edge(Tetrahedron* act_tet, int mod)
 }
 
 //---------------------------------------------------------------------------
-//ÅĞ¶ÏÁ½¸ö½ÚµãÊÇ·ñÔÚÍ¬Ò»Ìõ±ß½çÉÏ£¬mod¿ØÖÆÒª²»Òª¼ì²éÔöÇ¿¿ÅÁ£ºÍ»ùÌå½»½çÃæ
+//åˆ¤æ–­ä¸¤ä¸ªèŠ‚ç‚¹æ˜¯å¦åœ¨åŒä¸€æ¡è¾¹ç•Œä¸Šï¼Œmodæ§åˆ¶è¦ä¸è¦æ£€æŸ¥å¢å¼ºé¢—ç²’å’ŒåŸºä½“äº¤ç•Œé¢
 int Mesher::is_on_same_edge(int node1_num, int node2_num, int mod)
 {
         Node *node1 = &nodes_vec[node1_num];
         Node *node2 = &nodes_vec[node2_num];
 
-        //Ê×ÏÈÈ·¶¨Á½¸ö½Úµã·Ö±ğÔÚÄÄĞ©ÃæÉÏ£¨ÄÄĞ©ÃæµÄ½»£©
+        //é¦–å…ˆç¡®å®šä¸¤ä¸ªèŠ‚ç‚¹åˆ†åˆ«åœ¨å“ªäº›é¢ä¸Šï¼ˆå“ªäº›é¢çš„äº¤ï¼‰
         vector<int> faces1, faces2 ;
         if( fabs(node1->x - x_min) <= ZERO ) faces1.push_back(-1) ;
         else if( fabs(node1->x - x_max) <= ZERO ) faces1.push_back(-2) ;
@@ -3918,7 +3918,7 @@ int Mesher::is_on_same_edge(int node1_num, int node2_num, int mod)
                 int ww = where_is_nodes[node2_num] ;
                 if( is_on_nodes[node2_num] == 1 ) faces2.push_back(ww + 1) ;
         }
-        //Ö»ÒªÓĞÁ½¸öÃæÏàÍ¬£¬¾ÍËµÃ÷´ËÁ½µãÔÚÍ¬Ò»±ß½çÏßÉÏ
+        //åªè¦æœ‰ä¸¤ä¸ªé¢ç›¸åŒï¼Œå°±è¯´æ˜æ­¤ä¸¤ç‚¹åœ¨åŒä¸€è¾¹ç•Œçº¿ä¸Š
         int sf = 0 ;
         for( int i=0; i<(int)faces1.size(); i++ )
 		{
@@ -3935,7 +3935,7 @@ int Mesher::is_on_same_edge(int node1_num, int node2_num, int mod)
 }
 
 //---------------------------------------------------------------------------
-//ÅĞ¶ÏÒ»¸öµ¥ÔªÊÇ·ñÓĞ±ßÔÚµ¥°û±ß½çÃæÉÏ¿ç±ß½ç
+//åˆ¤æ–­ä¸€ä¸ªå•å…ƒæ˜¯å¦æœ‰è¾¹åœ¨å•èƒè¾¹ç•Œé¢ä¸Šè·¨è¾¹ç•Œ
 int Mesher::has_cross_edge_edge_on_face( Tetrahedron *act_tet )
 {
 	int wh[4],is_on[4];
@@ -3958,7 +3958,7 @@ int Mesher::has_cross_edge_edge_on_face( Tetrahedron *act_tet )
 	{
 		for( int j=i+1; j<4; j++,edge_num++ )
 		{
-			//¼ì²éÃ¿Ìõ±ßÊÇ·ñÔÚµ¥°û±ß½çÃæÉÏ£¬²¢ÇÒ¿ç½çÃæ
+			//æ£€æŸ¥æ¯æ¡è¾¹æ˜¯å¦åœ¨å•èƒè¾¹ç•Œé¢ä¸Šï¼Œå¹¶ä¸”è·¨ç•Œé¢
 			int iof = is_on_same_face( act_tet->nodesId[i],
 													 act_tet->nodesId[j], 0 );
 			if( iof == 0 ) continue;
@@ -3978,9 +3978,9 @@ int Mesher::has_cross_edge_edge_on_face( Tetrahedron *act_tet )
 }
 
 //---------------------------------------------------------------------------
-//¼ì²é¸ø¶¨Á½¸ö½ÚµãÊÇ·ñÔÚÍ¬Ò»¸öÃæÉÏ£¨µ¥°û±ß½çÃæ»òÕß»ùÌåÓëÔöÇ¿ÏîµÄ½çÃæ£©
-//mod=0Ö»¼ì²éµ¥°û±ß½çÃæ£¬
-//mod=1¼ì²éµ¥°û±ß½çÃæºÍ»ùÌåÓëÔöÇ¿ÏîµÄ½çÃæ
+//æ£€æŸ¥ç»™å®šä¸¤ä¸ªèŠ‚ç‚¹æ˜¯å¦åœ¨åŒä¸€ä¸ªé¢ä¸Šï¼ˆå•èƒè¾¹ç•Œé¢æˆ–è€…åŸºä½“ä¸å¢å¼ºé¡¹çš„ç•Œé¢ï¼‰
+//mod=0åªæ£€æŸ¥å•èƒè¾¹ç•Œé¢ï¼Œ
+//mod=1æ£€æŸ¥å•èƒè¾¹ç•Œé¢å’ŒåŸºä½“ä¸å¢å¼ºé¡¹çš„ç•Œé¢
 int Mesher::is_on_same_face(int node1_num, int node2_num, int mod)
 {
 	Node *node1 = &nodes_vec[node1_num];
@@ -4023,9 +4023,9 @@ int Mesher::is_on_same_face(int node1_num, int node2_num, int mod)
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨Ó¦¸Ãµ÷ÕûµÄ±ß
-//Ê×ÏÈÑ¡Ôñ±ß½çÏßÉÏ¿ç±ß½çµÄ±ß£¬Æä´ÎÑ¡Ôñ±ß½çÃæÉÏ¿ç±ß½çµÄ±ß£¬ÔÙÆä´ÎÑ¡ÔñÁ½µã¶¼ÄÜÒÆ¶¯µÄ±ß
-//×îºóÑ¡ÔñÒ»µãÔÚ±ß½çÃæÉÏ£¬Ò»µãÔÚµ¥°ûÄÚ²¿µÄ±ß
+//ç¡®å®šåº”è¯¥è°ƒæ•´çš„è¾¹
+//é¦–å…ˆé€‰æ‹©è¾¹ç•Œçº¿ä¸Šè·¨è¾¹ç•Œçš„è¾¹ï¼Œå…¶æ¬¡é€‰æ‹©è¾¹ç•Œé¢ä¸Šè·¨è¾¹ç•Œçš„è¾¹ï¼Œå†å…¶æ¬¡é€‰æ‹©ä¸¤ç‚¹éƒ½èƒ½ç§»åŠ¨çš„è¾¹
+//æœ€åé€‰æ‹©ä¸€ç‚¹åœ¨è¾¹ç•Œé¢ä¸Šï¼Œä¸€ç‚¹åœ¨å•èƒå†…éƒ¨çš„è¾¹
 int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right_movable)
 {
 	bool debuging = false;
@@ -4042,7 +4042,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 
 	int left_nn, right_nn;
 
-	//¼ì²éÊÇ·ñÓĞÔÚ±ß½çÏßÉÏ¿ç±ß½çµÄ±ß
+	//æ£€æŸ¥æ˜¯å¦æœ‰åœ¨è¾¹ç•Œçº¿ä¸Šè·¨è¾¹ç•Œçš„è¾¹
 	int hcee = has_cross_edge_edge( act_tet );
 	if( hcee > 0 )
 	{
@@ -4102,7 +4102,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 		return hcee ;
 	}
 
-	//¼ì²éÊÇ·ñÓĞÔÚ±ß½çÃæÉÏ¿ç±ß½çµÄ±ß
+	//æ£€æŸ¥æ˜¯å¦æœ‰åœ¨è¾¹ç•Œé¢ä¸Šè·¨è¾¹ç•Œçš„è¾¹
 	int hceeof = has_cross_edge_edge_on_face( act_tet );
 
 	Node *n1 = &nodes_vec[act_tet->nodesId[0]];
@@ -4113,13 +4113,13 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 						{n2->x, n2->y,n2->z},
 						{n3->x, n3->y,n3->z},
 						{n4->x, n4->y,n4->z} };
-	//ÓÅÏÈÑ¡È¡Á½¶Ë½Úµã¶¼ÄÜÒÆ¶¯µÄ¿ç±ß½ç±ß
-	//Ê×ÏÈÕÒ³öËùÓĞ¿ç±ß½çµÄ±ß
+	//ä¼˜å…ˆé€‰å–ä¸¤ç«¯èŠ‚ç‚¹éƒ½èƒ½ç§»åŠ¨çš„è·¨è¾¹ç•Œè¾¹
+	//é¦–å…ˆæ‰¾å‡ºæ‰€æœ‰è·¨è¾¹ç•Œçš„è¾¹
 	vector< vector<int> > cross_edges ;
 	for( int i=0; i<6; i++ )
 	{
-		//left_nn right_nn¾Ö²¿±àºÅ
-		//left_ndoeN right_nodeNÕûÌå±àºÅ
+		//left_nn right_nnå±€éƒ¨ç¼–å·
+		//left_ndoeN right_nodeNæ•´ä½“ç¼–å·
 		int left_nn , right_nn ;
 		if( i == 0 )			{ left_nn = 0; right_nn = 1; }
 		else if( i == 1 )	{ left_nn = 0; right_nn = 2; }
@@ -4138,7 +4138,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 			if( !is_same_par1 && !is_same_par2 )	continue;
 
 			vector<int> temp_v;
-			//È·¶¨Á½¶Ë½ÚµãÊÇ·ñÄÜÒÆ¶¯
+			//ç¡®å®šä¸¤ç«¯èŠ‚ç‚¹æ˜¯å¦èƒ½ç§»åŠ¨
 			if( hceeof >= 1 && is_on_same_face( left_nodeN, right_nodeN, 0 ) == 1 )
 			{
 				temp_v.push_back(i+1);
@@ -4201,10 +4201,10 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 		}
 	}
 
-	//¼ì²éÓĞÃ»ÓĞ¿ÅÁ£ÖØµşµÄÇé¿ö
-	//£¨¼´ÓĞ±ß¿çÔ½Á½¸ö¿ÅÁ££¬¿ÅÁ£ÓÖÓĞÖØµş²¿·Ö£¬
-	//¿ÅÁ£Éú³ÉËã·¨µÄÎÊÌâ£¬µ«ĞèÒª´¦Àí£¬°¦£¬³îÈË°¡£¬ÓÚÑŞÕæ»á¸øÎÒ³öÄÑÌâ£©
-	//ºÇºÇ ÓàĞÂ¸ÕÊ¦ĞÖÕæÓĞÇéÈ¤
+	//æ£€æŸ¥æœ‰æ²¡æœ‰é¢—ç²’é‡å çš„æƒ…å†µ
+	//ï¼ˆå³æœ‰è¾¹è·¨è¶Šä¸¤ä¸ªé¢—ç²’ï¼Œé¢—ç²’åˆæœ‰é‡å éƒ¨åˆ†ï¼Œ
+	//é¢—ç²’ç”Ÿæˆç®—æ³•çš„é—®é¢˜ï¼Œä½†éœ€è¦å¤„ç†ï¼Œå”‰ï¼Œæ„äººå•Šï¼Œäºè‰³çœŸä¼šç»™æˆ‘å‡ºéš¾é¢˜ï¼‰
+	//å‘µå‘µ ä½™æ–°åˆšå¸ˆå…„çœŸæœ‰æƒ…è¶£
 	vector<vector<int> > cross_edges1(cross_edges.begin(),cross_edges.end());
 	cross_edges.clear();
 	for( int i=0; i<(int)cross_edges1.size(); i++ )
@@ -4213,8 +4213,8 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 		int rn = cross_edges1[i][2];
 		if( ww[ln]!=-1 && is_on[ln]==0 && ww[rn]!=-1 && is_on[rn]==0 )
 		{
-			//ÔÚÁ½¸ö¿ÅÁ£ÄÚ
-			//ÏÂÃæ¼ì²éÁ½¸ö¿ÅÁ£ÊÇ·ñÖØµş£¨ÇóÁ½¸ö½»µã£¬ÀûÓÃ¾àÀëÅĞ¶Ï£©
+			//åœ¨ä¸¤ä¸ªé¢—ç²’å†…
+			//ä¸‹é¢æ£€æŸ¥ä¸¤ä¸ªé¢—ç²’æ˜¯å¦é‡å ï¼ˆæ±‚ä¸¤ä¸ªäº¤ç‚¹ï¼Œåˆ©ç”¨è·ç¦»åˆ¤æ–­ï¼‰
 			Point inter_point1, inter_point2;
 			int err1 = thecell->surfaces_vec[ww[ln]]->intersect(pp[ln],pp[rn],inter_point1);
 			if( err1 == 0 ) continue;
@@ -4224,9 +4224,9 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 			double dis2 = pp[ln].distance_to(inter_point2);
 			if( dis1 > dis2 )
 			{
-				//ÖØµşÀ²
-				//Ç¿ÖÆÈÏÎª×ó²à½ÚµãÔÚÓÒ²à½ÚµãËùÔÚ¿ÅÁ£µÄ±ß½çÉÏ£¬ÒÔ·½±ãºó±ßÈ·¶¨
-				//×îºÃÊÇÏë°ì·¨±êÖ¾´Ëµ¥ÔªÎª¿ç±ß½çµ¥Ôª£¬àÅ£¬ÒÔºóÔÙËµ
+				//é‡å å•¦
+				//å¼ºåˆ¶è®¤ä¸ºå·¦ä¾§èŠ‚ç‚¹åœ¨å³ä¾§èŠ‚ç‚¹æ‰€åœ¨é¢—ç²’çš„è¾¹ç•Œä¸Šï¼Œä»¥æ–¹ä¾¿åè¾¹ç¡®å®š
+				//æœ€å¥½æ˜¯æƒ³åŠæ³•æ ‡å¿—æ­¤å•å…ƒä¸ºè·¨è¾¹ç•Œå•å…ƒï¼Œå—¯ï¼Œä»¥åå†è¯´
 				hout	<< "cross two particles: " << act_tet->nodesId[ln] << "("
 						<< ww[ln] << ") "
 						<< act_tet->nodesId[rn] << "("
@@ -4241,7 +4241,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 	}
 	if( cross_edges.size() == 0 ) return 0;
 
-	//¼ì²éËùÓĞ¿ç±ß½çµÄ±ß£¬ÓÅÏÈÑ¡ÔñÁ½¶Ëµã¶¼ÄÜÒÆ¶¯µÄ±ß
+	//æ£€æŸ¥æ‰€æœ‰è·¨è¾¹ç•Œçš„è¾¹ï¼Œä¼˜å…ˆé€‰æ‹©ä¸¤ç«¯ç‚¹éƒ½èƒ½ç§»åŠ¨çš„è¾¹
 	vector<vector<int> > cross_edges_dmb ;
 	for( int i=0; i<(int)cross_edges.size(); i++ )
 	{
@@ -4254,7 +4254,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 			return cross_edges[i][0];
 		}
 	}
-	//Ñ¡Ôñ½Úµã±àºÅ½Ï´óµÄ±ß
+	//é€‰æ‹©èŠ‚ç‚¹ç¼–å·è¾ƒå¤§çš„è¾¹
 	if( cross_edges_dmb.size() > 0 )
 	{
 		vector<int> the_edge(cross_edges_dmb[0].begin(),cross_edges_dmb[0].end());
@@ -4273,7 +4273,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 		right_movable = 1;
 		return the_edge[0];
 	}
-	//¼ì²éËùÓĞ¿ç±ß½çµÄ±ß£¬ÓÅÏÈÑ¡ÔñÁ½¶Ëµã¶¼¶¼ÔÚÔöÇ¿ÌåÄÚµÄ±ß£¨·ÀÖ¹ËÀÑ­»·£©
+	//æ£€æŸ¥æ‰€æœ‰è·¨è¾¹ç•Œçš„è¾¹ï¼Œä¼˜å…ˆé€‰æ‹©ä¸¤ç«¯ç‚¹éƒ½éƒ½åœ¨å¢å¼ºä½“å†…çš„è¾¹ï¼ˆé˜²æ­¢æ­»å¾ªç¯ï¼‰
 	for( int i=0; i<(int)cross_edges.size(); i++ )
 	{
 		if( is_on[cross_edges[i][1]] == 0 && is_on[cross_edges[i][2]] == 0 )
@@ -4289,7 +4289,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 }
 
 //---------------------------------------------------------------------------
-//½ÚµãÊÇ·ñÔÚµ¥°ûµÄ½çÃæÉÏ
+//èŠ‚ç‚¹æ˜¯å¦åœ¨å•èƒçš„ç•Œé¢ä¸Š
 int Mesher::is_on_face(Node* node, int mod)
 {
 	if( fabs(node->x - x_min) <= ZERO ) return -1 ;
@@ -4325,13 +4325,13 @@ int Mesher::is_on_face(int node_num, int mod)
 	return 0;
 }
 //---------------------------------------------------------------------------
-//¼ì²âËÄÃæÌåÊÇ·ñÓĞÃæÔÚ±ß½çÃæÉÏ
-//·µ»ØÖµÎªÔÚ±ß½çÃæÉÏµÄÃæºÅ
-//      0: Ã»ÓĞÃæÔÚ±ß½çÃæÏßÉÏ
-//      1: 0-1-2 Ãæ
-//      2: 0-2-3 Ãæ
-//      3: 0-3-1 Ãæ
-//      4: 1-2-3 Ãæ
+//æ£€æµ‹å››é¢ä½“æ˜¯å¦æœ‰é¢åœ¨è¾¹ç•Œé¢ä¸Š
+//è¿”å›å€¼ä¸ºåœ¨è¾¹ç•Œé¢ä¸Šçš„é¢å·
+//      0: æ²¡æœ‰é¢åœ¨è¾¹ç•Œé¢çº¿ä¸Š
+//      1: 0-1-2 é¢
+//      2: 0-2-3 é¢
+//      3: 0-3-1 é¢
+//      4: 1-2-3 é¢
 int Mesher::is_on_face(Tetrahedron* act_tet, int mod)
 {
         int iof1 = is_on_same_face( act_tet->nodesId[0], act_tet->nodesId[1], 0 ) ;
@@ -4349,11 +4349,11 @@ int Mesher::is_on_face(Tetrahedron* act_tet, int mod)
 }
 
 //---------------------------------------------------------------------------
-//ÅĞ¶ÏÒ»¸ö½ÚµãÊÇ·ñÎª½Çµã£¨Èı¸öÃæµÄ½»µã£©
+//åˆ¤æ–­ä¸€ä¸ªèŠ‚ç‚¹æ˜¯å¦ä¸ºè§’ç‚¹ï¼ˆä¸‰ä¸ªé¢çš„äº¤ç‚¹ï¼‰
 int Mesher::is_corner( int node_num )
 {
 	Node *node = &nodes_vec[node_num];
-	//¼ì²é½ÚµãÊÇ·ñÍ¬Ê±ÔÚÁ½¸öÃæÉÏ£¬Èç¹ûÊÇ£¬ÔòËµÃ÷´ËµãÔÚÁ½Ãæ½»ÏßÉÏ
+	//æ£€æŸ¥èŠ‚ç‚¹æ˜¯å¦åŒæ—¶åœ¨ä¸¤ä¸ªé¢ä¸Šï¼Œå¦‚æœæ˜¯ï¼Œåˆ™è¯´æ˜æ­¤ç‚¹åœ¨ä¸¤é¢äº¤çº¿ä¸Š
 	int ofs = 0 ;
 
 	if( fabs(node->x - x_min) <= ZERO ) ofs ++ ;
@@ -4369,10 +4369,10 @@ int Mesher::is_corner( int node_num )
 }
 
 //---------------------------------------------------------------------------
-//¼ì²é±ß½çÃæÉÏµÄµ¥ÔªÔÚ±ß½çÃæÉÏµÄ½ÚµãÊÇ·ñÀë±ß½çºÜ½ü
+//æ£€æŸ¥è¾¹ç•Œé¢ä¸Šçš„å•å…ƒåœ¨è¾¹ç•Œé¢ä¸Šçš„èŠ‚ç‚¹æ˜¯å¦ç¦»è¾¹ç•Œå¾ˆè¿‘
 int Mesher::check_bft_node( Tetrahedron *act_tet, double alength )
 {
-	//¼ì²éÃæÉÏµÄµãÊÇ·ñÀë±ß½çºÜ½ü
+	//æ£€æŸ¥é¢ä¸Šçš„ç‚¹æ˜¯å¦ç¦»è¾¹ç•Œå¾ˆè¿‘
 	int node1_num=-1, node2_num=-1, node3_num=-1 ;
 	int act_iof = is_on_face( act_tet , 0 );
 	int w1 = where_is_nodes[act_tet->nodesId[0]];
@@ -4491,7 +4491,7 @@ int Mesher::check_bft_node( Tetrahedron *act_tet, double alength )
 
 			if( dis < alength )
 			{
-				Node temp_n = nodes_vec[node1_num] ;//±£Áô¸±±¾£¬ÒÔ±ã³öÏÖ´íÎóÊ±»Ö¸´
+				Node temp_n = nodes_vec[node1_num] ;//ä¿ç•™å‰¯æœ¬ï¼Œä»¥ä¾¿å‡ºç°é”™è¯¯æ—¶æ¢å¤
 				nodes_vec[node1_num].move_to( &rn1 );
 				double relative_min_volume = cal_relative_min_volume( node1_num );
 
@@ -4512,7 +4512,7 @@ int Mesher::check_bft_node( Tetrahedron *act_tet, double alength )
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãºÍ½ÚµãÏà¹ØµÄµ¥ÔªµÄÌå»ı×îĞ¡Öµ
+//è®¡ç®—å’ŒèŠ‚ç‚¹ç›¸å…³çš„å•å…ƒçš„ä½“ç§¯æœ€å°å€¼
 double Mesher::cal_relative_min_volume( int node_num )
 {
 	bool debuging = false;
@@ -4547,7 +4547,7 @@ double Mesher::cal_relative_min_volume( int node_num )
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãËÄÃæÌåµ¥ÔªµÄÌå»ı(ÓĞÏòÌå»ı£©
+//è®¡ç®—å››é¢ä½“å•å…ƒçš„ä½“ç§¯(æœ‰å‘ä½“ç§¯ï¼‰
 double Mesher::cal_tet_volume( Tetrahedron* tet )
 {
 	return cal_volume(	 &nodes_vec[tet->nodesId[0]],
@@ -4557,7 +4557,7 @@ double Mesher::cal_tet_volume( Tetrahedron* tet )
 }
 
 //---------------------------------------------------------------------------
-//¼ì²éÓĞÎŞËÄ¸ö½Úµã¶¼ÔÚ½çÃæÉÏµÄµ¥Ôª£¬ÓĞÔò²ğÖ®
+//æ£€æŸ¥æœ‰æ— å››ä¸ªèŠ‚ç‚¹éƒ½åœ¨ç•Œé¢ä¸Šçš„å•å…ƒï¼Œæœ‰åˆ™æ‹†ä¹‹
 int Mesher::split_grovelling_eles()
 {
 	bool debuing=false;
@@ -4575,7 +4575,7 @@ int Mesher::split_grovelling_eles()
 }
 
 //---------------------------------------------------------------------------
-//´¦ÀíËÄ¸ö½Úµã¶¼ÔÚ½çÃæÉÏµÄµ¥Ôª£¨ÔÚ³¤±ßÖĞ¼ä²åÈë½Úµã£©
+//å¤„ç†å››ä¸ªèŠ‚ç‚¹éƒ½åœ¨ç•Œé¢ä¸Šçš„å•å…ƒï¼ˆåœ¨é•¿è¾¹ä¸­é—´æ’å…¥èŠ‚ç‚¹ï¼‰
 int Mesher::deal_grov_eles(vector<int> &grov_eles, vector<int> &new_eles_num)
 {
 	for( int i=0; i<(int)grov_eles.size(); i++ )
@@ -4586,7 +4586,7 @@ int Mesher::deal_grov_eles(vector<int> &grov_eles, vector<int> &new_eles_num)
 }
 
 //---------------------------------------------------------------------------
-//¼ì²éËùÓĞµÄµ¥Ôª£¬Èç¹ûÓĞÁ½¸öÃæµÄ¼Ğ½Ç·Ç³£´ó£¨½Ó½ü180£©£¬ÔòÔÚ¶Ô±ß²åÈëÒ»¸ö½Úµã
+//æ£€æŸ¥æ‰€æœ‰çš„å•å…ƒï¼Œå¦‚æœæœ‰ä¸¤ä¸ªé¢çš„å¤¹è§’éå¸¸å¤§ï¼ˆæ¥è¿‘180ï¼‰ï¼Œåˆ™åœ¨å¯¹è¾¹æ’å…¥ä¸€ä¸ªèŠ‚ç‚¹
 int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 {
 	bool debuging = false;
@@ -4621,8 +4621,8 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 	}
 	if( is_deleted == 1 ) return 1;
 
-	//ÅĞ¶ÏÊÇ·ñËÄ¸ö½ÚµãÈ«²¿ÔÚ½çÃæÉÏ
-	//£¨Ë³±ã¼ì²éÊÇ·ñËÄ¸ö½ÚµãÖĞ£¬ÆäÏà¹Øµ¥ÔªÎª±¡ÔªµÄ¸öÊı²»ÄÜ³¬¹ı2¸ö£¬·ñÔò²ğ·Ö²»ÊÕÁ²£¨²»Í£µÄ²ğ£©£©
+	//åˆ¤æ–­æ˜¯å¦å››ä¸ªèŠ‚ç‚¹å…¨éƒ¨åœ¨ç•Œé¢ä¸Š
+	//ï¼ˆé¡ºä¾¿æ£€æŸ¥æ˜¯å¦å››ä¸ªèŠ‚ç‚¹ä¸­ï¼Œå…¶ç›¸å…³å•å…ƒä¸ºè–„å…ƒçš„ä¸ªæ•°ä¸èƒ½è¶…è¿‡2ä¸ªï¼Œå¦åˆ™æ‹†åˆ†ä¸æ”¶æ•›ï¼ˆä¸åœçš„æ‹†ï¼‰ï¼‰
 	int is_all_on_face = 1;
 	int re_all_on_face = 0;
 	for( int i=0; i<4; i++ )
@@ -4654,11 +4654,11 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 			int cbe = can_be_extracted(nn);
 			if( cbe == 1 )
 			{
-				//Óë´Ë½ÚµãÏàÁ¬µÄËùÓĞµ¥Ôª£¨³ıÁËµ±Ç°±¡µ¥Ôª£©¶¼ÊÇ»ùÌåµ¥Ôª£¬Ö±½ÓÌá³öÈ¥
+				//ä¸æ­¤èŠ‚ç‚¹ç›¸è¿çš„æ‰€æœ‰å•å…ƒï¼ˆé™¤äº†å½“å‰è–„å•å…ƒï¼‰éƒ½æ˜¯åŸºä½“å•å…ƒï¼Œç›´æ¥æå‡ºå»
 				where_is_nodes[nn] = -1;
 				is_on_nodes[nn] = 0;
 				//eles_vec[ele_num].materialId = 0;
-				//°ÑËùÓĞ´Ë½ÚµãµÄÏà¹Øµ¥Ôª¸Ä³É»ùÌå²ÄÁÏ£¬Ë³±ã¹âË³Ò»ÏÂÏÂ£¬hoho
+				//æŠŠæ‰€æœ‰æ­¤èŠ‚ç‚¹çš„ç›¸å…³å•å…ƒæ”¹æˆåŸºä½“ææ–™ï¼Œé¡ºä¾¿å…‰é¡ºä¸€ä¸‹ä¸‹ï¼Œhoho
 				Node smoothed_node(0,0,0);
 				int sm_num =0;
 				for( int j=0; j<(int)nodes_vec[nn].relative_eles_vec.size(); j++ )
@@ -4692,17 +4692,17 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 	}
 	else
 	{
-		//¿ÉÄÜÊÇ¿ÅÁ£ÄÚ²¿µÄ±¡Ôª£¬µ±ÓëÆäÏà½ÓµÄÓĞÆäËû±¡ÔªÊ±£¬²»´¦ÀíÁË£¨²»ĞĞ£¬´¦Àí£¬ÔÎ£©
+		//å¯èƒ½æ˜¯é¢—ç²’å†…éƒ¨çš„è–„å…ƒï¼Œå½“ä¸å…¶ç›¸æ¥çš„æœ‰å…¶ä»–è–„å…ƒæ—¶ï¼Œä¸å¤„ç†äº†ï¼ˆä¸è¡Œï¼Œå¤„ç†ï¼Œæ™•ï¼‰
 		if( re_all_on_face > 1 ) return 0;
 	}
-	//µ±ÓëÆäÏà½ÓµÄ»¹ÓĞÆäËûºÜ¶à±¡ÔªÊ±£¬²»´¦ÀíÁË£¬·¢ÏÖÓĞ¿ÉÄÜ³öÏÖËÀÑ­»·£¬·³
+	//å½“ä¸å…¶ç›¸æ¥çš„è¿˜æœ‰å…¶ä»–å¾ˆå¤šè–„å…ƒæ—¶ï¼Œä¸å¤„ç†äº†ï¼Œå‘ç°æœ‰å¯èƒ½å‡ºç°æ­»å¾ªç¯ï¼Œçƒ¦
 	if( re_all_on_face > 2 ) return 0;
 
 	int itt = is_thin_tet(ele_num);
 	if( itt == 0 ) return 1;
-	//°Ñµ¥Ôª·Ö½â³É4¸öÈı½ÇĞÎ£¬É¾³ı
-	//Ê×ÏÈÕÒ³ö½Ç¶È×î´óµÄÁ½¸öÃæ
-	int nsn[4];        //ËÄ¸ö½Úµã±àºÅ
+	//æŠŠå•å…ƒåˆ†è§£æˆ4ä¸ªä¸‰è§’å½¢ï¼Œåˆ é™¤
+	//é¦–å…ˆæ‰¾å‡ºè§’åº¦æœ€å¤§çš„ä¸¤ä¸ªé¢
+	int nsn[4];        //å››ä¸ªèŠ‚ç‚¹ç¼–å·
 	double max_ang = max_angle_of_tet(ele_num,nsn);
 
 	if( debuging )
@@ -4732,7 +4732,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 
 	if( re_all_on_face < 2 )
 	{
-		//¼ÆËãĞÂ½ÚµãÎ»ÖÃ£¨ËÄ¸ö½ÚµãµÄÆ½¾ù£©
+		//è®¡ç®—æ–°èŠ‚ç‚¹ä½ç½®ï¼ˆå››ä¸ªèŠ‚ç‚¹çš„å¹³å‡ï¼‰
 		Node cen_node(0,0,0);
 		for( int i=0; i<4; i++ )
 		{
@@ -4745,7 +4745,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 		int whnn = where_is(&cen_node,is_on);
 		if( is_all_on_face == 1 )
 		{
-			//Èç¹ûÊÇËÄ¸ö½Úµã¶¼ÔÚÍÖÇòÃæµÄµ¥Ôª£¬¿¼ÂÇÊÇ·ñĞèÒª½«ĞÂ½ÚµãÍ¶Ó°µ½ÇòÃæ
+			//å¦‚æœæ˜¯å››ä¸ªèŠ‚ç‚¹éƒ½åœ¨æ¤­çƒé¢çš„å•å…ƒï¼Œè€ƒè™‘æ˜¯å¦éœ€è¦å°†æ–°èŠ‚ç‚¹æŠ•å½±åˆ°çƒé¢
 			if( whnn != -1 )
 			{
 				int perr=-1;
@@ -4770,8 +4770,8 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 					<< " is on: " << is_on_nodes[new_node_num] <<endl << endl;
 		}
 
-		//É¾³ı¾Éµ¥Ôª
-		//ÏÈ±ê¼Ç£¬»ØÍ·ÔÙÉ¾
+		//åˆ é™¤æ—§å•å…ƒ
+		//å…ˆæ ‡è®°ï¼Œå›å¤´å†åˆ 
 		for( int i=1; i<4; i++ )
 		{
 			eles_vec[ele_num].nodesId[i] = eles_vec[ele_num].nodesId[0];
@@ -4784,7 +4784,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 	}
 	else
 	{
-		//ÔÚ½Ç¶È×î´óµÄ¶Ô±ß²åÈë½Úµã
+		//åœ¨è§’åº¦æœ€å¤§çš„å¯¹è¾¹æ’å…¥èŠ‚ç‚¹
 		Node new_node = nodes_vec[nsn[0]]+nodes_vec[nsn[3]];
 		new_node = new_node/2.0;
 
@@ -4822,12 +4822,12 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 }
 
 //---------------------------------------------------------------------------
-//¼ì²éÒ»¸ö½ÚµãµÄÏà¹Øµ¥ÔªÖĞÓĞ¼¸¸ö±¡Ôª
+//æ£€æŸ¥ä¸€ä¸ªèŠ‚ç‚¹çš„ç›¸å…³å•å…ƒä¸­æœ‰å‡ ä¸ªè–„å…ƒ
 int Mesher::num_of_thin_tet_re(int nn)
 {
 	bool debuging = false;
 
-	int te_num=0; //Ïà¹Øµ¥ÔªÖĞ±¡ÔªÊıÄ¿
+	int te_num=0; //ç›¸å…³å•å…ƒä¸­è–„å…ƒæ•°ç›®
 	for( int i=0; i<(int)nodes_vec[nn].relative_eles_vec.size(); i++ )
 	{
 		int ele_num = nodes_vec[nn].relative_eles_vec[i];
@@ -4838,15 +4838,15 @@ int Mesher::num_of_thin_tet_re(int nn)
 }
 
 //---------------------------------------------------------------------------
-//ÅĞ¶ÏÒ»¸ö½ÚµãµÄËùÓĞÏàÁ¬½ÚµãÊÇ·ñÓĞÔÚ¿ÅÁ£ÄÚ£¨¼ì²é½ÚµãËùÓĞµÄÏà¹Øµ¥ÔªµÄ½Úµã£¬ÓĞ½ÚµãÔÚ¿ÅÁ£ÄÚ£¬·µ»Ø0£¬·ñÔò£¨È«²¿ÔÚ»ùÌåÄÚ»òÔÚ¿ÅÁ£±íÃæ£©·µ»Ø1£©
+//åˆ¤æ–­ä¸€ä¸ªèŠ‚ç‚¹çš„æ‰€æœ‰ç›¸è¿èŠ‚ç‚¹æ˜¯å¦æœ‰åœ¨é¢—ç²’å†…ï¼ˆæ£€æŸ¥èŠ‚ç‚¹æ‰€æœ‰çš„ç›¸å…³å•å…ƒçš„èŠ‚ç‚¹ï¼Œæœ‰èŠ‚ç‚¹åœ¨é¢—ç²’å†…ï¼Œè¿”å›0ï¼Œå¦åˆ™ï¼ˆå…¨éƒ¨åœ¨åŸºä½“å†…æˆ–åœ¨é¢—ç²’è¡¨é¢ï¼‰è¿”å›1ï¼‰
 int Mesher::can_be_extracted(int n1)
 {
-	if( nodes_vec[n1].flag >= 0 ) return 0;  //µ¥°û²àÃæÉÏµÄµã
+	if( nodes_vec[n1].flag >= 0 ) return 0;  //å•èƒä¾§é¢ä¸Šçš„ç‚¹
 	for( int i=0; i<(int)nodes_vec[n1].relative_eles_vec.size(); i++ )
 	{
 		int en = nodes_vec[n1].relative_eles_vec[i];
 		int ic = eles_vec[en].is_contain(n1);
-		if( ic == -1 ) continue;   //ÒÑ¾­²»ÔÙ°üº¬½Úµãn1ÁË£¨Ã»ÓĞ¸üĞÂµÄÔµ¹Ê£©
+		if( ic == -1 ) continue;   //å·²ç»ä¸å†åŒ…å«èŠ‚ç‚¹n1äº†ï¼ˆæ²¡æœ‰æ›´æ–°çš„ç¼˜æ•…ï¼‰
 		for( int j=0; j<4; j++ )
 		{
 			if( j == ic ) continue;
@@ -4858,7 +4858,7 @@ int Mesher::can_be_extracted(int n1)
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËã¸ø¶¨Á½¸ö½ÚµãÏà¹Øµ¥ÔªµÄ²ÄÁÏºÅ£¨Í¬Ê±°üº¬Á½¸ö½ÚµãµÄËùÓĞµ¥Ôª¿ÅÁ£±àºÅ,-1±íÊ¾»ùÌå£©
+//è®¡ç®—ç»™å®šä¸¤ä¸ªèŠ‚ç‚¹ç›¸å…³å•å…ƒçš„ææ–™å·ï¼ˆåŒæ—¶åŒ…å«ä¸¤ä¸ªèŠ‚ç‚¹çš„æ‰€æœ‰å•å…ƒé¢—ç²’ç¼–å·,-1è¡¨ç¤ºåŸºä½“ï¼‰
 int Mesher::face_particle(int n1,int n2)
 {
 	bool debuging = false;
@@ -4884,16 +4884,16 @@ int Mesher::face_particle(int n1,int n2)
 }
 
 //---------------------------------------------------------------------------
-//ÔÚÁ½¸ö½ÚµãÖĞ¼ä²åÈë½Úµã
+//åœ¨ä¸¤ä¸ªèŠ‚ç‚¹ä¸­é—´æ’å…¥èŠ‚ç‚¹
 int Mesher::insert_node(int node1_num, int node2_num, int node3_num,
 									vector<int> &new_ele_num)
 {                
 	bool debuging = false;
 
-	//¼ì²é½ÚµãNode1_numµÄËùÓĞÏà¹Øµ¥Ôª
+	//æ£€æŸ¥èŠ‚ç‚¹Node1_numçš„æ‰€æœ‰ç›¸å…³å•å…ƒ
 	for( int i=0; i<(int)nodes_vec[node1_num].relative_eles_vec.size(); i++ )
 	{
-		//¼ì²é¸Ãµ¥ÔªÊÇ·ñ°üº¬¸ø¶¨Á½½Úµã
+		//æ£€æŸ¥è¯¥å•å…ƒæ˜¯å¦åŒ…å«ç»™å®šä¸¤èŠ‚ç‚¹
 		int ele_num = nodes_vec[node1_num].relative_eles_vec[i];
 		int node1_i = eles_vec[ele_num].is_contain( node1_num );
 		if( node1_i == -1 )		continue;
@@ -4908,7 +4908,7 @@ int Mesher::insert_node(int node1_num, int node2_num, int node3_num,
 			hout << eles_vec[ele_num].nodesId[3] << endl ;
 		}
 
-		//È·¶¨ÊÇÄÄÌõ±ß
+		//ç¡®å®šæ˜¯å“ªæ¡è¾¹
 		if( node1_i > node2_i )
 		{
 			int temp_i = node1_i ;
@@ -4950,7 +4950,7 @@ int Mesher::insert_node(int node1_num, int node2_num, int node3_num,
 		new_ele_num.push_back(ele_num);
 		new_ele_num.push_back(new_tet_num);
 
-		//È·¶¨ĞÂËÄÃæÌåµÄ²ÄÁÏÊôĞÔ
+		//ç¡®å®šæ–°å››é¢ä½“çš„ææ–™å±æ€§
 		deter_mat_ele(ele_num);
 		deter_mat_ele(new_tet_num); 
 	}
@@ -4958,7 +4958,7 @@ int Mesher::insert_node(int node1_num, int node2_num, int node3_num,
 }
 
 //---------------------------------------------------------------------------
-//´¦Àí±ß½çÏßÉÏµÄµ¥Ôª(ÔÚ±ß½çÏßÉÏ¿ç±ß½çµÄµ¥Ôª£©
+//å¤„ç†è¾¹ç•Œçº¿ä¸Šçš„å•å…ƒ(åœ¨è¾¹ç•Œçº¿ä¸Šè·¨è¾¹ç•Œçš„å•å…ƒï¼‰
 int Mesher::deal_with_eles_across_boundary_be(vector<Bar> &new_edges,int debuging)
 {
 	bool debuging_map_mesh = false;
@@ -4997,7 +4997,7 @@ int Mesher::deal_with_eles_across_boundary_be(vector<Bar> &new_edges,int debugin
 
 		if( thin_tets.size() > 0 )
 		{
-			//´Ëµ¥ÔªÎª±¡Ôª
+			//æ­¤å•å…ƒä¸ºè–„å…ƒ
 			for( int j=0; j<(int)thin_tets.size(); j++ )
 			{
 				vector<int> new_tets;
@@ -5014,7 +5014,7 @@ int Mesher::deal_with_eles_across_boundary_be(vector<Bar> &new_edges,int debugin
 }
 
 //---------------------------------------------------------------------------
-//´¦Àí±ß½çÃæÉÏµÄµ¥Ôª(ÔÚ±ß½çÃæÉÏ¿ç±ß½çµÄµ¥Ôª£©
+//å¤„ç†è¾¹ç•Œé¢ä¸Šçš„å•å…ƒ(åœ¨è¾¹ç•Œé¢ä¸Šè·¨è¾¹ç•Œçš„å•å…ƒï¼‰
 int Mesher::deal_with_eles_across_boundary_bf(vector<Bar> &new_edges,int debuging)
 {
 	bool debuging_map_mesh = false;       
@@ -5037,7 +5037,7 @@ int Mesher::deal_with_eles_across_boundary_bf(vector<Bar> &new_edges,int debugin
 		while(true && circle_num < 20)
 		{
 			circle_num ++ ;
-			//¼ì²éµ±Ç°ËÄÃæÌåÊÇ·ñÈÔÓĞÃæÔÚ±ß½çÃæÉÏ£¬ÇÒ±ß½çÃæÉÏµÄÃæ¿çÔ½»ùÌåºÍÏËÎ¬±ß½ç
+			//æ£€æŸ¥å½“å‰å››é¢ä½“æ˜¯å¦ä»æœ‰é¢åœ¨è¾¹ç•Œé¢ä¸Šï¼Œä¸”è¾¹ç•Œé¢ä¸Šçš„é¢è·¨è¶ŠåŸºä½“å’Œçº¤ç»´è¾¹ç•Œ
 			int hceeof = has_cross_edge_edge_on_face( &eles_vec[ele_num] ) ;
 			if( debuging_map_mesh)
 			{
@@ -5059,7 +5059,7 @@ int Mesher::deal_with_eles_across_boundary_bf(vector<Bar> &new_edges,int debugin
 
 		if( thin_tets.size() > 0 )
 		{
-			//´Ëµ¥ÔªÎª±¡Ôª
+			//æ­¤å•å…ƒä¸ºè–„å…ƒ
 			for( int j=0; j<(int)thin_tets.size(); j++ )
 			{
 				vector<int> new_tets;
@@ -5076,7 +5076,7 @@ int Mesher::deal_with_eles_across_boundary_bf(vector<Bar> &new_edges,int debugin
 }
 
 //---------------------------------------------------------------------------
-//´¦ÀíÁ½¸ö¶Ëµã¶¼¿ÉÒÔÒÆ¶¯µÄ¿ç±ß½çµ¥Ôª
+//å¤„ç†ä¸¤ä¸ªç«¯ç‚¹éƒ½å¯ä»¥ç§»åŠ¨çš„è·¨è¾¹ç•Œå•å…ƒ
 int Mesher::deal_with_eles_across_boundary_dmb(vector<Bar> &new_edges,int debuging)
 {
 	bool debuging_map_mesh = false ;  
@@ -5122,7 +5122,7 @@ int Mesher::deal_with_eles_across_boundary_dmb(vector<Bar> &new_edges,int debugi
 
 		if( thin_tets.size() > 0 )
 		{
-			//´Ëµ¥ÔªÎª±¡Ôª
+			//æ­¤å•å…ƒä¸ºè–„å…ƒ
 			for( int j=0; j<(int)thin_tets.size(); j++ )
 			{
 				vector<int> new_tets;
@@ -5139,7 +5139,7 @@ int Mesher::deal_with_eles_across_boundary_dmb(vector<Bar> &new_edges,int debugi
 }
 
 //---------------------------------------------------------------------------
-//´¦ÀíÁ½¸ö¶ËµãÖĞÓĞÒ»¸ö²»¿ÉÒÔÒÆ¶¯µÄ¿ç±ß½çµ¥Ôª
+//å¤„ç†ä¸¤ä¸ªç«¯ç‚¹ä¸­æœ‰ä¸€ä¸ªä¸å¯ä»¥ç§»åŠ¨çš„è·¨è¾¹ç•Œå•å…ƒ
 int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debuging)
 {
 	bool debuging_map_mesh = false; 
@@ -5147,7 +5147,7 @@ int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debug
 	{
 		debuging_map_mesh = true;
 	}
-	//Èç¹ûÒÆ¶¯½ÚµãÊ§°Ü£¨³öÏÖ¸ºÌå»ıµ¥Ôª£©£¬ÔİÊ±´æ·ÅÔÚ´ËÏòÁ¿ÖĞ£¬×îºóÔÙ´¦Àí
+	//å¦‚æœç§»åŠ¨èŠ‚ç‚¹å¤±è´¥ï¼ˆå‡ºç°è´Ÿä½“ç§¯å•å…ƒï¼‰ï¼Œæš‚æ—¶å­˜æ”¾åœ¨æ­¤å‘é‡ä¸­ï¼Œæœ€åå†å¤„ç†
 	vector<int> undealed_ele;
 
 	for( int i=0; i<(int)eles_across_boundary_ndmb.size(); i++ )
@@ -5181,7 +5181,7 @@ int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debug
 
 		if( thin_tets.size() > 0 )
 		{
-			//´Ëµ¥ÔªÎª±¡Ôª
+			//æ­¤å•å…ƒä¸ºè–„å…ƒ
 			for( int j=0; j<(int)thin_tets.size(); j++ )
 			{
 				vector<int> new_tets;
@@ -5225,11 +5225,11 @@ int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debug
 }
 
 //---------------------------------------------------------------------------
-//´¦Àí¿ç±ß½çµ¥Ôª
-//ele_kind:µ¥Ôª´¦ÀíÀàĞÍ(ÔÚ±ß½çÏßÉÏ¿ç½çÃæµÄµ¥Ôª¡¢ÔÚ±ß½çÃæÉÏ¿ç±ß½çµÄµ¥Ôª......)
-//mod£ºµ±·¢ÏÖÒÆ¶¯½Úµãºó³öÏÖ¸ºÌå»ıµ¥ÔªÊ±µÄ´¦Àí·½·¨  £¨·ÏÆú£¬Ã»ÓÃ£©
-//      0£º²»×÷´¦Àí£¬³ÌĞò·µ»Ø2£¬
-//      1£º²åÈë½Úµã
+//å¤„ç†è·¨è¾¹ç•Œå•å…ƒ
+//ele_kind:å•å…ƒå¤„ç†ç±»å‹(åœ¨è¾¹ç•Œçº¿ä¸Šè·¨ç•Œé¢çš„å•å…ƒã€åœ¨è¾¹ç•Œé¢ä¸Šè·¨è¾¹ç•Œçš„å•å…ƒ......)
+//modï¼šå½“å‘ç°ç§»åŠ¨èŠ‚ç‚¹åå‡ºç°è´Ÿä½“ç§¯å•å…ƒæ—¶çš„å¤„ç†æ–¹æ³•  ï¼ˆåºŸå¼ƒï¼Œæ²¡ç”¨ï¼‰
+//      0ï¼šä¸ä½œå¤„ç†ï¼Œç¨‹åºè¿”å›2ï¼Œ
+//      1ï¼šæ’å…¥èŠ‚ç‚¹
 int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar> &new_edges,  int mod=1 )
 {
 	bool debuging_map_mesh = false ;
@@ -5240,23 +5240,23 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 	if( debuging_map_mesh) hout << "ele_num: " << ele_num << " ele type: " << ele_kind << endl;
 
 	double alength = global_length*0.8;
-	if( ele_kind == 1 ) alength = global_length*0.5;   //²àÃæÉÏ¿ç±ß½çµ¥Ôª
+	if( ele_kind == 1 ) alength = global_length*0.5;   //ä¾§é¢ä¸Šè·¨è¾¹ç•Œå•å…ƒ
 	double min_dis = global_length*3.0/8.0;
 	int wh[4],is_on[4];
 	for( int j=0; j<4; j++ )
 	{
 		wh[j] = where_is_nodes[eles_vec[ele_num].nodesId[j]];
-		if( wh[j] == -3 )			//·¢ÏÖ½ÚµãÍ¬Ê±ÔÚÁ½¸öÔöÇ¿ÏîÄÚ
+		if( wh[j] == -3 )			//å‘ç°èŠ‚ç‚¹åŒæ—¶åœ¨ä¸¤ä¸ªå¢å¼ºé¡¹å†…
 		{ 
 			return 0;
 		}
 		is_on[j] = is_on_nodes[eles_vec[ele_num].nodesId[j]];
 	}
-	//È·¶¨ÄÄÌõ±ß¿ç±ß½ç
+	//ç¡®å®šå“ªæ¡è¾¹è·¨è¾¹ç•Œ
 	int left_movable, right_movable;
 	int edge_num = deter_oper_edge( &eles_vec[ele_num], left_movable, right_movable );
 
-	if( edge_num == 0 ) return -1;     //Ã»ÓĞ±ß¿ç±ß½ç
+	if( edge_num == 0 ) return -1;     //æ²¡æœ‰è¾¹è·¨è¾¹ç•Œ
 
 	int nodes_id[4];
 	deter_nodes_id(edge_num,nodes_id);
@@ -5271,7 +5271,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		pww=&wh[nodes_id[1]];
 	}
 
-	//ÇóÓëÔöÇ¿²ÄÁÏ½çÃæµÄ½»µã       
+	//æ±‚ä¸å¢å¼ºææ–™ç•Œé¢çš„äº¤ç‚¹       
 	if( debuging_map_mesh) hout	<< "edge_num: " << edge_num
 													<< " nodes: " << eles_vec[ele_num].nodesId[nodes_id[0]] << " "
 													<< eles_vec[ele_num].nodesId[nodes_id[1]] << endl;
@@ -5304,13 +5304,13 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		Node node( rp );
 		if( debuging_map_mesh) hout << " rp: " << rp.x << "  " << rp.y << "  " << rp.z << endl;
 
-		//¼ì²é½«ÒªÒÆ¶¯µÄÁ½¸ö½ÚµãµÄÏàÁÚ½ÚµãÊÇ·ñÓĞ3¸ö½Úµã¶¼ÔÚ½»½çÃæÉÏµÄÇé¿ö
+		//æ£€æŸ¥å°†è¦ç§»åŠ¨çš„ä¸¤ä¸ªèŠ‚ç‚¹çš„ç›¸é‚»èŠ‚ç‚¹æ˜¯å¦æœ‰3ä¸ªèŠ‚ç‚¹éƒ½åœ¨äº¤ç•Œé¢ä¸Šçš„æƒ…å†µ
 		int is_all_on1 = is_re_all_on_face( node1_num, *pww );
 		int is_all_on2 = is_re_all_on_face( node2_num, *pww );
 
 		if( debuging_map_mesh) hout << " is_all_on1: " << is_all_on1 << " is_all_on2: " << is_all_on2 << endl;
 
-		//¾­Ñé±íÃ÷£ºµ±½ÚµãÀë½çÃæºÜ½üÊ±£¬ÎŞÂÛÈçºÎÓ¦¸ÃÒÆ¶¯µ½½çÃæÉÏ£¬¼´Ê¹is_all_on==1;
+		//ç»éªŒè¡¨æ˜ï¼šå½“èŠ‚ç‚¹ç¦»ç•Œé¢å¾ˆè¿‘æ—¶ï¼Œæ— è®ºå¦‚ä½•åº”è¯¥ç§»åŠ¨åˆ°ç•Œé¢ä¸Šï¼Œå³ä½¿is_all_on==1;
 		double dis2_sur1 = thecell->surfaces_vec[*pww]->dis_to(&p1);
 		double dis2_sur2 = thecell->surfaces_vec[*pww]->dis_to(&p2);
 		double the_dis = global_length*3.0/8.0;
@@ -5326,14 +5326,14 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		double dis1 = node.distance_to( &nodes_vec[node1_num] );
 		double dis2 = node.distance_to( &nodes_vec[node2_num] );
 
-		//È·¶¨ÒÆ¶¯ÄÄ¸öµãµ½½çÃæÉÏ
+		//ç¡®å®šç§»åŠ¨å“ªä¸ªç‚¹åˆ°ç•Œé¢ä¸Š
 		int move_which_node = 0;
 		if( left_movable == 1 )
 		{
 			if( right_movable == 1 )
 			{
-				//Á½¶Ë½Úµã¶¼ÄÜÒÆ¶¯£¬È¡¾àÀëĞ¡µÄÄÄ¸ö
-				if( dis2 < dis1 ) move_which_node = 1;  //ÒÆ¶¯ÓÒ¶Ë½Úµã
+				//ä¸¤ç«¯èŠ‚ç‚¹éƒ½èƒ½ç§»åŠ¨ï¼Œå–è·ç¦»å°çš„å“ªä¸ª
+				if( dis2 < dis1 ) move_which_node = 1;  //ç§»åŠ¨å³ç«¯èŠ‚ç‚¹
 			}                            
 		}
 		else
@@ -5344,7 +5344,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			}
 			else
 			{
-				move_which_node = -1;  //¶¼²»ÄÜÒÆ¶¯ 
+				move_which_node = -1;  //éƒ½ä¸èƒ½ç§»åŠ¨ 
 			}
 		}
 
@@ -5355,7 +5355,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			if( dis1 < alength )
 			{
 				if( debuging_map_mesh) hout << " dis1 < dis2, move node " << node1_num << " to the new position.\n";
-				Node temp_n = nodes_vec[node1_num] ;//±£Áô¸±±¾£¬ÒÔ±ã³öÏÖ´íÎóÊ±»Ö¸´
+				Node temp_n = nodes_vec[node1_num] ;//ä¿ç•™å‰¯æœ¬ï¼Œä»¥ä¾¿å‡ºç°é”™è¯¯æ—¶æ¢å¤
 				nodes_vec[node1_num].move_to( &node );
 				double relative_min_volume = cal_relative_min_volume( node1_num );
 				if( debuging_map_mesh) hout << " relative_min_volume: " << relative_min_volume << endl;
@@ -5377,7 +5377,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			if( dis2 < alength )
 			{
 				if( debuging_map_mesh) hout << " dis1 > dis2, move node " << node2_num << " to the new position.\n";
-				Node temp_n = nodes_vec[node2_num] ;//±£Áô¸±±¾£¬ÒÔ±ã³öÏÖ´íÎóÊ±»Ö¸´
+				Node temp_n = nodes_vec[node2_num] ;//ä¿ç•™å‰¯æœ¬ï¼Œä»¥ä¾¿å‡ºç°é”™è¯¯æ—¶æ¢å¤
 				nodes_vec[node2_num].move_to( &node );
 				double relative_min_volume = cal_relative_min_volume( node2_num );
 				if( debuging_map_mesh) hout << " relative_min_volume: " << relative_min_volume << endl;
@@ -5396,15 +5396,15 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			}
 		}
 
-		//²Ù×÷¹ıµÄ½Úµã£¨ÒÆ¶¯¹ı£¬»òÕßĞÂ²åÈëµÄ½ÚµãºÅ£¬ÒÔ±¸ºóÃæµÄ´¦Àí£©
+		//æ“ä½œè¿‡çš„èŠ‚ç‚¹ï¼ˆç§»åŠ¨è¿‡ï¼Œæˆ–è€…æ–°æ’å…¥çš„èŠ‚ç‚¹å·ï¼Œä»¥å¤‡åé¢çš„å¤„ç†ï¼‰
 		int oper_nn=moved_nn;
 
-		//ÒÆ¶¯ÁË½Úµã
+		//ç§»åŠ¨äº†èŠ‚ç‚¹
 		if( debuging_map_mesh )	hout << "moved node num: " << moved_nn << endl;
 
 		if( moved_nn != -1 )
 		{
-			//¼ì²éËùÓĞÏà¹Øµ¥ÔªµÄ²ÄÁÏÊôĞÔ
+			//æ£€æŸ¥æ‰€æœ‰ç›¸å…³å•å…ƒçš„ææ–™å±æ€§
 			for( int j=0;j <(int)nodes_vec[moved_nn].relative_eles_vec.size(); j++ )
 			{
 				int rele_num = nodes_vec[moved_nn].relative_eles_vec[j];
@@ -5435,7 +5435,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			}
 
 			if( debuging_map_mesh) hout << " node: " << node.x << "  " << node.y << "  " << node.z << endl;
-			int node_num = (int)nodes_vec.size();    //ĞÂÉú³É½ÚµãºÅ
+			int node_num = (int)nodes_vec.size();    //æ–°ç”ŸæˆèŠ‚ç‚¹å·
 			if( debuging_map_mesh) hout << " generate a node, node_num: " << node_num << endl;
 
 			nodes_vec.push_back( node );
@@ -5461,7 +5461,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			put_into_cbev( new_tet_num, alength, ele_kind );
 
 
-			//¼ì²éÃ¿¸ö°üº¬´Ë±ßµÄËÄÃæÌå£¬²¢½«Æä·ÖÁÑ³ÉÁ½¸ö£¬ÒÔ±£Ö¤µ¥ÔªµÄĞ­µ÷
+			//æ£€æŸ¥æ¯ä¸ªåŒ…å«æ­¤è¾¹çš„å››é¢ä½“ï¼Œå¹¶å°†å…¶åˆ†è£‚æˆä¸¤ä¸ªï¼Œä»¥ä¿è¯å•å…ƒçš„åè°ƒ
 			harmonize_tets( node1_num, node2_num, node_num, alength, new_edges, ele_kind );
 
 			oper_nn = node_num;
@@ -5476,17 +5476,17 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 }
 
 //---------------------------------------------------------------------------
-//¼ì²é¸ø¶¨½ÚµãµÄËùÓĞÏà¹Øµ¥ÔªÊÇ·ñËÄ¸ö½ÚµãÈ«ÔÚ±ß½çÃæÉÏ
+//æ£€æŸ¥ç»™å®šèŠ‚ç‚¹çš„æ‰€æœ‰ç›¸å…³å•å…ƒæ˜¯å¦å››ä¸ªèŠ‚ç‚¹å…¨åœ¨è¾¹ç•Œé¢ä¸Š
 int Mesher::is_re_all_on_face( int node_num, int wh )
 {
 	bool debuging = false;
 
-	int aof_num=0; //Ïà¹Øµ¥ÔªÖĞËÄ¸ö½ÚµãÈ«ÔÚ½çÃæÉÏµÄµ¥ÔªÊı£¨Í¨³£²»Òª³¬¹ıÁ½¸ö£¬·ñÔòºÜÄÑ²ğ·ÖÏû³ı£©
+	int aof_num=0; //ç›¸å…³å•å…ƒä¸­å››ä¸ªèŠ‚ç‚¹å…¨åœ¨ç•Œé¢ä¸Šçš„å•å…ƒæ•°ï¼ˆé€šå¸¸ä¸è¦è¶…è¿‡ä¸¤ä¸ªï¼Œå¦åˆ™å¾ˆéš¾æ‹†åˆ†æ¶ˆé™¤ï¼‰
 	for( int i=0; i<(int)nodes_vec[node_num].relative_eles_vec.size(); i++ )
 	{
 		int ele_num = nodes_vec[node_num].relative_eles_vec[i];
 
-		//¼ì²éÊÇ·ñÒÑ¾­±»É¾³ı£¨ËÄ¸ö½ÚµãºÅÏàÍ¬£©£¨·³°¡£¬²»ÖªµÀ»¹ÓĞ¶àÉÙµØ·½Ã»ÓĞ¼ì²éµ¥ÔªÊÇ·ñÒÑ¾­É¾³ı£©
+		//æ£€æŸ¥æ˜¯å¦å·²ç»è¢«åˆ é™¤ï¼ˆå››ä¸ªèŠ‚ç‚¹å·ç›¸åŒï¼‰ï¼ˆçƒ¦å•Šï¼Œä¸çŸ¥é“è¿˜æœ‰å¤šå°‘åœ°æ–¹æ²¡æœ‰æ£€æŸ¥å•å…ƒæ˜¯å¦å·²ç»åˆ é™¤ï¼‰
 		int is_deleted = 0;
 		for( int i=1; i<4; i++ )
 		{
@@ -5523,7 +5523,7 @@ int Mesher::is_re_all_on_face( int node_num, int wh )
 }
 
 //---------------------------------------------------------------------------
-//¸ù¾İ¸ø¶¨µÄ±ßµÄĞòºÅ£¬È·¶¨½ÚµãĞòÁĞ£¬½øĞĞµ¥Ôª²ğ·ÖµÄÊ±ºòÊ¹ÓÃ
+//æ ¹æ®ç»™å®šçš„è¾¹çš„åºå·ï¼Œç¡®å®šèŠ‚ç‚¹åºåˆ—ï¼Œè¿›è¡Œå•å…ƒæ‹†åˆ†çš„æ—¶å€™ä½¿ç”¨
 int* Mesher::deter_nodes_id(int edge_num, int* nodes_id)
 {
 	int node1_i,node2_i,node3_i,node4_i;
@@ -5577,16 +5577,16 @@ int* Mesher::deter_nodes_id(int edge_num, int* nodes_id)
 }
 
 //---------------------------------------------------------------------------
-//¼ì²éÃ¿¸öÏà¹Øµ¥Ôª£¨ËÄÃæÌå£©£¬²¢ÔÚ½ÚµãNode1_num ºÍ Node2_numÖ®¼ä²åÈë½Úµãnode3_num
+//æ£€æŸ¥æ¯ä¸ªç›¸å…³å•å…ƒï¼ˆå››é¢ä½“ï¼‰ï¼Œå¹¶åœ¨èŠ‚ç‚¹Node1_num å’Œ Node2_numä¹‹é—´æ’å…¥èŠ‚ç‚¹node3_num
 void Mesher::harmonize_tets( int node1_num, int node2_num, int node3_num,
 											 double alength, vector<Bar> &new_edges, int ele_kind )
 {
 	bool debuging = false;
 
-	//¼ì²é½ÚµãNode1_numµÄËùÓĞÏà¹Øµ¥Ôª
+	//æ£€æŸ¥èŠ‚ç‚¹Node1_numçš„æ‰€æœ‰ç›¸å…³å•å…ƒ
 	for( int i=0; i<(int)nodes_vec[node1_num].relative_eles_vec.size(); i++ )
 	{
-		//¼ì²é¸Ãµ¥ÔªÊÇ·ñ°üº¬¸ø¶¨Á½½Úµã
+		//æ£€æŸ¥è¯¥å•å…ƒæ˜¯å¦åŒ…å«ç»™å®šä¸¤èŠ‚ç‚¹
 		int ele_num = nodes_vec[node1_num].relative_eles_vec[i];
 		int node1_i = eles_vec[ele_num].is_contain( node1_num );
 		if( node1_i == -1 )	 continue;
@@ -5601,7 +5601,7 @@ void Mesher::harmonize_tets( int node1_num, int node2_num, int node3_num,
 			hout << eles_vec[ele_num].nodesId[3] << endl ;
 		}     
 
-		//´¦ÀíĞÂÉú³ÉµÄ±ß
+		//å¤„ç†æ–°ç”Ÿæˆçš„è¾¹
 		for( int k=0; k<4; k++ )
 		{
 			if( k == node1_i || k == node2_i ) continue;
@@ -5609,7 +5609,7 @@ void Mesher::harmonize_tets( int node1_num, int node2_num, int node3_num,
 			new_edges.push_back(newbar);
 		}
 
-		//È·¶¨ÊÇÄÄÌõ±ß
+		//ç¡®å®šæ˜¯å“ªæ¡è¾¹
 		if( node1_i > node2_i )
 		{
 			int temp_i = node1_i ;
@@ -5660,7 +5660,7 @@ void Mesher::harmonize_tets( int node1_num, int node2_num, int node3_num,
 }
 
 //---------------------------------------------------------------------------
-//²ÉÓÃ¿ìËÙÅÅĞò·¨ (´ÓĞ¡µ½´ó£©
+//é‡‡ç”¨å¿«é€Ÿæ’åºæ³• (ä»å°åˆ°å¤§ï¼‰
 void Mesher::quick_sort( vector<int> *int_vec, int min_n, int max_n )
 {
 	if( min_n == -1 ) min_n = 0;
@@ -5670,15 +5670,15 @@ void Mesher::quick_sort( vector<int> *int_vec, int min_n, int max_n )
 	int i = min_n;
 	int j = max_n;
 	do{
-		while(((*int_vec)[i]<middle) && (i<max_n))//´Ó×óÉ¨Ãè´óÓÚÖĞÖµµÄÊı
+		while(((*int_vec)[i]<middle) && (i<max_n))//ä»å·¦æ‰«æå¤§äºä¸­å€¼çš„æ•°
 		{       
 			i++;
 		}
-		while(((*int_vec)[j]>middle) && (j>min_n))//´ÓÓÒÉ¨ÃèĞ¡ÓÚÖĞÖµµÄÊı
+		while(((*int_vec)[j]>middle) && (j>min_n))//ä»å³æ‰«æå°äºä¸­å€¼çš„æ•°
 		{        
 			j--;
 		}
-		if(i<=j)//ÕÒµ½ÁËÒ»¶ÔÖµ£¬½»»»
+		if(i<=j)//æ‰¾åˆ°äº†ä¸€å¯¹å€¼ï¼Œäº¤æ¢
 		{                         
 			int temp_v = (*int_vec)[i];
 			(*int_vec)[i]=(*int_vec)[j];
@@ -5686,22 +5686,22 @@ void Mesher::quick_sort( vector<int> *int_vec, int min_n, int max_n )
 			i++;
 			j--;
 		}
-	}while( i <= j );//Èç¹ûÁ½±ßÉ¨ÃèµÄÏÂ±ê½»´í£¬¾ÍÍ£Ö¹£¨Íê³ÉÒ»´Î£©
+	}while( i <= j );//å¦‚æœä¸¤è¾¹æ‰«æçš„ä¸‹æ ‡äº¤é”™ï¼Œå°±åœæ­¢ï¼ˆå®Œæˆä¸€æ¬¡ï¼‰
 
-	//µ±×ó±ß²¿·ÖÓĞÖµ(left<j)£¬µİ¹é×ó°ë±ß
+	//å½“å·¦è¾¹éƒ¨åˆ†æœ‰å€¼(left<j)ï¼Œé€’å½’å·¦åŠè¾¹
 	if( min_n < j ) quick_sort( int_vec, min_n, j );
-	//µ±ÓÒ±ß²¿·ÖÓĞÖµ(right>i)£¬µİ¹éÓÒ°ë±ß
+	//å½“å³è¾¹éƒ¨åˆ†æœ‰å€¼(right>i)ï¼Œé€’å½’å³åŠè¾¹
 	if( max_n > i ) quick_sort( int_vec, i, max_n );
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãËùÓĞµ¥Ôª×îĞ¡Ìå»ıºÍ×î´óÌå»ı£¨Êı×émin_max_en[2]±£´æ×îĞ¡×î´óÌå»ıµÄµ¥ÔªºÅ£¬min_max_vl[2]±£´æ×îĞ¡×î´óÌå»ıÖµ£©
+//è®¡ç®—æ‰€æœ‰å•å…ƒæœ€å°ä½“ç§¯å’Œæœ€å¤§ä½“ç§¯ï¼ˆæ•°ç»„min_max_en[2]ä¿å­˜æœ€å°æœ€å¤§ä½“ç§¯çš„å•å…ƒå·ï¼Œmin_max_vl[2]ä¿å­˜æœ€å°æœ€å¤§ä½“ç§¯å€¼ï¼‰
 int Mesher::cal_min_max_tet_volume(int min_max_en[2], double min_max_vl[2])
 {
-	//¼ì²éÃ¿¸öµ¥ÔªµÄÌå»ı
-	double mmin_volume = 1.0e88 ;//¼ÇÂ¼×îĞ¡µÄÌå»ı
+	//æ£€æŸ¥æ¯ä¸ªå•å…ƒçš„ä½“ç§¯
+	double mmin_volume = 1.0e88 ;//è®°å½•æœ€å°çš„ä½“ç§¯
 	int min_vol_ele_num = -1;
-	double mmax_volume = 0.0 ;		//¼ÇÂ¼×îĞ¡µÄÌå»ı
+	double mmax_volume = 0.0 ;		//è®°å½•æœ€å°çš„ä½“ç§¯
 	int max_vol_ele_num = -1;
 	double volume_ele;
 	for( int i=0; i<(int)eles_vec.size(); i++ )
@@ -5726,11 +5726,11 @@ int Mesher::cal_min_max_tet_volume(int min_max_en[2], double min_max_vl[2])
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãËùÓĞµ¥ÔªµÄÌå»ı·Ö²¼Çé¿ö£¨×îĞ¡Ìå»ıÏòÏÂÈ¡Õû£¬×î´óÌå»ıÏòÉÏÈ¡Õû£¬¼ÇÂ¼³¤¶È£©
-//½«Õâ¶Î³¤¶È·Ö³Én·İ£¨Ò»°ãÇé¿önÈ¡10£©£¬¼ÇÂ¼Ã¿·İÖĞËùÕ¼µ¥ÔªÊıÓë×Üµ¥ÔªÊıµÄ±ÈÖµ£»
+//è®¡ç®—æ‰€æœ‰å•å…ƒçš„ä½“ç§¯åˆ†å¸ƒæƒ…å†µï¼ˆæœ€å°ä½“ç§¯å‘ä¸‹å–æ•´ï¼Œæœ€å¤§ä½“ç§¯å‘ä¸Šå–æ•´ï¼Œè®°å½•é•¿åº¦ï¼‰
+//å°†è¿™æ®µé•¿åº¦åˆ†æˆnä»½ï¼ˆä¸€èˆ¬æƒ…å†µnå–10ï¼‰ï¼Œè®°å½•æ¯ä»½ä¸­æ‰€å å•å…ƒæ•°ä¸æ€»å•å…ƒæ•°çš„æ¯”å€¼ï¼›
 void Mesher::tet_vol_distrib( double min_max_vl[2], string str, int n, int mod )
 {
-	//ÓÃÓÚ¼ÇÂ¼Ã¿·İËùº¬ËÄÃæÌåµÄ¸öÊı
+	//ç”¨äºè®°å½•æ¯ä»½æ‰€å«å››é¢ä½“çš„ä¸ªæ•°
 	vector<int> tetnum(n,0) ;
 	double vol_min=floor(min_max_vl[0]);
 	double vol_max=ceil(min_max_vl[1]);
@@ -5749,54 +5749,54 @@ void Mesher::tet_vol_distrib( double min_max_vl[2], string str, int n, int mod )
 	{
 		string file="tet_vol_distrib"+str+".dat";
 		ofstream disout( file.c_str() ) ;
-		if ( !disout )  hout << "ÎŞ·¨´ò¿ªÎÄ¼ş£º" << file << endl;
-		disout << "ËÄÃæÌåÌå»ı·Ö²¼" << endl;
-		disout << "×îĞ¡Ìå»ı£º" << min_max_vl[0] << endl;
-		disout << "×î´óÌå»ı£º" << min_max_vl[1] << endl;
+		if ( !disout )  hout << "æ— æ³•æ‰“å¼€æ–‡ä»¶ï¼š" << file << endl;
+		disout << "å››é¢ä½“ä½“ç§¯åˆ†å¸ƒ" << endl;
+		disout << "æœ€å°ä½“ç§¯ï¼š" << min_max_vl[0] << endl;
+		disout << "æœ€å¤§ä½“ç§¯ï¼š" << min_max_vl[1] << endl;
 		m=(int)eles_vec.size();
-		disout << "×ÜËÄÃæÌå¸öÊı" << m << endl;
+		disout << "æ€»å››é¢ä½“ä¸ªæ•°" << m << endl;
 		for( int i=0; i<n; i++ )
 		{
 			disout << i <<" :  ";
-			disout << "Ìå»ıÔÚ" << vol_min+i*vol_ele << "~" << vol_min+(i+1)*vol_ele << "Ö®¼ä£º"; 
-			disout << "ËÄÃæÌå¸öÊı£º" << tetnum[i];
-			disout << "°Ù·Ö±È£º" <<	100*(tetnum[i]*1.0/m) << "%" << endl;
+			disout << "ä½“ç§¯åœ¨" << vol_min+i*vol_ele << "~" << vol_min+(i+1)*vol_ele << "ä¹‹é—´ï¼š"; 
+			disout << "å››é¢ä½“ä¸ªæ•°ï¼š" << tetnum[i];
+			disout << "ç™¾åˆ†æ¯”ï¼š" <<	100*(tetnum[i]*1.0/m) << "%" << endl;
 		}
 	}
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãËùÓĞËÄÃæÌåµ¥ÔªµÄÖÊÁ¿¶ÈÁ¿·Ö²¼Çé¿ö£¨×îĞ¡Öµ0£¬×î´óÖµÈ¡1£¬¼ÇÂ¼³¤¶È£©
-//½«Õâ¶Î³¤¶È·Ö³Én·İ£¨Ò»°ãÇé¿önÈ¡10£©£¬¼ÇÂ¼Ã¿·İÖĞËùÕ¼µ¥ÔªÊıÓë×Üµ¥ÔªÊıµÄ±ÈÖµ£»
+//è®¡ç®—æ‰€æœ‰å››é¢ä½“å•å…ƒçš„è´¨é‡åº¦é‡åˆ†å¸ƒæƒ…å†µï¼ˆæœ€å°å€¼0ï¼Œæœ€å¤§å€¼å–1ï¼Œè®°å½•é•¿åº¦ï¼‰
+//å°†è¿™æ®µé•¿åº¦åˆ†æˆnä»½ï¼ˆä¸€èˆ¬æƒ…å†µnå–10ï¼‰ï¼Œè®°å½•æ¯ä»½ä¸­æ‰€å å•å…ƒæ•°ä¸æ€»å•å…ƒæ•°çš„æ¯”å€¼ï¼›
 void Mesher::tet_quality( string str, int n, int mod )
 {
-	//ÓÃÓÚ¼ÇÂ¼Ã¿·İËùº¬ËÄÃæÌåµÄ¸öÊı
+	//ç”¨äºè®°å½•æ¯ä»½æ‰€å«å››é¢ä½“çš„ä¸ªæ•°
 	vector<int> tetnum(n,0) ;
-	double tria[4];	//ÓÃÓÚ¼ÇÂ¼ËÄÃæÌåËÄ¸öÃæµÄÃæ»ı(triangle_area)
-	double silp[3];	//ÓÃÓÚ¼ÇÂ¼ËÄÃæÌå¶Ô±ß±ß³¤Ö®»ı(side_length_product)
-	double ir;			//ÄÚÇĞÇò°ë¾¶
-	double R;			//Íâ½ÓÇò°ë¾¶
-	double rou;       //±ÈÖµrou
-	double volume_ele; //ËÄÃæÌåÌå»ı
+	double tria[4];	//ç”¨äºè®°å½•å››é¢ä½“å››ä¸ªé¢çš„é¢ç§¯(triangle_area)
+	double silp[3];	//ç”¨äºè®°å½•å››é¢ä½“å¯¹è¾¹è¾¹é•¿ä¹‹ç§¯(side_length_product)
+	double ir;			//å†…åˆ‡çƒåŠå¾„
+	double R;			//å¤–æ¥çƒåŠå¾„
+	double rou;       //æ¯”å€¼rou
+	double volume_ele; //å››é¢ä½“ä½“ç§¯
 	int m;
 
 	for( int i=0; i<(int)eles_vec.size(); i++ )
 	{
-		//¼ÆËãËÄÃæÌåÌå»ı
+		//è®¡ç®—å››é¢ä½“ä½“ç§¯
 		volume_ele = cal_tet_volume( &eles_vec[i] );
-		//¼ÆËãËÄÃæÌåËÄ¸öÃæµÄÃæ»ı
+		//è®¡ç®—å››é¢ä½“å››ä¸ªé¢çš„é¢ç§¯
 		tet_tri_area( &eles_vec[i] , tria );
-		//¼ÆËãÄÚÇĞÇò°ë¾¶
+		//è®¡ç®—å†…åˆ‡çƒåŠå¾„
 		ir=(3.0*volume_ele)/(tria[0]+tria[1]+tria[2]+tria[3]);
-		//¼ÆËãËÄÃæÌå¶Ô±ß±ß³¤Ö®»ı
+		//è®¡ç®—å››é¢ä½“å¯¹è¾¹è¾¹é•¿ä¹‹ç§¯
 		side_length_pro(&eles_vec[i] , silp );
-		//¼ÆËãÍâ½ÓÇò°ë¾¶
+		//è®¡ç®—å¤–æ¥çƒåŠå¾„
 		R=sqrt((silp[0]+silp[1]+silp[2])*(silp[0]+silp[1]-silp[2])*(silp[0]+silp[2]-silp[1])*(silp[1]+silp[2]-silp[0]))/(24*volume_ele);
-		//¼ÆËã±ÈÖµrou
+		//è®¡ç®—æ¯”å€¼rou
 		rou=3*ir/R;
 		if(rou<0.0-ZERO||rou>1.0+ZERO)
 		{
-			hout << "ÔÚ¼ÆËãµÚ" << i << "¸öµ¥ÔªÊ±,±ÈÖµrou=" << rou <<" Ğ¡ÓÚ0.0»ò´óÓÚ1.0,³ö´í£¡" <<endl;
+			hout << "åœ¨è®¡ç®—ç¬¬" << i << "ä¸ªå•å…ƒæ—¶,æ¯”å€¼rou=" << rou <<" å°äº0.0æˆ–å¤§äº1.0,å‡ºé”™ï¼" <<endl;
 			hout << "ir=" << ir << "  " << "R=" << R << endl;
 		}
 		else
@@ -5810,21 +5810,21 @@ void Mesher::tet_quality( string str, int n, int mod )
 	{
 		string file="tet_quality"+str+".dat";
 		ofstream disout( file.c_str() ) ;
-		if ( !disout )  hout << "ÎŞ·¨´ò¿ªÎÄ¼ş£º" << file << endl;
-		disout << "ËÄÃæÌåÖÊÁ¿ÏµÊı·Ö²¼" << endl;
+		if ( !disout )  hout << "æ— æ³•æ‰“å¼€æ–‡ä»¶ï¼š" << file << endl;
+		disout << "å››é¢ä½“è´¨é‡ç³»æ•°åˆ†å¸ƒ" << endl;
 		m=(int)eles_vec.size();
-		disout << "×ÜËÄÃæÌå¸öÊı" << m << endl;
+		disout << "æ€»å››é¢ä½“ä¸ªæ•°" << m << endl;
 		for( int i=0; i<n; i++ )
 		{
 			disout << i <<" :  ";
-			disout << "ÖÊÁ¿ÏµÊıÔÚ" << i*(1.0/n) << "~" << (i+1)*(1.0/n) << "Ö®¼ä£º"; 
-			disout << "ËÄÃæÌå¸öÊı£º" << tetnum[i];
-			disout << "°Ù·Ö±È£º" <<	100*(tetnum[i]*1.0/m) << "%" << endl;
+			disout << "è´¨é‡ç³»æ•°åœ¨" << i*(1.0/n) << "~" << (i+1)*(1.0/n) << "ä¹‹é—´ï¼š"; 
+			disout << "å››é¢ä½“ä¸ªæ•°ï¼š" << tetnum[i];
+			disout << "ç™¾åˆ†æ¯”ï¼š" <<	100*(tetnum[i]*1.0/m) << "%" << endl;
 		}
 	}
 }
 //---------------------------------------------------------------------------
-//ÓÃÓÚ¼ÆËãËÄÃæÌåËÄ¸öÃæµÄÃæ»ı
+//ç”¨äºè®¡ç®—å››é¢ä½“å››ä¸ªé¢çš„é¢ç§¯
 void Mesher::tet_tri_area( Tetrahedron *tet , double tria[4] )
 {
 	Node node1, node2, node3;
@@ -5860,7 +5860,7 @@ void Mesher::tet_tri_area( Tetrahedron *tet , double tria[4] )
 	}
 }
 //---------------------------------------------------------------------------
-//ÓÃÓÚ¼ÆËãËÄÃæÌå¶Ô±ß±ß³¤Ö®»ı
+//ç”¨äºè®¡ç®—å››é¢ä½“å¯¹è¾¹è¾¹é•¿ä¹‹ç§¯
 void Mesher::side_length_pro( Tetrahedron* tet , double silp[3] )
 {
 	Node node[4];
@@ -5877,7 +5877,7 @@ void Mesher::side_length_pro( Tetrahedron* tet , double silp[3] )
 	for(int i=1; i<4; i++)
 	{
 		k=0;
-		//ÈıÖÖÇé¿ö·Ö±ğÊÇ£º(0,1;2,3),(0,2;1,3),(0,3;1,2), ÓÃn[2][2]¼ÇÂ¼
+		//ä¸‰ç§æƒ…å†µåˆ†åˆ«æ˜¯ï¼š(0,1;2,3),(0,2;1,3),(0,3;1,2), ç”¨n[2][2]è®°å½•
 		n[0][0]=0;
 		n[0][1]=i;
 		for(int j=1; j<4; j++)
@@ -5899,13 +5899,13 @@ void Mesher::side_length_pro( Tetrahedron* tet , double silp[3] )
 	}
 }
 //---------------------------------------------------------------------------
-//Ïû³ıÕûĞÍÏòÁ¿ÖĞÁ¬Ğø³öÏÖµÄÖØ¸´ÔªËØ
+//æ¶ˆé™¤æ•´å‹å‘é‡ä¸­è¿ç»­å‡ºç°çš„é‡å¤å…ƒç´ 
 void Mesher::unique( vector<int> *int_vec )
 {
 	if( int_vec->size() < 2 ) return ;
-	//¸´ÖÆ¸±±¾
+	//å¤åˆ¶å‰¯æœ¬
 	vector<int> int_vec_cop = *int_vec;
-	//Çå¿ÕÏòÁ¿
+	//æ¸…ç©ºå‘é‡
 	int_vec->clear();
 	int_vec->push_back( int_vec_cop[0] ) ;
 	for( int i=1; i<(int)int_vec_cop.size(); i++ )
@@ -5918,13 +5918,13 @@ void Mesher::unique( vector<int> *int_vec )
 }
 
 //---------------------------------------------------------------------------
-//mod=0:À­ÆÕÀ­Ë¹¹â»¬´¦Àí£¬¼´¶ÔÈÎÒ»½Úµã£¬È¡Æä×ø±êÎªÓëÖ®ÏàÁÚµÄ½Úµã×ø±êÆ½¾ùÖµ
-//mod=1:È¡ÏàÁÚ½ÚµãËùÎ§ÇøÓòµÄÖĞĞÄ
+//mod=0:æ‹‰æ™®æ‹‰æ–¯å…‰æ»‘å¤„ç†ï¼Œå³å¯¹ä»»ä¸€èŠ‚ç‚¹ï¼Œå–å…¶åæ ‡ä¸ºä¸ä¹‹ç›¸é‚»çš„èŠ‚ç‚¹åæ ‡å¹³å‡å€¼
+//mod=1:å–ç›¸é‚»èŠ‚ç‚¹æ‰€å›´åŒºåŸŸçš„ä¸­å¿ƒ
 int Mesher::smoothing_3d(int mod)
 {
 	bool debuging_smoothing = false;
 	int min_vol_en;
-	double min_min_volume_ori=min_volume_of_cell(min_vol_en);  //¹âË³Ç°×îĞ¡Ìå»ı
+	double min_min_volume_ori=min_volume_of_cell(min_vol_en);  //å…‰é¡ºå‰æœ€å°ä½“ç§¯
 	for( int i=0; i<(int)nodes_vec.size(); i++ )
 	{
 		if( debuging_smoothing ) hout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
@@ -5932,15 +5932,15 @@ int Mesher::smoothing_3d(int mod)
 		if( debuging_smoothing ) hout	<< "old location: " << nodes_vec[i].x << " "
 														<< nodes_vec[i].y << " "
 														<< nodes_vec[i].z << endl;
-		double min_volume_ori = cal_relative_min_volume( i ); //¹âË³Ç°¸Ã½ÚµãÏà¹Øµ¥ÔªµÄ×îĞ¡Ìå»ı
+		double min_volume_ori = cal_relative_min_volume( i ); //å…‰é¡ºå‰è¯¥èŠ‚ç‚¹ç›¸å…³å•å…ƒçš„æœ€å°ä½“ç§¯
 		if( debuging_smoothing ) hout << " min_volume_ori: " << min_volume_ori << endl;
-		double sum_x=0, sum_y=0, sum_z=0; //½«´Ë½ÚµãµÄÁÚ½Úµã×ø±êÇóºÍ
-		int num_node=0;                   //½«¶àÉÙ½Úµã×ø±êÇóºÍ
-		//¶ÔÓÚ±ß½çÉÏµÄ½Úµã£¬Ö»ÓĞÔÚÍ¬Ñù±ß½çÉÏµÄ½Úµã£¬²ÅÄÜ¶ÔÆäÇóÆ½¾ù
-		//ÓĞÁ½ÖÖÇé¿ö£º±ß½çÏßÉÏµÄ½Úµã£¬±ß½çÃæÉÏµÄ½Úµã
+		double sum_x=0, sum_y=0, sum_z=0; //å°†æ­¤èŠ‚ç‚¹çš„é‚»èŠ‚ç‚¹åæ ‡æ±‚å’Œ
+		int num_node=0;                   //å°†å¤šå°‘èŠ‚ç‚¹åæ ‡æ±‚å’Œ
+		//å¯¹äºè¾¹ç•Œä¸Šçš„èŠ‚ç‚¹ï¼Œåªæœ‰åœ¨åŒæ ·è¾¹ç•Œä¸Šçš„èŠ‚ç‚¹ï¼Œæ‰èƒ½å¯¹å…¶æ±‚å¹³å‡
+		//æœ‰ä¸¤ç§æƒ…å†µï¼šè¾¹ç•Œçº¿ä¸Šçš„èŠ‚ç‚¹ï¼Œè¾¹ç•Œé¢ä¸Šçš„èŠ‚ç‚¹
 		int ioe =  is_on_edge( i ) ;
 		int iof =  is_on_face( i ) ;
-		vector<int> ioe_nodes; //ºÍµ±Ç°½ÚµãÔÚÍ¬Ò»±ß½çÏßÉÏµÄ½Úµã¼¯
+		vector<int> ioe_nodes; //å’Œå½“å‰èŠ‚ç‚¹åœ¨åŒä¸€è¾¹ç•Œçº¿ä¸Šçš„èŠ‚ç‚¹é›†
 		double x_min=1.0e200,x_max=-1.0e200,y_min=1.0e200,y_max=-1.0e200,z_min=1.0e200,z_max=-1.0e200;
 
 		if( debuging_smoothing ) hout << "ioe: " << ioe << " iof: " << iof << endl;
@@ -6003,12 +6003,12 @@ int Mesher::smoothing_3d(int mod)
 				hout << "Before projection the point: " << the_p.x << " " << the_p.y << " " << the_p.z << endl;
 			}
 
-			Node old_position = nodes_vec[i];	//±£Áô¸±±¾£¬ÒÔ±ã³öÏÖ´íÎóÊ±»Ö¸´
+			Node old_position = nodes_vec[i];	//ä¿ç•™å‰¯æœ¬ï¼Œä»¥ä¾¿å‡ºç°é”™è¯¯æ—¶æ¢å¤
 			if( ioe != 0 )
 			{
 				if( debuging_smoothing ) hout << " on the edge! " << endl;
-				if( num_node > 2 ) continue;			//½Çµã
-				//ÕÒ³öÓë´Ë½ÚµãÏàÁÚµÄÁ½¸öÍ¬±ß½çÏßÉÏµÄ½ÚµãÁ¬ÏßµÄÖĞ´¹ÏßÓëÍÖÇò±íÃæµÄ½»µã
+				if( num_node > 2 ) continue;			//è§’ç‚¹
+				//æ‰¾å‡ºä¸æ­¤èŠ‚ç‚¹ç›¸é‚»çš„ä¸¤ä¸ªåŒè¾¹ç•Œçº¿ä¸Šçš„èŠ‚ç‚¹è¿çº¿çš„ä¸­å‚çº¿ä¸æ¤­çƒè¡¨é¢çš„äº¤ç‚¹
 				Node *node1 = &nodes_vec[ioe_nodes[0]];
 				Node *node2 = &nodes_vec[ioe_nodes[1]];
 				Node *node3 = &nodes_vec[i];
@@ -6022,14 +6022,14 @@ int Mesher::smoothing_3d(int mod)
 				int is_on1 = is_on_nodes[i];
 				if( is_on1 == 0 )
 				{
-					//ÔÚµ¥°û±ß½çÏßÉÏ
-					Node temp_node = (*node1 + *node2)/2.0;			//º«·Ç20061221¸Ä
+					//åœ¨å•èƒè¾¹ç•Œçº¿ä¸Š
+					Node temp_node = (*node1 + *node2)/2.0;			//éŸ©é20061221æ”¹
 					node3->x = temp_node.x;
 					node3->y = temp_node.y;
 					node3->z = temp_node.z;
 					continue ;
 				}
-				//ÔÚÍÖÇòºÍ»ùÌåµÄ½»½çÏßÉÏ
+				//åœ¨æ¤­çƒå’ŒåŸºä½“çš„äº¤ç•Œçº¿ä¸Š
 				Node  node4 = ( *node1 + *node2 )/2.0 ;
 				Node node31 = *node3 - *node1 ;
 				Node node41 =  node4 - *node1 ;
@@ -6044,7 +6044,7 @@ int Mesher::smoothing_3d(int mod)
 				if( n3221 == 0 ) continue;
 				tt = ( node42.x * node21.x + node42.y * node21.y + node42.z * node21.z )/n3221;
 				Node node_32_mid = node32*tt + *node2 ;
-				//ÇóÓëÍÖÇòÃæµÄ½»µã
+				//æ±‚ä¸æ¤­çƒé¢çš„äº¤ç‚¹
 				Point p1 = { node_31_mid.x,  node_31_mid.y,  node_31_mid.z };
 				Point p2 = { node_32_mid.x,  node_32_mid.y,  node_32_mid.z };
 				Point rp ;
@@ -6060,10 +6060,10 @@ int Mesher::smoothing_3d(int mod)
 				if( debuging_smoothing ) hout << " on the face No. " << iof << endl;
 				if( num_node > 2 )
 				{
-					//Èç¹ûÁÚ½Úµã³¬¹ı3¸ö£¨¿ÉÓÃÀ´¹â»¬µÄ½Úµã£¬±ÈÈç£¬Èç¹û½ÚµãÔÚÃæÉÏ
-					//ÔòÖ»ÓĞÔÚÍ¬Ò»ÃæÉÏµÄÁÚ½Úµã²Å¿ÉÓÃÀ´¹â»¬´¦Àí£©
-					//¶ÔËùÓĞÁÚ½Úµã£¬ÒÀ´ÎÑ¡È¡3¸ö£¬Çó·¨Ïß·½Ïò£¬Ñ­»·µ½×îºóÒ»¸öÁÚ½Úµã
-					//È»ºó¶ÔËùÓĞµÄ·¨ÏßÈ¡Æ½¾ù£¬×÷ÎªÍ¶Ó°·½Ïò
+					//å¦‚æœé‚»èŠ‚ç‚¹è¶…è¿‡3ä¸ªï¼ˆå¯ç”¨æ¥å…‰æ»‘çš„èŠ‚ç‚¹ï¼Œæ¯”å¦‚ï¼Œå¦‚æœèŠ‚ç‚¹åœ¨é¢ä¸Š
+					//åˆ™åªæœ‰åœ¨åŒä¸€é¢ä¸Šçš„é‚»èŠ‚ç‚¹æ‰å¯ç”¨æ¥å…‰æ»‘å¤„ç†ï¼‰
+					//å¯¹æ‰€æœ‰é‚»èŠ‚ç‚¹ï¼Œä¾æ¬¡é€‰å–3ä¸ªï¼Œæ±‚æ³•çº¿æ–¹å‘ï¼Œå¾ªç¯åˆ°æœ€åä¸€ä¸ªé‚»èŠ‚ç‚¹
+					//ç„¶åå¯¹æ‰€æœ‰çš„æ³•çº¿å–å¹³å‡ï¼Œä½œä¸ºæŠ•å½±æ–¹å‘
 					vector<TDVector> vecs;
 					double dxx=nodes_vec[nei_nodes[1]].x-nodes_vec[nei_nodes[0]].x;
 					double dyy=nodes_vec[nei_nodes[1]].y-nodes_vec[nei_nodes[0]].y;
@@ -6140,7 +6140,7 @@ int Mesher::smoothing_3d(int mod)
 				<< nodes_vec[i].x << " "<< nodes_vec[i].y << " "<< nodes_vec[i].z << endl;
 
 			double min_volume_new = cal_relative_min_volume( i );
-			if( min_volume_new < min_volume_ori )	//Ïà¹Øµ¥Ôª×îĞ¡Ìå»ı¼õĞ¡£¬»Ö¸´
+			if( min_volume_new < min_volume_ori )	//ç›¸å…³å•å…ƒæœ€å°ä½“ç§¯å‡å°ï¼Œæ¢å¤
 			{
 				nodes_vec[i].move_to( &old_position );
 				if( debuging_smoothing ) hout << " re_min_volume: oled: " << min_volume_ori
@@ -6154,7 +6154,7 @@ int Mesher::smoothing_3d(int mod)
 			hout << " min_volume_new: " << min_volume_new << endl;
 		}
 	}       
-	double min_min_volume_new=min_volume_of_cell(min_vol_en);  //¹âË³ºó×îĞ¡Ìå»ı
+	double min_min_volume_new=min_volume_of_cell(min_vol_en);  //å…‰é¡ºåæœ€å°ä½“ç§¯
 
 	if( debuging_smoothing ) hout << " min_min_volume_ori: " << min_min_volume_ori << " min_min_volume_new: " << min_min_volume_new << endl;
 	if( min_min_volume_new - min_min_volume_ori > fabs(min_min_volume_ori) * 0.01 ) return 1;
@@ -6163,7 +6163,7 @@ int Mesher::smoothing_3d(int mod)
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãËùÓĞµ¥ÔªÖĞµÄ×îĞ¡Ìå»ı
+//è®¡ç®—æ‰€æœ‰å•å…ƒä¸­çš„æœ€å°ä½“ç§¯
 double Mesher::min_volume_of_cell(int &ele_num)
 {
 	double mmin_volume = 1e80;
@@ -6180,7 +6180,7 @@ double Mesher::min_volume_of_cell(int &ele_num)
 }
 
 //---------------------------------------------------------------------------
-//¼ÆËãÏËÎ¬Ìå»ı±È
+//è®¡ç®—çº¤ç»´ä½“ç§¯æ¯”
 double Mesher::volume_ratio()
 {
 	double non_matrix_vol = 0.0;
@@ -6193,46 +6193,46 @@ double Mesher::volume_ratio()
 	}
 	double total_vol = thecell->clength*thecell->cwidth*thecell->cheight;
 
-	//hout << "    ÔöÇ¿¿ÅÁ£Ìå»ı: " << non_matrix_vol << " ×ÜÌåÌå»ı: " << total_vol << endl;  
+	//hout << "    å¢å¼ºé¢—ç²’ä½“ç§¯: " << non_matrix_vol << " æ€»ä½“ä½“ç§¯: " << total_vol << endl;  
 	return non_matrix_vol/total_vol;
 }
 
 //---------------------------------------------------------------------------
-//È·¶¨µ¥°û±ß½çÉÏµÄ½Úµã
+//ç¡®å®šå•èƒè¾¹ç•Œä¸Šçš„èŠ‚ç‚¹
 void Mesher::deter_boundary_nodes(int coat)
 {
 	bnodes_vec.clear();
 
 	for ( int i=0; i<(int)nodes_vec.size(); i++)
 	{
-		int iof = is_on_face(i);   //¼ì²é½ÚµãÎ»ÖÃ
+		int iof = is_on_face(i);   //æ£€æŸ¥èŠ‚ç‚¹ä½ç½®
 		if( iof < 0 )
 		{
-			//ÔÚµ¥°û±ß½çÉÏ
+			//åœ¨å•èƒè¾¹ç•Œä¸Š
 			bnodes_vec.push_back(i);
 			nodes_vec[i].flag = 1;
 		}
 		else if( iof == 0 )
 		{
-			//ÔÚµ¥°ûÄÚ²¿£¬²»ÔÚµ¥°û±ß½çÃæÉÏ£¬Ò²²»ÔÚ¿ÅÁ£½çÃæÉÏ
+			//åœ¨å•èƒå†…éƒ¨ï¼Œä¸åœ¨å•èƒè¾¹ç•Œé¢ä¸Šï¼Œä¹Ÿä¸åœ¨é¢—ç²’ç•Œé¢ä¸Š
 			nodes_vec[i].flag = 0;
 		}
 		else
 		{
-			//ÔÚ¿ÅÁ£½çÃæÉÏ
-			nodes_vec[i].flag = 0;			//¿ÉÒÔÓÃ2±íÊ¾ÔÚ¿ÅÁ£½çÃæÉÏ
-														//ÎªÁË²»ÓëºóÃæµÄ³ÌĞò³åÍ»£¬ÕâÀïÏÈ¸ÄÎª0
+			//åœ¨é¢—ç²’ç•Œé¢ä¸Š
+			nodes_vec[i].flag = 0;			//å¯ä»¥ç”¨2è¡¨ç¤ºåœ¨é¢—ç²’ç•Œé¢ä¸Š
+														//ä¸ºäº†ä¸ä¸åé¢çš„ç¨‹åºå†²çªï¼Œè¿™é‡Œå…ˆæ”¹ä¸º0
 		}
 	}
 }
 //---------------------------------------------------------------------------
-//Éú³É±ß½ç²ãÍø¸ñ
+//ç”Ÿæˆè¾¹ç•Œå±‚ç½‘æ ¼
 int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 {
 	vector<EllipsGeometry> ellgeo(thecell->surfaces_vec.size());
 
 	//-------------------------------------------------------------------------------------------------------------
-	//°´ÍÖÇòÕûÀíÍÖÇòÄÚ½Úµã¡¢µ¥ÔªµÈÊı¾İ
+	//æŒ‰æ¤­çƒæ•´ç†æ¤­çƒå†…èŠ‚ç‚¹ã€å•å…ƒç­‰æ•°æ®
 	int ele_size = int(eles_vec.size());
 	vector<int>  eles_ellip(ele_size,-1);
 	for(int i=0; i<ele_size; i++)
@@ -6240,25 +6240,25 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 		//if(i==566||i==571||i==1146||i==1148)
 		//{
 		//	hout << "i= " << i << "  mat= " <<  eles_vec[i].materialId<<endl;
-		//	hout << "nodesId£º";
+		//	hout << "nodesIdï¼š";
 		//	for(int k=0 ; k<4; k++)
 		//	{
 		//		hout << eles_vec[i].nodesId[k]+1 <<"  ";
 		//	}
 		//	hout << endl;
-		//	hout << "where_is_nodes£º";
+		//	hout << "where_is_nodesï¼š";
 		//	for(int j=0 ; j<4; j++)
 		//	{
 		//		hout << where_is_nodes[eles_vec[i].nodesId[j]] <<"  ";
 		//	}
 		//	hout << endl;
-		//	hout << "is_on_nodes£º";
+		//	hout << "is_on_nodesï¼š";
 		//	for(int j=0 ; j<4; j++)
 		//	{
 		//		hout << is_on_nodes[eles_vec[i].nodesId[j]] <<"  ";
 		//	}
 		//	hout << endl;
-		//	hout << "where_is£º";
+		//	hout << "where_isï¼š";
 		//	for(int j=0 ; j<4; j++)
 		//	{
 		//		int is_on=0;
@@ -6266,23 +6266,23 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 		//	}
 		//	hout << endl;
 		//}
-		if(eles_vec[i].materialId==1)		//µ¥ÔªÊôÓÚ¿ÅÁ£
+		if(eles_vec[i].materialId==1)		//å•å…ƒå±äºé¢—ç²’
 		{
 			//---------------------------------------------------------------------
-			//ÅĞ¶Ï´Ëµ¥ÔªÔÚÊôÓÚÄÄ¸öÍÖÇò
+			//åˆ¤æ–­æ­¤å•å…ƒåœ¨å±äºå“ªä¸ªæ¤­çƒ
 			int ele_num;
 			int wws[4];
 			for(int j=0; j<4; j++)
 			{
 				wws[j] = 	where_is_nodes[eles_vec[i].nodesId[j]];
 			}
-			if(wws[0]==wws[1]&&wws[0]==wws[2]&&wws[0]==wws[3])		//ËÄ¸öµãËùÔÚÍÖÇò±àºÅÒ»ÖÂ
+			if(wws[0]==wws[1]&&wws[0]==wws[2]&&wws[0]==wws[3])		//å››ä¸ªç‚¹æ‰€åœ¨æ¤­çƒç¼–å·ä¸€è‡´
 			{
 				ele_num = wws[0];
 			}
-			else																								//ËÄ¸öµãËùÔÚÎ»ÖÃ±êÊ¶²»Ò»ÖÂ
+			else																								//å››ä¸ªç‚¹æ‰€åœ¨ä½ç½®æ ‡è¯†ä¸ä¸€è‡´
 			{
-				//Çó³ö¸Ãµ¥ÔªµÄÖØĞÄµã×ø±ê
+				//æ±‚å‡ºè¯¥å•å…ƒçš„é‡å¿ƒç‚¹åæ ‡
 				Point pp={0.0, 0.0, 0.0};
 				for(int j=0; j<4; j++)
 				{
@@ -6293,15 +6293,15 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 				pp.x=pp.x/4.0;
 				pp.y=pp.y/4.0;
 				pp.z=pp.z/4.0;
-				//Çó´Ëµ¥ÔªËùÔÚÍÖÇò±àºÅ
+				//æ±‚æ­¤å•å…ƒæ‰€åœ¨æ¤­çƒç¼–å·
 				int count=0;
 				vector<int> tem_num;
 				for(int j=0; j<4; j++)
 				{
 					int wn=wws[j];
-					if(wn==-1) continue;												//È¥µôµÈÓÚ-1µÄÇé¿ö£¬-1±íÊ¾»ùÌå
+					if(wn==-1) continue;												//å»æ‰ç­‰äº-1çš„æƒ…å†µï¼Œ-1è¡¨ç¤ºåŸºä½“
 
-					int key=0;																//ÅĞ¶ÏÕâ¸öÍÖÇòÊÇ·ñÒÑ¾­±»ÅĞ¶Ï¹ı£¬tem_numÖĞ¼ÇÂ¼ÅĞ¶Ï¹ıµÄÍÖÇò±àºÅ
+					int key=0;																//åˆ¤æ–­è¿™ä¸ªæ¤­çƒæ˜¯å¦å·²ç»è¢«åˆ¤æ–­è¿‡ï¼Œtem_numä¸­è®°å½•åˆ¤æ–­è¿‡çš„æ¤­çƒç¼–å·
 					for(int k=0; k<int(tem_num.size()); k++)
 					{
 						if(wn==tem_num[k])
@@ -6313,7 +6313,7 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 					if(key==1)		continue;
 					else	tem_num.push_back(wn);
 
-					if(thecell->surfaces_vec[wn]->is_contain(&pp)<=0)		//ÅĞ¶ÏËÄÃæÌåÖØĞÄÊÇ·ñÔÚ¸ÃÍÖÇòÖĞ
+					if(thecell->surfaces_vec[wn]->is_contain(&pp)<=0)		//åˆ¤æ–­å››é¢ä½“é‡å¿ƒæ˜¯å¦åœ¨è¯¥æ¤­çƒä¸­
 					{
 						ele_num = wn;
 						count++;
@@ -6321,98 +6321,98 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 				}
 				if(count==0)
 				{
-					//ÅĞ¶ÏÌØÀı£ºËäÈ»ËÄÃæÌåµÄÖØĞÄÔÚ¸ÃÍÖÇòµÄÍâ²¿£¬
-					//µ«ÒòËÄÃæÌåµÄÍâ¶¥µãÊÇÔÚ»ùÌåÖĞ£¬¿ÉÒÔÈÏÎª´Ëµ¥ÔªÈÔÊôÓÚ¸ÃÍÖÇò¡£
+					//åˆ¤æ–­ç‰¹ä¾‹ï¼šè™½ç„¶å››é¢ä½“çš„é‡å¿ƒåœ¨è¯¥æ¤­çƒçš„å¤–éƒ¨ï¼Œ
+					//ä½†å› å››é¢ä½“çš„å¤–é¡¶ç‚¹æ˜¯åœ¨åŸºä½“ä¸­ï¼Œå¯ä»¥è®¤ä¸ºæ­¤å•å…ƒä»å±äºè¯¥æ¤­çƒã€‚
 					if(int(tem_num.size())==1)
 					{
 						ele_num = tem_num[0];
 					}
 					else if(int(tem_num.size())>=2)
 					{
-						eles_vec[i].materialId=0;    //´Ëµ¥Ôª¼ĞÔÚÁ½¸öÒÔÉÏÍÖÇòÖ®¼ä,ÈÏÎª´Ëµ¥ÔªÊÇ»ùÌå²ÄÁÏ
+						eles_vec[i].materialId=0;    //æ­¤å•å…ƒå¤¹åœ¨ä¸¤ä¸ªä»¥ä¸Šæ¤­çƒä¹‹é—´,è®¤ä¸ºæ­¤å•å…ƒæ˜¯åŸºä½“ææ–™
 						continue;
 					}
 					else
 					{
 						hout << "i= " << i << "  mat= " <<  eles_vec[i].materialId<<endl;
-						hout << "nodesId£º";
+						hout << "nodesIdï¼š";
 						for(int k=0 ; k<4; k++)
 						{
 							hout << eles_vec[i].nodesId[k]+1 <<"  ";
 						}
 						hout << endl;
-						hout << "where_is_nodes£º";
+						hout << "where_is_nodesï¼š";
 						for(int j=0 ; j<4; j++)
 						{
 							hout << where_is_nodes[eles_vec[i].nodesId[j]] <<"  ";
 						}
 						hout << endl;
-						hout << "is_on_nodes£º";
+						hout << "is_on_nodesï¼š";
 						for(int j=0 ; j<4; j++)
 						{
 							hout << is_on_nodes[eles_vec[i].nodesId[j]] <<"  ";
 						}
 						hout << endl;
-						hout << "where_is£º";
+						hout << "where_isï¼š";
 						for(int j=0 ; j<4; j++)
 						{
 							int is_on=0;
 							hout << where_is(&nodes_vec[eles_vec[i].nodesId[j]], is_on) << "/" << is_on <<"  ";
 						}
 						hout << endl;
-						hout << "´íÎó£¡ÓĞ¸öËÄÃæÌå²»ÊôÓÚÈÎºÎÍÖÇò¡£" << endl;
+						hout << "é”™è¯¯ï¼æœ‰ä¸ªå››é¢ä½“ä¸å±äºä»»ä½•æ¤­çƒã€‚" << endl;
 						return 0;
 					}
 				}
 				else if(count>1)
 				{
-					hout << "´íÎó£¡ÓĞ¸öËÄÃæÌåÍ¬Ê±ÊôÓÚ¼¸¸öÍÖÇò¡£" << endl;
+					hout << "é”™è¯¯ï¼æœ‰ä¸ªå››é¢ä½“åŒæ—¶å±äºå‡ ä¸ªæ¤­çƒã€‚" << endl;
 					return 0;
 				}
 			}
-			//±ê¶¨µ¥ÔªÊôÓÚÄÄ¸öÍÖÇò
+			//æ ‡å®šå•å…ƒå±äºå“ªä¸ªæ¤­çƒ
 			eles_ellip[i] = ele_num;
-			//²åÈë´ËËÄÃæÌåµ¥ÔªÊı¾İµ½ÍÖÇò¶ÔÏó
+			//æ’å…¥æ­¤å››é¢ä½“å•å…ƒæ•°æ®åˆ°æ¤­çƒå¯¹è±¡
 			ellgeo[ele_num].tet.push_back(i);
 		}
-		else if(eles_vec[i].materialId==-1)		//µ¥Ôª¼È²»ÊÇ¿ÅÁ£Ò²²»ÊÇ»ùÌå
+		else if(eles_vec[i].materialId==-1)		//å•å…ƒæ—¢ä¸æ˜¯é¢—ç²’ä¹Ÿä¸æ˜¯åŸºä½“
 		{
 			eles_vec[i].materialId=0;
 		}
 	}
 
-	//±éÀúËùÓĞµÄÍÖÇòµ¥ÔªÉú³É±íÃæÆ¬ºÍÄÚÍâ½Úµã
+	//éå†æ‰€æœ‰çš„æ¤­çƒå•å…ƒç”Ÿæˆè¡¨é¢ç‰‡å’Œå†…å¤–èŠ‚ç‚¹
 	int node_size = int(nodes_vec.size());
 	vector<int> nod_ellip(node_size,-2);
 	int ellgeo_size = int(ellgeo.size());
 	for(int i=0; i<ellgeo_size; i++)
 	{
-		vector<vector<int > > line_vec;		//ÓÃÓÚÅĞ¶Ï±íÃæÈı½ÇĞÎÃæÆ¬ÊÇ·ñ·â±Õ
+		vector<vector<int > > line_vec;		//ç”¨äºåˆ¤æ–­è¡¨é¢ä¸‰è§’å½¢é¢ç‰‡æ˜¯å¦å°é—­
 		int tet_size = int(ellgeo[i].tet.size());
 		for(int j=0; j<tet_size; j++)
 		{
-			vector<vector<int> > temp_tri;	//ÁÙÊ±¼ÇÂ¼Èı½ÇĞÎÃæÆ¬£¨ËÄÃæÌåÔÚÍÖÇò±íÃæµÄÈı½ÇĞÎÃæÆ¬£©
-			int ell_tet = ellgeo[i].tet[j];			//µ¥Ôª±àºÅ
-			int nid[4];									//µ¥ÔªËÄ¸ö½ÚµãµÄ±àºÅ
+			vector<vector<int> > temp_tri;	//ä¸´æ—¶è®°å½•ä¸‰è§’å½¢é¢ç‰‡ï¼ˆå››é¢ä½“åœ¨æ¤­çƒè¡¨é¢çš„ä¸‰è§’å½¢é¢ç‰‡ï¼‰
+			int ell_tet = ellgeo[i].tet[j];			//å•å…ƒç¼–å·
+			int nid[4];									//å•å…ƒå››ä¸ªèŠ‚ç‚¹çš„ç¼–å·
 			for(int k=0; k<4; k++)
 			{
 				nid[k] =  eles_vec[ell_tet].nodesId[k];
 			}
-			//¼ÇÂ¼ËÄÃæÌåµÄËÄ¸öÃæÆ¬ÖĞÔÚ¸ÃÍÖÇò±íÃæµÄÈı½ÇĞÎÃæÆ¬
-			for(int k=0; k<2; k++)					//Ñ­»·±ãÀûËÄÃæÌåµ¥ÔªµÄËÄ¸ö¶¥µã
+			//è®°å½•å››é¢ä½“çš„å››ä¸ªé¢ç‰‡ä¸­åœ¨è¯¥æ¤­çƒè¡¨é¢çš„ä¸‰è§’å½¢é¢ç‰‡
+			for(int k=0; k<2; k++)					//å¾ªç¯ä¾¿åˆ©å››é¢ä½“å•å…ƒçš„å››ä¸ªé¡¶ç‚¹
 			{
 				for(int l=k+1; l<3; l++)
 				{
 					for(int m=l+1; m<4; m++)
 					{
 						int key;
-						if(is_on_nodes[nid[k]]==0||is_on_nodes[nid[l]]==0||is_on_nodes[nid[m]]==0)   //ÅĞ¶Ï²¢¼ÇÂ¼±íÃæÈı½ÇĞÎÃæÆ¬
+						if(is_on_nodes[nid[k]]==0||is_on_nodes[nid[l]]==0||is_on_nodes[nid[m]]==0)   //åˆ¤æ–­å¹¶è®°å½•è¡¨é¢ä¸‰è§’å½¢é¢ç‰‡
 						{
-							if(deter_node_flag(nid[k])>0&&deter_node_flag(nid[l])>0&&deter_node_flag(nid[m])>0)		//ÕâÖÖÇé¿ö´ËÃæÔÚµ¥°ûÄÚ
+							if(deter_node_flag(nid[k])>0&&deter_node_flag(nid[l])>0&&deter_node_flag(nid[m])>0)		//è¿™ç§æƒ…å†µæ­¤é¢åœ¨å•èƒå†…
 							{
 								key=0;
 							}
-							else																																	//ÕâÖÖÇé¿ö´ËÃæÔÚµ¥°û±íÃæ
+							else																																	//è¿™ç§æƒ…å†µæ­¤é¢åœ¨å•èƒè¡¨é¢
 							{
 								key=1;
 							}
@@ -6421,14 +6421,14 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 						{
 							key=1;
 						}
-						if(key==1)			//ÅĞ¶Ï´ËÃæÊÇ·ñ²úÉúÍÖÇòÍâ±íÃæ
+						if(key==1)			//åˆ¤æ–­æ­¤é¢æ˜¯å¦äº§ç”Ÿæ¤­çƒå¤–è¡¨é¢
 						{
 							vector<int> rel_tet;
-							int nk_rel_size = int(nodes_vec[nid[k]].relative_eles_vec.size());					//ÀûÓÃ½ÚµãµÄÏà¹ØËÄÃæÌåÏòÁ¿
+							int nk_rel_size = int(nodes_vec[nid[k]].relative_eles_vec.size());					//åˆ©ç”¨èŠ‚ç‚¹çš„ç›¸å…³å››é¢ä½“å‘é‡
 							for(int n=0; n<nk_rel_size; n++)
 							{
 								int rel_ele_num = nodes_vec[nid[k]].relative_eles_vec[n];
-								if(rel_ele_num!=ell_tet&&eles_ellip[rel_ele_num] == i)							//¸Ãµ¥Ôª±¾Éí²»Ëã£¬ËùÕÒµ½µÄµ¥ÔªÓ¦¸ÃÊôÓÚ´ËÍÖÇò
+								if(rel_ele_num!=ell_tet&&eles_ellip[rel_ele_num] == i)							//è¯¥å•å…ƒæœ¬èº«ä¸ç®—ï¼Œæ‰€æ‰¾åˆ°çš„å•å…ƒåº”è¯¥å±äºæ­¤æ¤­çƒ
 								{
 									int nl_rel_size = int(nodes_vec[nid[l]].relative_eles_vec.size());
 									for(int p=0; p<nl_rel_size; p++)
@@ -6440,7 +6440,7 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 											{
 												if(rel_ele_num==nodes_vec[nid[m]].relative_eles_vec[q])
 												{
-													rel_tet.push_back(rel_ele_num);											//·¢ÏÖ´ËÈı½ÇĞÎÊÇ±¾Éíµ¥ÔªÓëÆäËûµ¥ÔªµÄ¹«¹²ÃæÆ¬
+													rel_tet.push_back(rel_ele_num);											//å‘ç°æ­¤ä¸‰è§’å½¢æ˜¯æœ¬èº«å•å…ƒä¸å…¶ä»–å•å…ƒçš„å…¬å…±é¢ç‰‡
 													goto label_prism;
 												}
 											}
@@ -6448,7 +6448,7 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 									}
 								}
 							}
-label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
+label_prism:			if(rel_tet.empty())		//æ­¤ä¸‰è§’å½¢é¢ç‰‡æ²¡æœ‰æ‰¾åˆ°å…¶ä»–ç›¸å…³å››é¢ä½“
 							{
 								vector<int> triangle(3,0);
 								triangle[0] = k;
@@ -6460,9 +6460,9 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 					}
 				}
 			}
-			//²åÈëÄÚÍâµãÊı¾İµ½ÍÖÇò¶ÔÏó
+			//æ’å…¥å†…å¤–ç‚¹æ•°æ®åˆ°æ¤­çƒå¯¹è±¡
 			int num_tri = int(temp_tri.size());
-			if(num_tri==1)  //Ö»ÓĞÒ»¸ö±íÃæÈı½ÇĞÎ£¬µ«ÓĞ¿ÉÄÜÓĞÒ»¸öÄÚµã£¬Ò²ÓĞ¿ÉÄÜÒ»¸öÄÚµã¶¼Ã»ÓĞ
+			if(num_tri==1)  //åªæœ‰ä¸€ä¸ªè¡¨é¢ä¸‰è§’å½¢ï¼Œä½†æœ‰å¯èƒ½æœ‰ä¸€ä¸ªå†…ç‚¹ï¼Œä¹Ÿæœ‰å¯èƒ½ä¸€ä¸ªå†…ç‚¹éƒ½æ²¡æœ‰
 			{
 				int tri[3];
 				for(int k=0; k<3; k++)
@@ -6471,9 +6471,9 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				}
 				for(int k=0; k<4; k++)
 				{
-					if(nod_ellip[nid[k]]==-2)					//-2±íÊ¾Î´Ê¹ÓÃ
+					if(nod_ellip[nid[k]]==-2)					//-2è¡¨ç¤ºæœªä½¿ç”¨
 					{
-						if(k==tri[0]||k==tri[1]||k==tri[2])		//Íâµã
+						if(k==tri[0]||k==tri[1]||k==tri[2])		//å¤–ç‚¹
 						{
 							ellgeo[i].outell_nodes.push_back(nid[k]);
 							nod_ellip[nid[k]] = int(ellgeo[i].outell_nodes.size())-1;
@@ -6483,9 +6483,9 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			}
 			else if(num_tri==2||num_tri==3)
 			{
-				for(int k=0; k<4; k++)							//È«Íâµã
+				for(int k=0; k<4; k++)							//å…¨å¤–ç‚¹
 				{
-					if(nod_ellip[nid[k]]==-2)					//-2±íÊ¾Î´Ê¹ÓÃ
+					if(nod_ellip[nid[k]]==-2)					//-2è¡¨ç¤ºæœªä½¿ç”¨
 					{
 						ellgeo[i].outell_nodes.push_back(nid[k]);
 						nod_ellip[nid[k]] = int(ellgeo[i].outell_nodes.size())-1;
@@ -6494,16 +6494,16 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			}
 			else if(num_tri!=0)
 			{
-				hout << "´íÎó£¡ËÄÃæÌåµÄËÄ¸öÈı½ÇĞÎÃæÆ¬È«ÊÇÍÖÇò±íÃæÈı½ÇĞÎÃæÆ¬¡£" << endl;
+				hout << "é”™è¯¯ï¼å››é¢ä½“çš„å››ä¸ªä¸‰è§’å½¢é¢ç‰‡å…¨æ˜¯æ¤­çƒè¡¨é¢ä¸‰è§’å½¢é¢ç‰‡ã€‚" << endl;
 				return 0;
 			}
 
-			//²åÈëÈı½ÇĞÎÃæÆ¬ĞÅÏ¢µ½ÍÖÇò¶ÔÏó
+			//æ’å…¥ä¸‰è§’å½¢é¢ç‰‡ä¿¡æ¯åˆ°æ¤­çƒå¯¹è±¡
 			vector<vector<int> > temp_line;
 			for(int k=0; k<num_tri; k++)
 			{
 //---------------------------------------------------------------------------------------------------------------
-//<1>ÒÔÏÂ¶ÎÂä³ÌĞòÓÃÓÚÅĞ¶ÏÈı½ÇĞÎµÄÈıÌõÏß¶ÎÊÇ·ñÓĞÏß¶ÎÖØºÏ,¹²Èı¶Î
+//<1>ä»¥ä¸‹æ®µè½ç¨‹åºç”¨äºåˆ¤æ–­ä¸‰è§’å½¢çš„ä¸‰æ¡çº¿æ®µæ˜¯å¦æœ‰çº¿æ®µé‡åˆ,å…±ä¸‰æ®µ
 				for(int m=0; m<2; m++)
 				{
 					for(int n=m+1; n<3; n++)
@@ -6543,14 +6543,14 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 					}
 				}
 //---------------------------------------------------------------------------------------------------------------
-				//½«Èı½ÇĞÎÃæÆ¬Èı¸ö¶¥µãµÄµ¥Ôª±àºÅ×ª»»ÎªÍÖÇò¶ÔÏóµÄÍâµãÏòÁ¿ÖĞ±àºÅ
+				//å°†ä¸‰è§’å½¢é¢ç‰‡ä¸‰ä¸ªé¡¶ç‚¹çš„å•å…ƒç¼–å·è½¬æ¢ä¸ºæ¤­çƒå¯¹è±¡çš„å¤–ç‚¹å‘é‡ä¸­ç¼–å·
 				for(int l=0; l<3; l++)
 				{
 					temp_tri[k][l] = nod_ellip[nid[temp_tri[k][l]]];
 				}
 			}
 //---------------------------------------------------------------------------------------------------------------
-//<2>ÒÔÏÂ¶ÎÂä³ÌĞòÓÃÓÚÅĞ¶ÏÈı½ÇĞÎµÄÈıÌõÏß¶ÎÊÇ·ñÓĞÏß¶ÎÖØºÏ,¹²Èı¶Î
+//<2>ä»¥ä¸‹æ®µè½ç¨‹åºç”¨äºåˆ¤æ–­ä¸‰è§’å½¢çš„ä¸‰æ¡çº¿æ®µæ˜¯å¦æœ‰çº¿æ®µé‡åˆ,å…±ä¸‰æ®µ
 			int tem_size = int(temp_line.size());
 			for(int k=0; k<tem_size; k++)
 			{
@@ -6574,15 +6574,15 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				}
 			}
 //---------------------------------------------------------------------------------------------------------------
-			//²åÈëÈı½ÇĞÎÃæÆ¬µ½ÍÖÇò¶ÔÏó
+			//æ’å…¥ä¸‰è§’å½¢é¢ç‰‡åˆ°æ¤­çƒå¯¹è±¡
 			ellgeo[i].tri.insert(ellgeo[i].tri.end(),temp_tri.begin(),temp_tri.end());
 		}
 //---------------------------------------------------------------------------------------------------------------
-//<3>ÒÔÏÂ¶ÎÂä³ÌĞòÓÃÓÚÅĞ¶ÏÈı½ÇĞÎµÄÈıÌõÏß¶ÎÊÇ·ñÓĞÏß¶ÎÖØºÏ,¹²Èı¶Î
-		//ÅĞ¶ÏÍÖÇòÍâ±íÃæÊÇ·ñ·â±Õ
+//<3>ä»¥ä¸‹æ®µè½ç¨‹åºç”¨äºåˆ¤æ–­ä¸‰è§’å½¢çš„ä¸‰æ¡çº¿æ®µæ˜¯å¦æœ‰çº¿æ®µé‡åˆ,å…±ä¸‰æ®µ
+		//åˆ¤æ–­æ¤­çƒå¤–è¡¨é¢æ˜¯å¦å°é—­
 		if(!line_vec.empty())
 		{
-			//ÅĞ¶ÏÊÇ·ñÊÇºÍµ¥°ûÍâ±íÃæÏà½»²úÉúµÄ²¿·Ö£¬Õâ²¿·ÖÁôÏÂ·â±ÕÈ¦
+			//åˆ¤æ–­æ˜¯å¦æ˜¯å’Œå•èƒå¤–è¡¨é¢ç›¸äº¤äº§ç”Ÿçš„éƒ¨åˆ†ï¼Œè¿™éƒ¨åˆ†ç•™ä¸‹å°é—­åœˆ
 			vector<int> poi_vec;
 			int lvsize = int(line_vec.size());
 			for(int j=0; j<lvsize; j++)
@@ -6615,34 +6615,34 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			}
 			if(!poi_vec.empty())
 			{
-				hout << "´íÎó£¡ÍÖÇòÍâ±íÃæÈı½ÇĞÎ²»·â±Õ£¡£¨Òª¿¼ÂÇºÍµ¥°ûÍâ±íÃæÏà½»µÄÇé¿ö£©" << endl;
+				hout << "é”™è¯¯ï¼æ¤­çƒå¤–è¡¨é¢ä¸‰è§’å½¢ä¸å°é—­ï¼ï¼ˆè¦è€ƒè™‘å’Œå•èƒå¤–è¡¨é¢ç›¸äº¤çš„æƒ…å†µï¼‰" << endl;
 				return 0;
 			}
 		}
 
-		//È·¶¨ÍÖÇòÄÚµã
+		//ç¡®å®šæ¤­çƒå†…ç‚¹
 		for(int j=0; j<tet_size; j++)
 		{
-			vector<int > temp_tet_nod;		//¼ÇÂ¼¸ÃËÄÃæÌåÖĞµÄÍâµãËù¶ÔÓ¦µÄµ¥Ôª¾Ö²¿±àºÅºÍÔÚÍÖÇòÍâµãÏòÁ¿ÖĞµÄ±àºÅ
+			vector<int > temp_tet_nod;		//è®°å½•è¯¥å››é¢ä½“ä¸­çš„å¤–ç‚¹æ‰€å¯¹åº”çš„å•å…ƒå±€éƒ¨ç¼–å·å’Œåœ¨æ¤­çƒå¤–ç‚¹å‘é‡ä¸­çš„ç¼–å·
 			for(int k=0; k<4; k++)
 			{
-				int nid =  eles_vec[ellgeo[i].tet[j]].nodesId[k];			//µ¥ÔªËÄ¸ö½ÚµãµÄ±àºÅ
-				if(nod_ellip[nid]==-2)		//-2±íÊ¾Î´Ê¹ÓÃ,ÔÚËùÓĞµÄÍâµã¶¼È·¶¨ÍêÖ®ºó£¬ÁôÏÂµÄ¾ÍÊÇÄÚµã
+				int nid =  eles_vec[ellgeo[i].tet[j]].nodesId[k];			//å•å…ƒå››ä¸ªèŠ‚ç‚¹çš„ç¼–å·
+				if(nod_ellip[nid]==-2)		//-2è¡¨ç¤ºæœªä½¿ç”¨,åœ¨æ‰€æœ‰çš„å¤–ç‚¹éƒ½ç¡®å®šå®Œä¹‹åï¼Œç•™ä¸‹çš„å°±æ˜¯å†…ç‚¹
 				{
 					ellgeo[i].inell_nodes.push_back(nid);
 					nod_ellip[nid]=-1;
 				}
 				else if(nod_ellip[nid]>=0)
 				{
-					temp_tet_nod.push_back(k);							//¼ÇÂ¼ÔÚ¸ÃËÄÃæÌåÖĞµÄ¾Ö²¿±àºÅ
-					temp_tet_nod.push_back(nod_ellip[nid]);		//¼ÇÂ¼Ëù¶ÔÓ¦µÄÔÚÍâµãÏòÁ¿ÖĞµÄ±àºÅ
+					temp_tet_nod.push_back(k);							//è®°å½•åœ¨è¯¥å››é¢ä½“ä¸­çš„å±€éƒ¨ç¼–å·
+					temp_tet_nod.push_back(nod_ellip[nid]);		//è®°å½•æ‰€å¯¹åº”çš„åœ¨å¤–ç‚¹å‘é‡ä¸­çš„ç¼–å·
 				}
 			}
-			//²åÈëµ¥ÔªµÄÍâµã±àºÅĞÅÏ¢
+			//æ’å…¥å•å…ƒçš„å¤–ç‚¹ç¼–å·ä¿¡æ¯
 			ellgeo[i].tet_nod.push_back(temp_tet_nod);
 		}
 		//---------------------------------------------------------------------------------------------------------------
-		//ÖØĞÂ¿ªÊ¼nod_ellipÏòÁ¿
+		//é‡æ–°å¼€å§‹nod_ellipå‘é‡
 		int insize = int(ellgeo[i].inell_nodes.size());
 		for(int j=0; j<insize; j++)
 		{
@@ -6656,9 +6656,9 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 	}
 
 	//------------------------------------------------------------------------------------------------------
-	//Éú³ÉÀâÖùµÄ¹ı³Ì
+	//ç”Ÿæˆæ£±æŸ±çš„è¿‡ç¨‹
 	//------------------------------------------------------------------------------------------------------
-	//°ÑÔ­ÓĞËÄÃæÌåµ¥ÔªÏòÁ¿µ¼Èë»ìºÏµ¥ÔªÏòÁ¿
+	//æŠŠåŸæœ‰å››é¢ä½“å•å…ƒå‘é‡å¯¼å…¥æ··åˆå•å…ƒå‘é‡
 	for(int i=0; i<ele_size; i++)
 	{
 		Element temp_element;
@@ -6670,11 +6670,11 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			elements_vec.back().nodes_id.push_back(eles_vec[i].nodesId[j]);
 		}
 	}
-	//°´ÍÖÇòÊÕËõÍø¸ñ²¢¼Ó½çÃæ²ã
+	//æŒ‰æ¤­çƒæ”¶ç¼©ç½‘æ ¼å¹¶åŠ ç•Œé¢å±‚
 	for(int i=0; i<int(ellgeo.size()); i++)
 	{
 		//------------------------------------------------------------------------------------
-		//ÍÖÇòÄÚµãÊÕËõ(ÓëËÄÃæÌåµ¥ÔªÎŞ¹Ø)
+		//æ¤­çƒå†…ç‚¹æ”¶ç¼©(ä¸å››é¢ä½“å•å…ƒæ— å…³)
 		for(int j=0; j<int(ellgeo[i].inell_nodes.size()); j++)
 		{
 			int nodes_n = ellgeo[i].inell_nodes[j];
@@ -6685,14 +6685,14 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			point.y = 0.0;
 			point.z = 0.0;
 
-			Point node_poi; //¼ÇÂ¼ÊÕËõµÄ³õÊ¼µã
+			Point node_poi; //è®°å½•æ”¶ç¼©çš„åˆå§‹ç‚¹
 			node_poi.x = nodes_vec[nodes_n].x;
 			node_poi.y = nodes_vec[nodes_n].y;
 			node_poi.z = nodes_vec[nodes_n].z;
 
 			if (thecell->surfaces_vec[i]->change_coor(&node_poi, &point, ratio)==0)
 			{
-				hout << i << "µãÔÚ×ø±ê±ä»»Ê±³ö´í£¡" << endl;
+				hout << i << "ç‚¹åœ¨åæ ‡å˜æ¢æ—¶å‡ºé”™ï¼" << endl;
 				hout << "*******************************************" << endl;
 				return 0;
 			}
@@ -6702,7 +6702,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			nodes_vec[nodes_n].z = point.z;
 		}
 		//------------------------------------------------------------------------------------
-		//ÍÖÇòÍâµãÊÕÊÕËõ£¬Éú³É½çÃæ²ãÀâÖù£¬¸Ä±äÄ³Ğ©ËÄÃæÌå½Úµã±àºÅ
+		//æ¤­çƒå¤–ç‚¹æ”¶æ”¶ç¼©ï¼Œç”Ÿæˆç•Œé¢å±‚æ£±æŸ±ï¼Œæ”¹å˜æŸäº›å››é¢ä½“èŠ‚ç‚¹ç¼–å·
 		vector<int> temp_vec(layer_num+1,0);
 		vector<vector<int> > stem_node(ellgeo[i].outell_nodes.size(),temp_vec);
 
@@ -6718,7 +6718,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 			point.y = 0.0;
 			point.z = 0.0;
 
-			Point node_poi; //¼ÇÂ¼ÊÕËõµÄ³õÊ¼µã
+			Point node_poi; //è®°å½•æ”¶ç¼©çš„åˆå§‹ç‚¹
 			node_poi.x = nodes_vec[nodes_n].x;
 			node_poi.y = nodes_vec[nodes_n].y;
 			node_poi.z = nodes_vec[nodes_n].z;
@@ -6729,7 +6729,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				
 				if (thecell -> surfaces_vec[i] -> change_coor(&node_poi, &point, ratio) == 0)
 				{
-					hout << i << "µãÔÚ×ø±ê±ä»»Ê±³ö´í£¡" << endl;
+					hout << i << "ç‚¹åœ¨åæ ‡å˜æ¢æ—¶å‡ºé”™ï¼" << endl;
 					hout << "*******************************************" << endl;
 					return 0;
 				}
@@ -6739,7 +6739,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				new_node.z = point.z; 
 				new_node.flag = nodes_vec[nodes_n].flag;
 
-				//²åÈëĞÂµã
+				//æ’å…¥æ–°ç‚¹
 				nodes_vec.push_back(new_node);
 				where_is_nodes.push_back(i);
 				if(new_node.flag==1) bnodes_vec.push_back(int(nodes_vec.size())-1);
@@ -6749,7 +6749,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				else	is_on_nodes.push_back(2);
 			}
 		}
-		//ĞŞ¸ÄÄ³Ğ©ËÄÃæÌå½Úµã±àºÅ
+		//ä¿®æ”¹æŸäº›å››é¢ä½“èŠ‚ç‚¹ç¼–å·
 		for(int j=0; j<int(ellgeo[i].tet.size()); j++)
 		{
 			for(int k=0; k<int(ellgeo[i].tet_nod[j].size());k=k+2)
@@ -6757,7 +6757,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				elements_vec[ellgeo[i].tet[j]].nodes_id[ellgeo[i].tet_nod[j][k]]=stem_node[ellgeo[i].tet_nod[j][k+1]][layer_num];
 			}
 		}
-		//Éú³ÉÀâÖù
+		//ç”Ÿæˆæ£±æŸ±
 		for(int j=0; j<int(ellgeo[i].tri.size()); j++)
 		{
 			for(int k=0; k<layer_num; k++)
@@ -6766,7 +6766,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 				elements_vec.push_back(temp_element);
 				elements_vec.back().mat=2;
 				elements_vec.back().type=3;
-				//ÅĞ¶ÏÈıÀâÖùµÄÌå»ı(Îª±£Ö¤ÓĞÏŞÔª¼ÆËã£¬ÀâÖùÌå»ı±ØĞëÎªÕı)
+				//åˆ¤æ–­ä¸‰æ£±æŸ±çš„ä½“ç§¯(ä¸ºä¿è¯æœ‰é™å…ƒè®¡ç®—ï¼Œæ£±æŸ±ä½“ç§¯å¿…é¡»ä¸ºæ­£)
 				vector <Node> elenodes_vec(6);
 				int nodn[6];
 				for(int n=0;n<2; n++)
@@ -6806,7 +6806,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 					}
 					else
 					{
-						cout << "´íÎó£¡ÈıÀâÖùµÄJ_val²»¶Ô¡£" <<endl;
+						cout << "é”™è¯¯ï¼ä¸‰æ£±æŸ±çš„J_valä¸å¯¹ã€‚" <<endl;
 						//for(int m=0; m<6; m++)
 						//{
 						//	hout << elenodes_vec[m].x << "   ";
@@ -6834,7 +6834,7 @@ label_prism:			if(rel_tet.empty())		//´ËÈı½ÇĞÎÃæÆ¬Ã»ÓĞÕÒµ½ÆäËûÏà¹ØËÄÃæÌå
 }
 
 //---------------------------------------------------------------------------
-//ÔÚ²»Éú³É±ß½ç²ãµÄÇé¿öÏÂ£¬½«ËÄÃæÌåµ¥ÔªÀàĞÍµ¹Îª»ìºÏµ¥ÔªÀàĞÍ
+//åœ¨ä¸ç”Ÿæˆè¾¹ç•Œå±‚çš„æƒ…å†µä¸‹ï¼Œå°†å››é¢ä½“å•å…ƒç±»å‹å€’ä¸ºæ··åˆå•å…ƒç±»å‹
 int Mesher::change_elements_to_blend()
 {
 	int num = (int)eles_vec.size();
@@ -6853,10 +6853,10 @@ int Mesher::change_elements_to_blend()
 }
 
 //---------------------------------------------------------------------------
-//Êä³ötecplotÍø¸ñÊı¾İ
+//è¾“å‡ºtecplotç½‘æ ¼æ•°æ®
 int Mesher::export_tecplot_data()
 {
-	//Êä³öÊÕËõºóÍÖÇòËÄÃæÌåÍø¸ñ£¨°´ËÄÃæÌåÊä³ö£©
+	//è¾“å‡ºæ”¶ç¼©åæ¤­çƒå››é¢ä½“ç½‘æ ¼ï¼ˆæŒ‰å››é¢ä½“è¾“å‡ºï¼‰
 	ofstream otec("mesh_in_tecplot.dat");
 	otec << "TITLE = blend_mesh_in_ellipse" << endl;
 	otec << "VARIABLES = X, Y, Z" << endl;
@@ -6866,9 +6866,9 @@ int Mesher::export_tecplot_data()
 	{
 		switch (elements_vec[i].mat)
 		{
-		case 0: count[0]++; break; //»ùÌåµ¥Ôª
-		case 1: count[1]++; break; //ÍÖÇòµ¥Ôª
-		case 2: count[2]++; break; //±ß½ç²ãµ¥Ôª
+		case 0: count[0]++; break; //åŸºä½“å•å…ƒ
+		case 1: count[1]++; break; //æ¤­çƒå•å…ƒ
+		case 2: count[2]++; break; //è¾¹ç•Œå±‚å•å…ƒ
 		default: hout << " error!! " << endl; break;
 		}
 	}
@@ -6886,7 +6886,7 @@ int Mesher::export_tecplot_data()
 					<< elements_vec[i].nodes_id[2]+1 << "  " << elements_vec[i].nodes_id[3]+1 << endl;
 		}
 	}
-	//Êä³ö½çÃæ²ãÈıÀâÖùÍø¸ñ£¨°´ÁùÃæÌåÊä³ö£©
+	//è¾“å‡ºç•Œé¢å±‚ä¸‰æ£±æŸ±ç½‘æ ¼ï¼ˆæŒ‰å…­é¢ä½“è¾“å‡ºï¼‰
 	otec << "ZONE N=" << (int)nodes_vec.size() << ", E=" << count[2] << ", F=FEPOINT, ET=BRICK" << endl;
 	for (int i=0; i < (int)nodes_vec.size(); i++)
 	{
@@ -6898,18 +6898,18 @@ int Mesher::export_tecplot_data()
 		if (elements_vec[i].mat == 2)
 		{
 //---------------------------------------------------------------------------------
-//ÔÚ¼ì²âÊ±Ê¹ÓÃ
+//åœ¨æ£€æµ‹æ—¶ä½¿ç”¨
 //			int k = elements_vec[i].nodes_id[0];
 //			for (int j=1; j <6; j++)
 //			{
 //				int m = elements_vec[i].nodes_id[j];
 //				if (where_is_nodes[k]!=where_is_nodes[m])
 //				{
-//					hout << "·¢ÏÖ²»µÈµã£¡£¡£¡" << endl;
+//					hout << "å‘ç°ä¸ç­‰ç‚¹ï¼ï¼ï¼" << endl;
 //					hout << "i=" << i << endl;
 //					for (int n=0; n < 6; n++)
 //					{
-//						hout << n << "ºÅµã" << elements_vec[i].nodes_id[n] << "ºÅµã"<< "ËùÔÚÍÖÇòÊÇ" << where_is_nodes[elements_vec[i].nodes_id[n]] << endl;
+//						hout << n << "å·ç‚¹" << elements_vec[i].nodes_id[n] << "å·ç‚¹"<< "æ‰€åœ¨æ¤­çƒæ˜¯" << where_is_nodes[elements_vec[i].nodes_id[n]] << endl;
 //					}
 //					goto label;
 //				}
@@ -6928,17 +6928,17 @@ int Mesher::export_tecplot_data()
 	return 1;
 }
 //---------------------------------------------------------------------------
-//Êä³öÈıÎ¬¿Õ¼ä¿ÉÊÓ»¯EnsightÍø¸ñÊı¾İ
+//è¾“å‡ºä¸‰ç»´ç©ºé—´å¯è§†åŒ–Ensightç½‘æ ¼æ•°æ®
 int Mesher::export_Ensight_data()
 {
-	//Êä³öÌâÍ·
+	//è¾“å‡ºé¢˜å¤´
 	//ofstream otec("Composites_Materials_Particles.geo");
 	//otec << "geometry meshes" << endl;
 	//otec << "composites materials with core/shell particles" << endl;
 	//otec << "node id assign" << endl;
 	//otec << "element id assign" << endl;
 	//otec << "coordinates" << endl;
-	////Êä³ö½ÚµãĞÅÏ¢
+	////è¾“å‡ºèŠ‚ç‚¹ä¿¡æ¯
 	//otec << setw(10) << (int)nodes_vec.size() << endl;
 	//for (int i=0; i < (int)nodes_vec.size(); i++)
 	//{
@@ -6948,20 +6948,20 @@ int Mesher::export_Ensight_data()
 	//	otec <<setw(12)<<scientific<<setprecision(4)<<nodes_vec[i].z;
 	//	otec <<endl;
 	//}
-	////¼ÇÂ¼¸÷Ààµ¥ÔªµÄ¸öÊı
+	////è®°å½•å„ç±»å•å…ƒçš„ä¸ªæ•°
 	//int count[3]={0,0,0};
 	//for (int i=0; i < (int)elements_vec.size(); i++)
 	//{
 	//	switch (elements_vec[i].mat)
 	//	{
-	//	case 0: count[0]++; break; //»ùÌåµ¥Ôª
-	//	case 1: count[1]++; break; //ÍÖÇòµ¥Ôª
-	//	case 2: count[2]++; break; //±ß½ç²ãµ¥Ôª
+	//	case 0: count[0]++; break; //åŸºä½“å•å…ƒ
+	//	case 1: count[1]++; break; //æ¤­çƒå•å…ƒ
+	//	case 2: count[2]++; break; //è¾¹ç•Œå±‚å•å…ƒ
 	//	default: hout << " error!! " << endl; break;
 	//	}
 	//}
 	//cout<<"matrix: "<<count[0]<<"  core"<<count[1]<<"  shell"<<count[2];
-	////Êä³ö¿ÅÁ£ºËµ¥Ôª
+	////è¾“å‡ºé¢—ç²’æ ¸å•å…ƒ
 	//otec << "part 1" << endl;
 	//otec << "cores of particles" << endl;
  //   otec << "tetra4" << endl;
@@ -6978,7 +6978,7 @@ int Mesher::export_Ensight_data()
 	//	    otec <<endl;
 	//	}
 	//}
-	////Êä³ö¿ÅÁ£¿Ç²ãµ¥Ôª
+	////è¾“å‡ºé¢—ç²’å£³å±‚å•å…ƒ
 	//otec << "part 2" << endl;
 	//otec << "shells of particles" << endl;
  //   otec << "penta6" << endl;
@@ -6997,7 +6997,7 @@ int Mesher::export_Ensight_data()
 	//		otec <<endl;
 	//	}
 	//}
-	////Êä³ö»ùÌåµ¥Ôª
+	////è¾“å‡ºåŸºä½“å•å…ƒ
 	//otec << "part 3" << endl;
 	//otec << "matrix" << endl;
 	//otec << "tetra4" << endl;
@@ -7019,14 +7019,14 @@ int Mesher::export_Ensight_data()
 	return 1;
 }
 //-----------------------------------------------------------------------------------------------
-//ÈıÀâÖùÌå»ı
+//ä¸‰æ£±æŸ±ä½“ç§¯
 double Mesher::Threeprism_volume(const vector<Node> &elenodes_vec)
 {
-	//Ñ­»·¸ßË¹µã¼ÆËã»ı·Ö£»
+	//å¾ªç¯é«˜æ–¯ç‚¹è®¡ç®—ç§¯åˆ†ï¼›
 	double volume=0;
-	//¼ÆËã£Ê¾ØÕó£»
+	//è®¡ç®—ï¼ªçŸ©é˜µï¼›
 	//--------------------------------------------
-	//ĞÎº¯ÊıN¶Ôgauss[count].x,gauss[count].y,gauss[count].zµÄÆ«µ¼¾ØÕó
+	//å½¢å‡½æ•°Nå¯¹gauss[count].x,gauss[count].y,gauss[count].zçš„åå¯¼çŸ©é˜µ
 	double diff[3][6];
 	diff[0][0]=0.5*(1.0-0);  
 	diff[0][1]=0;                         
@@ -7049,7 +7049,7 @@ double Mesher::Threeprism_volume(const vector<Node> &elenodes_vec)
 	diff[2][4]=-diff[2][1];
 	diff[2][5]=-diff[2][2];
 	//--------------------------------------------------
-	//µ¥Ôª½Úµã×ø±ê¾ØÕó
+	//å•å…ƒèŠ‚ç‚¹åæ ‡çŸ©é˜µ
 	double elenode[6][3];
 	for(int i=0;i<6;i++){
 		elenode[i][0]=elenodes_vec[i].x;
@@ -7057,9 +7057,9 @@ double Mesher::Threeprism_volume(const vector<Node> &elenodes_vec)
 		elenode[i][2]=elenodes_vec[i].z;
 	}
 	//--------------------------------------------------
-	//J¾ØÕó
+	//JçŸ©é˜µ
 	double Jmatrix[3][3];
-	//ÒÔÉÏÁ½¸ö¾ØÕóµÄ»ı
+	//ä»¥ä¸Šä¸¤ä¸ªçŸ©é˜µçš„ç§¯
 	for(int i=0;i<3;i++)
 		for(int j=0;j<3;j++){
 			Jmatrix[i][j]=0;
@@ -7067,18 +7067,18 @@ double Mesher::Threeprism_volume(const vector<Node> &elenodes_vec)
 			Jmatrix[i][j]=Jmatrix[i][j] + diff[i][k]*elenode[k][j];
 		}
 		//--------------------------------------------------
-		//Çó³öJ¾ØÕóµÄĞĞÁĞÊ½£»
+		//æ±‚å‡ºJçŸ©é˜µçš„è¡Œåˆ—å¼ï¼›
 		double J_val=Jmatrix[0][0]*(Jmatrix[1][1]*Jmatrix[2][2]-Jmatrix[1][2]*Jmatrix[2][1])
 			-Jmatrix[0][1]*(Jmatrix[1][0]*Jmatrix[2][2]-Jmatrix[1][2]*Jmatrix[2][0])
 			+Jmatrix[0][2]*(Jmatrix[1][0]*Jmatrix[2][1]-Jmatrix[1][1]*Jmatrix[2][0]);	
 		//--------------------------------------------------
-		//ÓÉ¸ßË¹»ı·ÖµãÇóÌå»ı£»
+		//ç”±é«˜æ–¯ç§¯åˆ†ç‚¹æ±‚ä½“ç§¯ï¼›
 		  volume=J_val*0.5*2.0;
 	
 	  return volume;
 }
 //---------------------------------------------------------------------------
-//È·¶¨ËùÓĞ½ÚµãµÄÏà¹Øµ¥ÔªĞÅÏ¢
+//ç¡®å®šæ‰€æœ‰èŠ‚ç‚¹çš„ç›¸å…³å•å…ƒä¿¡æ¯
 void Mesher::deter_nodes_relative_eles()
 {
 	for( int i=0; i<(int)nodes_vec.size(); i++ )
@@ -7095,11 +7095,11 @@ void Mesher::deter_nodes_relative_eles()
 	}
 }
 //---------------------------------------------------------------------------
-//¾­¹ıÈ·ÈÏmaterialId ==0 ÊÇ»ùÌåµ¥Ôª£¬materialId ==1 ÊÇÍÖÇòµ¥Ôª
-//Êä³öÉú³É±ß½ç²ãÇ°µÄtecplotÍø¸ñÊı¾İ
+//ç»è¿‡ç¡®è®¤materialId ==0 æ˜¯åŸºä½“å•å…ƒï¼ŒmaterialId ==1 æ˜¯æ¤­çƒå•å…ƒ
+//è¾“å‡ºç”Ÿæˆè¾¹ç•Œå±‚å‰çš„tecplotç½‘æ ¼æ•°æ®
 int Mesher::export_tecplot_data_before_coating()
 {
-	//Êä³öÊÕËõºóÍÖÇòËÄÃæÌåÍø¸ñ£¨°´ËÄÃæÌåÊä³ö£©
+	//è¾“å‡ºæ”¶ç¼©åæ¤­çƒå››é¢ä½“ç½‘æ ¼ï¼ˆæŒ‰å››é¢ä½“è¾“å‡ºï¼‰
 	ofstream otec("mesh_in_tecplot_before_coating.dat");
 	otec << "TITLE = tetrahedron_mesh_in_ellipse" << endl;
 	otec << "VARIABLES = X, Y, Z" << endl;
@@ -7109,13 +7109,13 @@ int Mesher::export_tecplot_data_before_coating()
 	{
 		switch (eles_vec[i].materialId)
 		{
-		case 0: count[0]++; break; //»ùÌåµ¥Ôª
-		case 1: count[1]++; break; //ÍÖÇòµ¥Ôª
+		case 0: count[0]++; break; //åŸºä½“å•å…ƒ
+		case 1: count[1]++; break; //æ¤­çƒå•å…ƒ
 		case -1: count[2]++; break;
 		default: hout << " error!! " << endl; break;
 		}
 	}
-	//»ùÌå
+	//åŸºä½“
 	otec << "ZONE N=" << (int)nodes_vec.size() << ", E=" << count[0]+count[2]<< ", F=FEPOINT, ET=TETRAHEDRON" << endl;
 	for (int i=0; i < (int)nodes_vec.size(); i++)
 	{
@@ -7130,7 +7130,7 @@ int Mesher::export_tecplot_data_before_coating()
 					<< eles_vec[i].nodesId[2]+1 << "  " << eles_vec[i].nodesId[3]+1 << endl;
 		}
 	}
-	//ÍÖÇò
+	//æ¤­çƒ
 	otec << "ZONE N=" << (int)nodes_vec.size() << ", E=" << count[1] << ", F=FEPOINT, ET=TETRAHEDRON" << endl;
 	for (int i=0; i < (int)nodes_vec.size(); i++)
 	{
@@ -7150,11 +7150,11 @@ int Mesher::export_tecplot_data_before_coating()
 	return 1;
 }
 //---------------------------------------------------------------------------
-//ÈËÎªÔö¼ÓµÄÌå·Ö±È
+//äººä¸ºå¢åŠ çš„ä½“åˆ†æ¯”
 void Mesher::Reincrese_vol_raito()
 {
-	//´ò¿ªÔö¼ÓµÄÌå·Ö±ÈÎÄ¼ş
-	//ÓÃÓÚ×ÔÈ»Éú³ÉÍÖÇòµÄÌå»ıÎŞ·¨´ïµ½ÒªÇóÊ±£¬ÔÚÆÊ·Öºó¸Ä±ä»ùÌåµ¥ÔªµÄĞÔÖÊÎª¿ÅÁ££¬ÈËÎªÔö¼ÓÍÖÇòÌå»ı
+	//æ‰“å¼€å¢åŠ çš„ä½“åˆ†æ¯”æ–‡ä»¶
+	//ç”¨äºè‡ªç„¶ç”Ÿæˆæ¤­çƒçš„ä½“ç§¯æ— æ³•è¾¾åˆ°è¦æ±‚æ—¶ï¼Œåœ¨å‰–åˆ†åæ”¹å˜åŸºä½“å•å…ƒçš„æ€§è´¨ä¸ºé¢—ç²’ï¼Œäººä¸ºå¢åŠ æ¤­çƒä½“ç§¯
 	ifstream in_refile;
 	in_refile.open("Reincrease_vol_ratio.dat", ios::in);
 	if(in_refile)
@@ -7165,11 +7165,11 @@ void Mesher::Reincrese_vol_raito()
 		hout << "re_ratio: " << re_ratio << endl;
 		if(re_ratio<=0.0||re_ratio>0.1)
 		{
-			hout << "      ĞèÒªÔö¼ÓµÄÌå»ı±È·ÖĞ¡ÓÚµÈÓÚ0%²¢ÇÒ´óÓÚ10%"<<endl;
+			hout << "      éœ€è¦å¢åŠ çš„ä½“ç§¯æ¯”åˆ†å°äºç­‰äº0%å¹¶ä¸”å¤§äº10%"<<endl;
 		}
 		else
 		{
-			//È·¶¨ËùÓĞ½ÚµãµÄÏà¹Øµ¥ÔªĞÅÏ¢(È·±£ºóÃæÊ¹ÓÃÕıÈ·)
+			//ç¡®å®šæ‰€æœ‰èŠ‚ç‚¹çš„ç›¸å…³å•å…ƒä¿¡æ¯(ç¡®ä¿åé¢ä½¿ç”¨æ­£ç¡®)
 			for( int i=0; i<(int)nodes_vec.size(); i++ )
 			{
 				nodes_vec[i].relative_eles_vec.clear();
@@ -7182,17 +7182,17 @@ void Mesher::Reincrese_vol_raito()
 				}
 			}
 			
-			//³õÊ¼»¯Ëæ»úÊı
+			//åˆå§‹åŒ–éšæœºæ•°
 			srand((unsigned int)time(0));
 
-			//µ¥°û×ÜÌå»ı
+			//å•èƒæ€»ä½“ç§¯
 			double total_vol = thecell->clength*thecell->cwidth*thecell->cheight;
 
-			//¶¨ÒåÔö¼ÓÌå·Ö±È±äÁ¿
+			//å®šä¹‰å¢åŠ ä½“åˆ†æ¯”å˜é‡
 			double increase_ratio = 0.0;
 			while(increase_ratio<re_ratio)
 			{
-				//ÌáÈ¡³öËùÓĞ½ôÁÚ¿ÅÁ£²ÄÁÏµÄ»ùÌåµ¥Ôª
+				//æå–å‡ºæ‰€æœ‰ç´§é‚»é¢—ç²’ææ–™çš„åŸºä½“å•å…ƒ
 				vector<int> temp_ele(2,0);
 				vector<vector<int> > matrix_ele(0,temp_ele);
 				for( int i=0; i<(int)eles_vec.size(); i++ )
@@ -7220,13 +7220,13 @@ eles_vec_mat: ;
 				
 				if((int)matrix_ele.size()==0)
 				{
-					hout << "matrix_ele.size()==0, ³ö´í£¡" << endl;
+					hout << "matrix_ele.size()==0, å‡ºé”™ï¼" << endl;
 					exit(0);
 				}
 
-				//Ëæ»ú¸Ä±äÒ»¸ö¾ßÓĞÒÔÉÏĞÔÖÊµÄ»ùÌåµ¥ÔªÎª¿ÅÁ£µ¥Ôª
-				//ÆÊ·Ö³ß´çglobal_length£¬´ó¸ÅĞèÒª¸Ä±äµ¥Ôª¸öÊıÎªcount = (int)(re_ratio*total_vol)/(pow(global_length,3)/6.0)
-				//Ã¿´Î¸Ä±ä×Ü¸öÊıµÄ1/6
+				//éšæœºæ”¹å˜ä¸€ä¸ªå…·æœ‰ä»¥ä¸Šæ€§è´¨çš„åŸºä½“å•å…ƒä¸ºé¢—ç²’å•å…ƒ
+				//å‰–åˆ†å°ºå¯¸global_lengthï¼Œå¤§æ¦‚éœ€è¦æ”¹å˜å•å…ƒä¸ªæ•°ä¸ºcount = (int)(re_ratio*total_vol)/(pow(global_length,3)/6.0)
+				//æ¯æ¬¡æ”¹å˜æ€»ä¸ªæ•°çš„1/6
 				int ele_count = (int)(re_ratio*total_vol/pow(global_length,3));
 				for(int i=0; i<ele_count; i++)
 				{
@@ -7234,27 +7234,27 @@ eles_vec_mat: ;
 					if(eles_vec[matrix_ele[mat_ele_n][0]].materialId != 0) continue;
 					eles_vec[matrix_ele[mat_ele_n][0]].materialId = matrix_ele[mat_ele_n][1];
 
-					//¼ÆËã¸Ä±äµ¥Ôª²ÄÁÏĞÔÖÊËùÔö¼ÓµÄÌå»ı
+					//è®¡ç®—æ”¹å˜å•å…ƒææ–™æ€§è´¨æ‰€å¢åŠ çš„ä½“ç§¯
 					increase_ratio = increase_ratio + cal_tet_volume( &eles_vec[matrix_ele[mat_ele_n][0]] )/total_vol;
 					if(increase_ratio>=re_ratio) break;
 				}
 			}
-			hout << "      ÈËÎªÔö¼ÓÌå»ı·ÖÊıÎª£º" << increase_ratio <<endl;
+			hout << "      äººä¸ºå¢åŠ ä½“ç§¯åˆ†æ•°ä¸ºï¼š" << increase_ratio <<endl;
 		}
 	}
 	else
 	{
-		hout << "      Reincrease_vol_ratio.datÎÄ¼ş²»´æÔÚ»ò´ò²»¿ª£¬¼ì²éÊÇ·ñĞèÒª×ö¶îÍâÔö¼Ó¿ÅÁ£Ìå·Ö±ÈµÄ²Ù×÷£¡"<<endl;
+		hout << "      Reincrease_vol_ratio.datæ–‡ä»¶ä¸å­˜åœ¨æˆ–æ‰“ä¸å¼€ï¼Œæ£€æŸ¥æ˜¯å¦éœ€è¦åšé¢å¤–å¢åŠ é¢—ç²’ä½“åˆ†æ¯”çš„æ“ä½œï¼"<<endl;
 	}
 	in_refile.close();
 }
 //======================================================================
-//¶ÁÈëÒ»ĞĞĞÅÏ¢£¬²¢Ìø¹ı×¢ÊÍĞĞ£¨ÒÔ"%"¿ªÍ·£©£»
+//è¯»å…¥ä¸€è¡Œä¿¡æ¯ï¼Œå¹¶è·³è¿‡æ³¨é‡Šè¡Œï¼ˆä»¥"%"å¼€å¤´ï¼‰ï¼›
 string Mesher::Get_Line(ifstream &infile)const{
 	string s;
-	//¶ÁÈëĞÅÏ¢Ò»ĞĞ
+	//è¯»å…¥ä¿¡æ¯ä¸€è¡Œ
 	getline(infile,s);
-	//Ìø¹ı×¢ÊÍĞĞ     
+	//è·³è¿‡æ³¨é‡Šè¡Œ     
 	while(!infile.eof() && s.substr(0,1)=="%")
 		getline(infile,s);
 	return s;

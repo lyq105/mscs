@@ -1,6 +1,6 @@
 
 //==========================================
-//¶şÎ¬ÏòÁ¿Àà£»
+//äºŒç»´å‘é‡ç±»ï¼›
 //Vector2D.h
 //==========================================
 #ifndef HEADER_VECTOR2D
@@ -19,17 +19,17 @@ public:
       double x,y;
 
 	  Vector2D(double ix=0,double iy=0);
-//ÖØÔØ²Ù×÷·û£»	
+//é‡è½½æ“ä½œç¬¦ï¼›	
 	 Vector2D operator+(const Vector2D& d);
 	 Vector2D operator-(const Vector2D& d);
 	 double   operator*(const Vector2D& d);
 	 Vector2D operator*(double d);
 	 Vector2D operator/(double d);
      bool     operator== (const Vector2D& d);
-//¶şÎ¬ÏòÁ¿µ¥Î»»¯£»
+//äºŒç»´å‘é‡å•ä½åŒ–ï¼›
      Vector2D Normallize();
 	 double   Length();
-//ÖØÔØÊä³öÁ÷²Ù×÷·û£»
+//é‡è½½è¾“å‡ºæµæ“ä½œç¬¦ï¼›
 	friend ostream& operator<<(ostream& o, const Vector2D& d);
 	friend class Node;
 };//========================================

@@ -1,8 +1,8 @@
 //===========================================================================
 // PCMCell.h
-// ¿ÅÁ£ÔöÇ¿¸´ºÏ²ÄÁÏµ¥°ûÀàÍ·ÎÄ¼ş
+// é¢—ç²’å¢å¼ºå¤åˆææ–™å•èƒç±»å¤´æ–‡ä»¶
 // A class of Cell of Particle reinforced Composite Material with random
-// ÊÇCMCellÀàµÄÅÉÉúÀà
+// æ˜¯CMCellç±»çš„æ´¾ç”Ÿç±»
 //===========================================================================
 
 #ifndef PCMCELL_H
@@ -24,12 +24,12 @@ class PCMCell : public CMCell
 
         int Cell_generate(string input_file,string data_file);
 	private:
-		vector<EllipseSurface> elliSurfaces_vec;  //´æ´¢ËùÓĞµÄÍÖÇò±íÃæ;
+		vector<EllipseSurface> elliSurfaces_vec;  //å­˜å‚¨æ‰€æœ‰çš„æ¤­çƒè¡¨é¢;
 
 		int import_ellipsoids(string file);
-		//¶ÁÈ¡ÊäÈëÎÄ¼şÒ»ĞĞ£¬Ìø¹ı×¢ÊÍĞĞ£¨ÒÔ%¿ªÊ¼£©
+		//è¯»å–è¾“å…¥æ–‡ä»¶ä¸€è¡Œï¼Œè·³è¿‡æ³¨é‡Šè¡Œï¼ˆä»¥%å¼€å§‹ï¼‰
 		char* Get_Line(ifstream& input_stream, char* read_line);
-		//¶ÁÈëĞÅÏ¢Ò»ĞĞ£¬Ìø¹ı×¢ÊÍĞĞ£¨ÒÔ%¿ªÍ·£©
+		//è¯»å…¥ä¿¡æ¯ä¸€è¡Œï¼Œè·³è¿‡æ³¨é‡Šè¡Œï¼ˆä»¥%å¼€å¤´ï¼‰
 		string Get_Line(ifstream &infile)const;
 }; 
 

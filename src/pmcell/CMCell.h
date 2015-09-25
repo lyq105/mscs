@@ -1,10 +1,10 @@
 //===========================================================================
 // CMCell.h
-// ¸´ºÏ²ÄÁÏµ¥°ûÀàÍ·ÎÄ¼ş
+// å¤åˆææ–™å•èƒç±»å¤´æ–‡ä»¶
 // A Class of Cell of Composite Material
 //
-// ¸´ºÏ²ÄÁÏµ¥°ûµÄ¶¨Òå£º°üÀ¨»ùÌåºÍÔöÇ¿²ÄÁÏµÄĞÅÏ¢ºÍ¼¸ºÎ²ÎÊı
-// ¸´ºÏ²ÄÁÏµ¥°ûÀàÊÇÒ»¸ö»ùÀà£¬Ö®ºó½«ÓÉËüÅÉÉú³öĞí¶à×ÓÀà
+// å¤åˆææ–™å•èƒçš„å®šä¹‰ï¼šåŒ…æ‹¬åŸºä½“å’Œå¢å¼ºææ–™çš„ä¿¡æ¯å’Œå‡ ä½•å‚æ•°
+// å¤åˆææ–™å•èƒç±»æ˜¯ä¸€ä¸ªåŸºç±»ï¼Œä¹‹åå°†ç”±å®ƒæ´¾ç”Ÿå‡ºè®¸å¤šå­ç±»
 //===========================================================================
 
 #ifndef CMCELL_H
@@ -18,34 +18,34 @@ using namespace hns;
 class CMCell
 {
 	public:
-		//¹¹Ôìº¯Êı
+		//æ„é€ å‡½æ•°
 		CMCell(double length=0, double width=0, double height=0); 
-		//Ğéº¯Êı
-		virtual double length();						//·µ»Øµ¥°ûµÄ³¤
-		virtual double width(); 						//·µ»Øµ¥°ûµÄ¿í
-		virtual double height() ;						//·µ»Øµ¥°ûµÄ¸ß
+		//è™šå‡½æ•°
+		virtual double length();						//è¿”å›å•èƒçš„é•¿
+		virtual double width(); 						//è¿”å›å•èƒçš„å®½
+		virtual double height() ;						//è¿”å›å•èƒçš„é«˜
 
-		virtual int get_mat_num();						//·µ»Ø²ÄÁÏÖÖÀàÊı
+		virtual int get_mat_num();						//è¿”å›ææ–™ç§ç±»æ•°
 
-		virtual double volume();						//·µ»Øµ¥°ûµÄÌå»ı
+		virtual double volume();						//è¿”å›å•èƒçš„ä½“ç§¯
 
 		void set_origin(double x,double y,double z);
-		void print();									//Êä³öµ¥°ûĞÅÏ¢
+		void print();									//è¾“å‡ºå•èƒä¿¡æ¯
 
-		//µ¥°ûµÄ¼¸ºÎ²ÎÊı
+		//å•èƒçš„å‡ ä½•å‚æ•°
 		double clength, cwidth, cheight;
-		double origin_x,origin_y,origin_z;				//µ¥°ûÆğµã×ø±ê
+		double origin_x,origin_y,origin_z;				//å•èƒèµ·ç‚¹åæ ‡
 		double Unitcell_V;
 
-		vector<Point> points_vec;						//´æ´¢µãµÄĞÅÏ¢£¬Ê×ÏÈÊÇµ¥°ûÁ¢·½ÌåµÄ8¸ö¶¥µã
-		vector<Line>  lines_vec;							//´æ´¢ËùÓĞµÄÏß¶ÎĞÅÏ¢, Ê×ÏÈÊÇµ¥°ûÁ¢·½ÌåµÄ12Ìõ±ßÏß¶ÎĞÅÏ¢  
-		vector<Surface*> surfaces_vec;				//´æ´¢ËùÓĞµÄÃæĞÅÏ¢, ÔöÇ¿ÏîµÄ½çÃæ
+		vector<Point> points_vec;						//å­˜å‚¨ç‚¹çš„ä¿¡æ¯ï¼Œé¦–å…ˆæ˜¯å•èƒç«‹æ–¹ä½“çš„8ä¸ªé¡¶ç‚¹
+		vector<Line>  lines_vec;							//å­˜å‚¨æ‰€æœ‰çš„çº¿æ®µä¿¡æ¯, é¦–å…ˆæ˜¯å•èƒç«‹æ–¹ä½“çš„12æ¡è¾¹çº¿æ®µä¿¡æ¯  
+		vector<Surface*> surfaces_vec;				//å­˜å‚¨æ‰€æœ‰çš„é¢ä¿¡æ¯, å¢å¼ºé¡¹çš„ç•Œé¢
 
 	protected:                
 		int material_num ;
 
 	private:
-		void generate();       //Éú³Éµ¥°ûÁ¢·½ÌåµÄ8¸ö¶¥µãºÍ12Ìõ±ßĞÅÏ¢
+		void generate();       //ç”Ÿæˆå•èƒç«‹æ–¹ä½“çš„8ä¸ªé¡¶ç‚¹å’Œ12æ¡è¾¹ä¿¡æ¯
 };
 
 //---------------------------------------------------------------------------

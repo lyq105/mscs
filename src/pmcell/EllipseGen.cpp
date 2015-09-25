@@ -88,11 +88,11 @@ int EllipseGen::uniell_generation(string input_file, string out_file, string dat
 
 	istrstream istr0(get_line(input_stream,rline));
         istr0 >> leftbar >> rightbar >> backbar >> formbar
-			  >> downbar >> upbar;//³¤·½ÌåÇøÓòµÄÁùÌõ±ß
+			  >> downbar >> upbar;//é•¿æ–¹ä½“åŒºåŸŸçš„å…­æ¡è¾¹
 	
 
 	istrstream istr2(get_line(input_stream,rline));
-        istr2 >> distribution_sign1;//Çã½Ç·Ö²¼ĞÅÏ¢£¬È¡0Îª¾ùÔÈ·Ö²¼£¬È¡1ÎªÕıÌ¬·Ö²¼
+        istr2 >> distribution_sign1;//å€¾è§’åˆ†å¸ƒä¿¡æ¯ï¼Œå–0ä¸ºå‡åŒ€åˆ†å¸ƒï¼Œå–1ä¸ºæ­£æ€åˆ†å¸ƒ
 
 
 	//ofstream output_stream;
@@ -104,16 +104,16 @@ int EllipseGen::uniell_generation(string input_file, string out_file, string dat
 	//	return 0;
 	//}
 
-	//output_stream <<"%ÍÖÇòµÄ¸öÊı" <<endl;
+	//output_stream <<"%æ¤­çƒçš„ä¸ªæ•°" <<endl;
 	//output_stream <<1<<endl;
 
- //   //Êä³öµ¥°ûÎ»ÖÃºÍ³ß´ç
-	//output_stream <<"%µ¥°ûÁù¸ö±ß" <<endl;
+ //   //è¾“å‡ºå•èƒä½ç½®å’Œå°ºå¯¸
+	//output_stream <<"%å•èƒå…­ä¸ªè¾¹" <<endl;
 	//output_stream  <<leftbar <<" " <<rightbar<<" "<<backbar<<" "<<formbar <<" "<<downbar <<" "
 	//	          <<upbar <<endl;
 
- ////Êä³öÍÖÇò18¸ö²ÎÊı£¨²ÎÊı·½³Ì£ºÍÖÇòÖĞĞÄ×ø±ê£¨3¸ö£©¡¢±ß½ç²ãºñ¶È£¨3¸ö£©¡¢³ß´ç£¨3¸ö£©¡¢·½Î»½Ç£¨9¸ö£©£©
-	//output_stream <<"%Êä³öÍÖÇò18¸ö²ÎÊı:ÍÖÇòÖĞĞÄ×ø±ê¡¢±ß½ç²ãºñ¶È¡¢³ß´ç¡¢·½Î»½Ç" <<endl;
+ ////è¾“å‡ºæ¤­çƒ18ä¸ªå‚æ•°ï¼ˆå‚æ•°æ–¹ç¨‹ï¼šæ¤­çƒä¸­å¿ƒåæ ‡ï¼ˆ3ä¸ªï¼‰ã€è¾¹ç•Œå±‚åšåº¦ï¼ˆ3ä¸ªï¼‰ã€å°ºå¯¸ï¼ˆ3ä¸ªï¼‰ã€æ–¹ä½è§’ï¼ˆ9ä¸ªï¼‰ï¼‰
+	//output_stream <<"%è¾“å‡ºæ¤­çƒ18ä¸ªå‚æ•°:æ¤­çƒä¸­å¿ƒåæ ‡ã€è¾¹ç•Œå±‚åšåº¦ã€å°ºå¯¸ã€æ–¹ä½è§’" <<endl;
 
 	//for(int k=0;k<1;k++)
 	//{
@@ -143,14 +143,14 @@ int EllipseGen::uniell_generation(string input_file, string out_file, string dat
 
 	
 	istrstream istr3(get_line(input_stream,rline));
-        istr3 >> distribution_sign2;//ÖĞĞÄ·Ö²¼ĞÅÏ¢£¬È¡0Îª¾ùÔÈ·Ö²¼£¬1ÎªÕıÌ¬·Ö²¼£¬2ÎªÖ¸Êı·Ö²¼
+        istr3 >> distribution_sign2;//ä¸­å¿ƒåˆ†å¸ƒä¿¡æ¯ï¼Œå–0ä¸ºå‡åŒ€åˆ†å¸ƒï¼Œ1ä¸ºæ­£æ€åˆ†å¸ƒï¼Œ2ä¸ºæŒ‡æ•°åˆ†å¸ƒ
 
 	/*if(distribution_sign2==0)
     	uniform(input_stream,out_file);
 	else*/
 	if(no_uniform(distribution_sign2,input_stream,out_file, data_file)==0)
 	{
-		hout << "¿ÉÄÜÊÇÌå»ı·ÖÊı²»¹»£¡" << endl;
+		hout << "å¯èƒ½æ˜¯ä½“ç§¯åˆ†æ•°ä¸å¤Ÿï¼" << endl;
 		return 0;
 	}
 	
@@ -168,31 +168,31 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 	int e_num=0,f_num=0,c_num=0;
 	int n,num=0;
 	int norm1,norm2,norm4,norm5;
-	int f_e_c_division;    //ÈôÒªÉú³ÉÏËÎ¬È¡0£¬ÈôÒªÉú³ÉÍÖÇòÈ¡1£¬ÈôÒªÉú³É±¡Ç®±Ò¿ÅÁ£È¡2
+	int f_e_c_division;    //è‹¥è¦ç”Ÿæˆçº¤ç»´å–0ï¼Œè‹¥è¦ç”Ÿæˆæ¤­çƒå–1ï¼Œè‹¥è¦ç”Ÿæˆè–„é’±å¸é¢—ç²’å–2
 	double *ixseed,*iyseed,*izseed;
 	double dz,dy,dx;
 	char rline[250];
-	int shape_sign1,shape_sign2,shape_sign3;//shape1È¡1±íÊ¾´æÔÚÏËÎ¬¿ÅÁ££¬È¡0±íÊ¾²»´æÔÚ
-                                                // Í¬Àí£¬shape2,shape3È¡1´ú±íÍÖÇò¿ÅÁ£ÒÔ¼°±¡Ç®±Ò¿ÅÁ£´æÔÚ£¬·ñÔò²»´æÔÚ
+	int shape_sign1,shape_sign2,shape_sign3;//shape1å–1è¡¨ç¤ºå­˜åœ¨çº¤ç»´é¢—ç²’ï¼Œå–0è¡¨ç¤ºä¸å­˜åœ¨
+                                                // åŒç†ï¼Œshape2,shape3å–1ä»£è¡¨æ¤­çƒé¢—ç²’ä»¥åŠè–„é’±å¸é¢—ç²’å­˜åœ¨ï¼Œå¦åˆ™ä¸å­˜åœ¨
 	struct parameter0 **elliptic[3],*p0;
 	struct parameter *p1,*p2;
 
-/***********************È·¶¨ÓĞ¼¸ÖÖĞÎÌ¬µÄ¿ÅÁ££¬²¢¶ÁÈ¡Ïà¹ØµÄ²ÎÊı*************************/
+/***********************ç¡®å®šæœ‰å‡ ç§å½¢æ€çš„é¢—ç²’ï¼Œå¹¶è¯»å–ç›¸å…³çš„å‚æ•°*************************/
 
    istrstream istr1(get_line(input_stream,rline));
    istr1 >>shape_sign1 >>shape_sign2 >>shape_sign3 ;
  
-  /*ÊäÈëÏËÎ¬µÄamin amax bmin cmin gamamin gamamax miumin miumax*/
-//ÏËÎ¬³¤Öáa·ş´Ó(famin,famax)µÄ¾ùÔÈ·Ö²¼,ÖĞÖábÈ¡fb,¶ÌÖácÓëbÍ¬
- //³¤ÖáaÓëzÖáµÄ¼Ğ½Ç·ş´Ó(fgamamin,fgamamax)µÄ¾ùÔÈ·Ö²¼,aÔÚxoyÃæÉÏÍ¶Ó°ÓëxÖáµÄ¼Ğ½Ç·ş´Ó(fmiumin,fmiumax)µÄ¾ùÔÈ·Ö²¼ 
+  /*è¾“å…¥çº¤ç»´çš„amin amax bmin cmin gamamin gamamax miumin miumax*/
+//çº¤ç»´é•¿è½´aæœä»(famin,famax)çš„å‡åŒ€åˆ†å¸ƒ,ä¸­è½´bå–fb,çŸ­è½´cä¸båŒ
+ //é•¿è½´aä¸zè½´çš„å¤¹è§’æœä»(fgamamin,fgamamax)çš„å‡åŒ€åˆ†å¸ƒ,aåœ¨xoyé¢ä¸ŠæŠ•å½±ä¸xè½´çš„å¤¹è§’æœä»(fmiumin,fmiumax)çš„å‡åŒ€åˆ†å¸ƒ 
   if(shape_sign1==1)
   {
 	  istrstream istr20(get_line(input_stream,rline));
       istr20 >> famin >>famax >>fb ;
   }
-  /*ÊäÈëÍÖÇòÌåµÄamin amax bmin cmin gamamin gamamax miumin miumax*/
-//ÍÖÇò³¤Öáa·ş´Ó(eamin,eamax)µÄ¾ùÔÈ·Ö²¼,ÖĞÖáb·ş´Ó(ebmin,a)µÄ¾ùÔÈ·Ö²¼,¶ÌÖác·ş´Ó(ecmin,b)µÄ¾ùÔÈ·Ö²¼
- //³¤ÖáaÓëzÖáµÄ¼Ğ½Ç·ş´Ó(egamamin,egamamax)µÄ¾ùÔÈ·Ö²¼,aÔÚxoyÃæÉÏÍ¶Ó°ÓëxÖáµÄ¼Ğ½Ç·ş´Ó(emiumin,emiumax)µÄ¾ùÔÈ·Ö²¼
+  /*è¾“å…¥æ¤­çƒä½“çš„amin amax bmin cmin gamamin gamamax miumin miumax*/
+//æ¤­çƒé•¿è½´aæœä»(eamin,eamax)çš„å‡åŒ€åˆ†å¸ƒ,ä¸­è½´bæœä»(ebmin,a)çš„å‡åŒ€åˆ†å¸ƒ,çŸ­è½´cæœä»(ecmin,b)çš„å‡åŒ€åˆ†å¸ƒ
+ //é•¿è½´aä¸zè½´çš„å¤¹è§’æœä»(egamamin,egamamax)çš„å‡åŒ€åˆ†å¸ƒ,aåœ¨xoyé¢ä¸ŠæŠ•å½±ä¸xè½´çš„å¤¹è§’æœä»(emiumin,emiumax)çš„å‡åŒ€åˆ†å¸ƒ
   if(shape_sign2==1)
   {
 	  istrstream istr21(get_line(input_stream,rline));
@@ -200,18 +200,18 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 	  
   }
   /****************************************/
-  /*ÊäÈë±¡Ç®±Ò¿ÅÁ£µÄamin amax bmin cmin gamamin gamamax miumin miumax*/
-//±¡Ç®±Ò¿ÅÁ£³¤Öáa·ş´Ó(camin,camax)µÄ¾ùÔÈ·Ö²¼,ÖĞÖáb·ş´Ó(cbmin,a),¶ÌÖácÈ¡cc
- //³¤ÖáaÓëzÖáµÄ¼Ğ½Ç·ş´Ó(cgamamin,cgamamax)µÄ¾ùÔÈ·Ö²¼,aÔÚxoyÃæÉÏÍ¶Ó°ÓëxÖáµÄ¼Ğ½Ç·ş´Ó(cmiumin,cmiumax)µÄ¾ùÔÈ·Ö²¼
+  /*è¾“å…¥è–„é’±å¸é¢—ç²’çš„amin amax bmin cmin gamamin gamamax miumin miumax*/
+//è–„é’±å¸é¢—ç²’é•¿è½´aæœä»(camin,camax)çš„å‡åŒ€åˆ†å¸ƒ,ä¸­è½´bæœä»(cbmin,a),çŸ­è½´cå–cc
+ //é•¿è½´aä¸zè½´çš„å¤¹è§’æœä»(cgamamin,cgamamax)çš„å‡åŒ€åˆ†å¸ƒ,aåœ¨xoyé¢ä¸ŠæŠ•å½±ä¸xè½´çš„å¤¹è§’æœä»(cmiumin,cmiumax)çš„å‡åŒ€åˆ†å¸ƒ
   if(shape_sign3==1)
   {
 	  istrstream istr22(get_line(input_stream,rline));
       istr22 >> camin >>camax >>cbmin >>cc;
   }
 
-/*********************¿ÅÁ£ĞÎÌ¬È·¶¨Íê±Ï**********************************************/
+/*********************é¢—ç²’å½¢æ€ç¡®å®šå®Œæ¯•**********************************************/
 
- //¿ÅÁ£·½Ïò²ÎÊıµÄ¶ÁÈ¡
+ //é¢—ç²’æ–¹å‘å‚æ•°çš„è¯»å–
   if(distribution_sign1==0)
   {
 	  istrstream istr30(get_line(input_stream,rline));
@@ -224,16 +224,16 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 
   }
 
-  //ÏËÎ¬£¬ÍÖÇò£¬±¡Ç®±Ò¿ÅÁ£µÄ¸öÊı±ÈÎªfm:em:cm
+  //çº¤ç»´ï¼Œæ¤­çƒï¼Œè–„é’±å¸é¢—ç²’çš„ä¸ªæ•°æ¯”ä¸ºfm:em:cm
   istrstream istr4(get_line(input_stream,rline));
       istr4 >> fm >>em >>cm ;
-  /*****************ÊäÈë³¤·½ÌåÇøÓò²ÎÊı**********************************/
+  /*****************è¾“å…¥é•¿æ–¹ä½“åŒºåŸŸå‚æ•°**********************************/
   
  
   m=fm+em+cm;
   
   
-  b_aver=(fb*fm/(fm+em+cm)+ebmin*em/(fm+em+cm)+cbmin*cm/(fm+em+cm)); //Ã¿Ò»ĞĞ¿ÉÄÜÈİÄÉ¿ÅÁ£µÄ×î¶à¸öÊıÓÉÆä¾ö¶¨ 
+  b_aver=(fb*fm/(fm+em+cm)+ebmin*em/(fm+em+cm)+cbmin*cm/(fm+em+cm)); //æ¯ä¸€è¡Œå¯èƒ½å®¹çº³é¢—ç²’çš„æœ€å¤šä¸ªæ•°ç”±å…¶å†³å®š 
 
   int sum=0;
   if(shape_sign1==1)
@@ -263,9 +263,9 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
   upbar1=upbar;
   backbar1=backbar;
   formbar1=formbar;
-  //ÉêÇë¿Õ¼ä
+  //ç”³è¯·ç©ºé—´
 
-//elliptic[2]´æ´¢´ıÉú³É²ãµÄ¿ÅÁ££¬elliptic[0]£¬elliptic[1]´æ´¢´Ë²ãÇ°1²ã£¬Ç°2²ãµÄ¿ÅÁ£
+//elliptic[2]å­˜å‚¨å¾…ç”Ÿæˆå±‚çš„é¢—ç²’ï¼Œelliptic[0]ï¼Œelliptic[1]å­˜å‚¨æ­¤å±‚å‰1å±‚ï¼Œå‰2å±‚çš„é¢—ç²’
 
   for(k=0;k<=2;k++)
   {
@@ -288,12 +288,12 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 
   for(k1=0;k1<=1;k1++)
   {
-     total_xmin[k1]=(double *)malloc(N2*sizeof(double));//´æ´¢´ıÉú³É²ãµÄÇ°1²ã£¬Ç°2²ãÃ¿ÁĞxµÄ×îĞ¡Öµ
-     total_xmax[k1]=(double *)malloc(N2*sizeof(double));//´æ´¢´ıÉú³É²ãµÄÇ°1²ã£¬Ç°2²ãÃ¿ÁĞxµÄ×î´óÖµ
-     total_ymin[k1]=(double *)malloc(N1*sizeof(double));//´æ´¢´ıÉú³É²ãµÄÇ°1²ã£¬Ç°2²ãÃ¿ÁĞyµÄ×îĞ¡Öµ
-     total_ymax[k1]=(double *)malloc(N1*sizeof(double));//´æ´¢´ıÉú³É²ãµÄÇ°1²ã£¬Ç°2²ãÃ¿ÁĞyµÄ×î´óÖµ
+     total_xmin[k1]=(double *)malloc(N2*sizeof(double));//å­˜å‚¨å¾…ç”Ÿæˆå±‚çš„å‰1å±‚ï¼Œå‰2å±‚æ¯åˆ—xçš„æœ€å°å€¼
+     total_xmax[k1]=(double *)malloc(N2*sizeof(double));//å­˜å‚¨å¾…ç”Ÿæˆå±‚çš„å‰1å±‚ï¼Œå‰2å±‚æ¯åˆ—xçš„æœ€å¤§å€¼
+     total_ymin[k1]=(double *)malloc(N1*sizeof(double));//å­˜å‚¨å¾…ç”Ÿæˆå±‚çš„å‰1å±‚ï¼Œå‰2å±‚æ¯åˆ—yçš„æœ€å°å€¼
+     total_ymax[k1]=(double *)malloc(N1*sizeof(double));//å­˜å‚¨å¾…ç”Ÿæˆå±‚çš„å‰1å±‚ï¼Œå‰2å±‚æ¯åˆ—yçš„æœ€å¤§å€¼
   }
-  //ÇåÁã
+  //æ¸…é›¶
   for(k1=0;k1<=1;k1++)
 	  for(i1=0;i1<N2;i1++)
 	  {
@@ -350,20 +350,20 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 
 	 n=0; 
 	 head=NULL;
-//////****************************************** ÍÖÇòµÄ¶¨Î»******************************************************//////
+//////****************************************** æ¤­çƒçš„å®šä½******************************************************//////
      for(k=0;;k++)
 	 {
 		 
-		 norm1=1;//¿ÅÁ£µÄz×î´óÖµ´óÓÚupbar1Ê± Îª1£¬ÓÃÓÚÅĞ¶ÏÍÖÇòÉú³ÉÊÇ·ñÍê±Ï
+		 norm1=1;//é¢—ç²’çš„zæœ€å¤§å€¼å¤§äºupbar1æ—¶ ä¸º1ï¼Œç”¨äºåˆ¤æ–­æ¤­çƒç”Ÿæˆæ˜¯å¦å®Œæ¯•
 		
 		for(j=0;;j++)
 		{
-			 norm2=1;//¿ÅÁ£y×î´óÖµ´óÓÚformbar1Ê±Îª1£¬ÓÃÓÚÅĞ¶Ï´Ë²ãÍÖÇòÊÇ·ñÉú³ÉÍê±Ï
+			 norm2=1;//é¢—ç²’yæœ€å¤§å€¼å¤§äºformbar1æ—¶ä¸º1ï¼Œç”¨äºåˆ¤æ–­æ­¤å±‚æ¤­çƒæ˜¯å¦ç”Ÿæˆå®Œæ¯•
 			for(i=0;;i++)
 			{
-				norm4=1;//ÈôÍÖÇòÂú×ã²åÈëÏÂÒ»²ãµÄÌõ¼şÔòÈ¡0
-				norm5=1;//ÈôÍÖÇòÂú×ã²åÈëÏÂÒ»ĞĞµÄÌõ¼şÔòÈ¡0
-				//ĞÎ³ÉÁ´±í
+				norm4=1;//è‹¥æ¤­çƒæ»¡è¶³æ’å…¥ä¸‹ä¸€å±‚çš„æ¡ä»¶åˆ™å–0
+				norm5=1;//è‹¥æ¤­çƒæ»¡è¶³æ’å…¥ä¸‹ä¸€è¡Œçš„æ¡ä»¶åˆ™å–0
+				//å½¢æˆé“¾è¡¨
 				{
 					n=n+1;
 					if(n==1)
@@ -431,7 +431,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 				}
 
 
-///*********************************************xµÄµÚÒ»´Î¶¨Î»******************************************************///
+///*********************************************xçš„ç¬¬ä¸€æ¬¡å®šä½******************************************************///
 				if(i==0)
 				{//printf("%lf %lf %lf %lf\n",cos((*p0).alpha1),cos((*p0).alpha2),(*p0).alpha3,(*p0).A);
 				
@@ -448,16 +448,16 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 							initialx=i1;
 							break;
 						}
-					finalx=i-1;//Óëµ±Ç°ÍÖÇò¶¨Î»Ïà¹ØµÄµ±Ç°ĞĞÍÖÇò£¬´ÓµÚinitialx¸öµ½µÚfinalx¸ö
+					finalx=i-1;//ä¸å½“å‰æ¤­çƒå®šä½ç›¸å…³çš„å½“å‰è¡Œæ¤­çƒï¼Œä»ç¬¬initialxä¸ªåˆ°ç¬¬finalxä¸ª
 
 					(*p0).center_x=elliptic[2][j][i-1].xmax+sqrt((*p0).A);
 					(*p0).xmin=(*p0).center_x-sqrt((*p0).A);
 					(*p0).xmax=(*p0).center_x+sqrt((*p0).A);
 						         
 				}
-///*********************************************xµÄµÚÒ»´Î¶¨Î»½áÊø******************************************************///
+///*********************************************xçš„ç¬¬ä¸€æ¬¡å®šä½ç»“æŸ******************************************************///
 
-////*********************************************yµÄµÚÒ»´Î¶¨Î»******************************************************///
+////*********************************************yçš„ç¬¬ä¸€æ¬¡å®šä½******************************************************///
 				if(j==0)
 				{
 					(*p0).center_y=unifrnd(backbar1,backbar1+a_aver,iyseed);
@@ -466,7 +466,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 				}
 				else
 				{
-                    //jÎªµ±Ç°ĞĞ£¬Óëµ±Ç°¿ÅÁ£¶¨Î»Ïà¹ØµÄµÚj-2ĞĞ¿ÅÁ££¬´ÓµÚinitialy[0]¸öµ½µÚfinaly[0]¸ö
+                    //jä¸ºå½“å‰è¡Œï¼Œä¸å½“å‰é¢—ç²’å®šä½ç›¸å…³çš„ç¬¬j-2è¡Œé¢—ç²’ï¼Œä»ç¬¬initialy[0]ä¸ªåˆ°ç¬¬finaly[0]ä¸ª
 					if(j>=2)
 					{
 						if(i==0)
@@ -500,7 +500,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 					}
 
                    if(j>=1)
-					{////jÎªµ±Ç°ĞĞ£¬Óëµ±Ç°¿ÅÁ£¶¨Î»Ïà¹ØµÄµÚj-1ĞĞ¿ÅÁ££¬´ÓµÚinitialy[1]¸öµ½µÚfinaly[1]¸ö
+					{////jä¸ºå½“å‰è¡Œï¼Œä¸å½“å‰é¢—ç²’å®šä½ç›¸å…³çš„ç¬¬j-1è¡Œé¢—ç²’ï¼Œä»ç¬¬initialy[1]ä¸ªåˆ°ç¬¬finaly[1]ä¸ª
 		    			if(i==0)
 		    				initialy[1]=0;
 		    			else
@@ -533,11 +533,11 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
                     (*p0).ymin=(*p0).center_y-sqrt((*p0).B);
 					(*p0).ymax=(*p0).center_y+sqrt((*p0).B);
 				}
-///********************************************yµÄµÚÒ»´Î¶¨Î»½áÊø*********************************************///
+///********************************************yçš„ç¬¬ä¸€æ¬¡å®šä½ç»“æŸ*********************************************///
 				
-///***********************************************zµÄµÚÒ»´Î¶¨Î»************************************************///
+///***********************************************zçš„ç¬¬ä¸€æ¬¡å®šä½************************************************///
 
-/*********************ÒÔÏÂÈ·¶¨µ±Ç°ÍÖÇòËùÄÜÒÆ¶¯µÄ·¶Î§£¬x0,x1Îªx·¶Î§£¬y0,y1ÎªyµÄ·¶Î§*******************************************/
+/*********************ä»¥ä¸‹ç¡®å®šå½“å‰æ¤­çƒæ‰€èƒ½ç§»åŠ¨çš„èŒƒå›´ï¼Œx0,x1ä¸ºxèŒƒå›´ï¼Œy0,y1ä¸ºyçš„èŒƒå›´*******************************************/
 				if(k==0)
 				{
 					(*p0).center_z=unifrnd(downbar1,downbar1+a_aver,izseed);
@@ -576,7 +576,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 								y0=elliptic[2][j-2][i1].ymin;
 					}*/
 
-/*********************ÒÔÏÂÈ·¶¨µÚk-1ĞĞÍÖÔ²ÖĞÓë´ËÍÖÔ²¶¨Î»ÓĞ¹ØµÄËùÓĞÍÖÔ²*******************************************/
+/*********************ä»¥ä¸‹ç¡®å®šç¬¬k-1è¡Œæ¤­åœ†ä¸­ä¸æ­¤æ¤­åœ†å®šä½æœ‰å…³çš„æ‰€æœ‰æ¤­åœ†*******************************************/
 			    	for(i1=0;i1<N2;i1++)
 					{
 		   				if(total_xmax[1][i1]>x0)
@@ -629,7 +629,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 					}
 
 
-/*ÒÔÏÂÈ·¶¨µÚk-2ĞĞÍÖÔ²ÖĞÓë´ËÍÖÔ²¶¨Î»ÓĞ¹ØµÄËùÓĞÍÖÔ²£¬µÚinitialkz[0]ÁĞµ½µÚfinalkz[0]ÁĞ£¬µÚinitialwz[0]ĞĞµ½µÚfinalwz[0]ĞĞ****/
+/*ä»¥ä¸‹ç¡®å®šç¬¬k-2è¡Œæ¤­åœ†ä¸­ä¸æ­¤æ¤­åœ†å®šä½æœ‰å…³çš„æ‰€æœ‰æ¤­åœ†ï¼Œç¬¬initialkz[0]åˆ—åˆ°ç¬¬finalkz[0]åˆ—ï¼Œç¬¬initialwz[0]è¡Œåˆ°ç¬¬finalwz[0]è¡Œ****/
 					if(k>=2)
 					{
 						for(i1=0;i1<N2;i1++)
@@ -693,11 +693,11 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 
 				
 				}
-///*************************************zµÄµÚÒ»´Î¶¨Î»½áÊø************************************************************///		    
+///*************************************zçš„ç¬¬ä¸€æ¬¡å®šä½ç»“æŸ************************************************************///		    
 
-///**************************************µÚ¶ş´Î¶¨Î»***************************************************************///
+///**************************************ç¬¬äºŒæ¬¡å®šä½***************************************************************///
 				do
-				{//dx,dy,dzÎªÓÃ´Ë·½·¨µ±È»ÍÖÇòÔÚ¸÷¸ö·½ÏòËùÄÜÒÆ¶¯µÄ¾àÀë
+				{//dx,dy,dzä¸ºç”¨æ­¤æ–¹æ³•å½“ç„¶æ¤­çƒåœ¨å„ä¸ªæ–¹å‘æ‰€èƒ½ç§»åŠ¨çš„è·ç¦»
                     if(k>0)
 	            	    dz=secondsettlez(elliptic,k,j,i);
 			    	 else
@@ -736,9 +736,9 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 				 
 
 				                                    
-///*****************************************************¶ş´Î¶¨Î»½áÊø*******************************************///
+///*****************************************************äºŒæ¬¡å®šä½ç»“æŸ*******************************************///
 
-				 	{//µ±È»ÍÖÇòÈôÂú×ã²åÈëµÄÌõ¼ş£¬Ôò²åÈëÉÏÒ»²ã»òÉÏÒ»ĞĞ
+				 	{//å½“ç„¶æ¤­çƒè‹¥æ»¡è¶³æ’å…¥çš„æ¡ä»¶ï¼Œåˆ™æ’å…¥ä¸Šä¸€å±‚æˆ–ä¸Šä¸€è¡Œ
 						double limitz;
 						double limity;
 						limitz=0;
@@ -786,7 +786,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 								
 					}
 					//printf("norm4 norm5 %d,%d\n",norm4,norm5);
-				{//µ±Ç°ÍÖÇò²åÈëµ½Á´±í
+				{//å½“å‰æ¤­çƒæ’å…¥åˆ°é“¾è¡¨
 					(*p2).a=elliptic[2][j][i].a;
 					(*p2).al=elliptic[2][j][i].al;
                     (*p2).b=elliptic[2][j][i].b;
@@ -812,14 +812,14 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 	//	printf("%d %d %d %d %d %lf %lf %lf\n",norm4,norm5,k,j,i,(*p0).center_z,(*p0).center_y,(*p0).center_x);
 
 					if(norm4==0||norm5==0)
-					{//Èôµ±Ç°ÍÖÇò²åÈëÉÏÒ»²ã»òÕßÉÏÒ»ĞĞÔòÖØĞÂÉú³Éµ±È»ÍÖÇò
+					{//è‹¥å½“å‰æ¤­çƒæ’å…¥ä¸Šä¸€å±‚æˆ–è€…ä¸Šä¸€è¡Œåˆ™é‡æ–°ç”Ÿæˆå½“ç„¶æ¤­çƒ
 						i=i-1;
 						continue;
 					}
 				}
 
-				//µ±µ±Ç°ÍÖÇòµÄxmax>=rightbar1£¬Ôò¿ªÊ¼Éú³ÉÏÂÒ»ĞĞ£»µ±Ç°ĞĞµÄËùÓĞÍÖÇòµÄymax>=formbar1,Ôò¿ªÊ¼Éú³ÉÏÂÒ»²ã£»
-				//Èôµ±Ç°²ãµÄËùÓĞÍÖÇòµÄzmax¡µ=upbar1,ÔòÉú³É½áÊø
+				//å½“å½“å‰æ¤­çƒçš„xmax>=rightbar1ï¼Œåˆ™å¼€å§‹ç”Ÿæˆä¸‹ä¸€è¡Œï¼›å½“å‰è¡Œçš„æ‰€æœ‰æ¤­çƒçš„ymax>=formbar1,åˆ™å¼€å§‹ç”Ÿæˆä¸‹ä¸€å±‚ï¼›
+				//è‹¥å½“å‰å±‚çš„æ‰€æœ‰æ¤­çƒçš„zmaxã€‰=upbar1,åˆ™ç”Ÿæˆç»“æŸ
 				if(elliptic[2][j][i].zmax<upbar1)
 					norm1=0;
 				if(elliptic[2][j][i].ymax<formbar1)
@@ -846,7 +846,7 @@ int EllipseGen::compact_elli(ifstream& input_stream,int distribution_sign1)
 	        		replace(&elliptic[1][j1][i1],&elliptic[2][j1][i1]);
 				}
 
-				//Ã¿Ò»ÅÅÖĞ£¬Ã¿Ò»ĞĞÒÔ¼°Ã¿Ò»ÁĞ£¬x,y×ÜµÄ×îĞ¡£¬×î´óÖµ
+				//æ¯ä¸€æ’ä¸­ï¼Œæ¯ä¸€è¡Œä»¥åŠæ¯ä¸€åˆ—ï¼Œx,yæ€»çš„æœ€å°ï¼Œæœ€å¤§å€¼
 			for(k1=0;k1<=1;k1++)
 			{
 				for(j1=0;j1<N1;j1++)
@@ -927,7 +927,7 @@ int EllipseGen::uniform(ifstream &input_stream, string outfile)
 	double p1,p2,q1,q2,r1,r2,p11,p22,q11,q22,r11,r22;
 	struct parameter *p0;
 
-//¾ùÔÈ·Ö²¼Ìå»ı°Ù·Öº¬Á¿µÄ¶ÁÈë£¨<½ô´Õ·Ö²¼Ìå»ı°Ù·Öº¬Á¿£©
+//å‡åŒ€åˆ†å¸ƒä½“ç§¯ç™¾åˆ†å«é‡çš„è¯»å…¥ï¼ˆ<ç´§å‡‘åˆ†å¸ƒä½“ç§¯ç™¾åˆ†å«é‡ï¼‰
 	char rline[250];
 	istrstream istr(get_line(input_stream,rline));
     istr >> neededrate;
@@ -951,8 +951,8 @@ int EllipseGen::uniform(ifstream &input_stream, string outfile)
 	ratemax=compactrate;
 	ratemin=0;
 
-    //½ô´Õ·Ö²¼Ìå»ı°Ù·Öº¬Á¿
-   printf("½ô´Õ·Ö²¼Ìå»ı°Ù·Öº¬Á¿ %lf\n",compactrate);
+    //ç´§å‡‘åˆ†å¸ƒä½“ç§¯ç™¾åˆ†å«é‡
+   printf("ç´§å‡‘åˆ†å¸ƒä½“ç§¯ç™¾åˆ†å«é‡ %lf\n",compactrate);
    
     if(neededrate<compactrate)
 		printf("The needed rate can be reached.\n");
@@ -1034,7 +1034,7 @@ int EllipseGen::uniform(ifstream &input_stream, string outfile)
 		}
 
 		double V_rate;
-		V_rate=(p22*r22*q22-p2*q2*r2)/((rightbar-leftbar)*(formbar-backbar)*(upbar-downbar));//¶ş·Ö·¨ÖĞÏàÁÚÁ©¸ö³¤·½ÌåÇøÓòÌå»ı±ÈÖ®²î
+		V_rate=(p22*r22*q22-p2*q2*r2)/((rightbar-leftbar)*(formbar-backbar)*(upbar-downbar));//äºŒåˆ†æ³•ä¸­ç›¸é‚»ä¿©ä¸ªé•¿æ–¹ä½“åŒºåŸŸä½“ç§¯æ¯”ä¹‹å·®
 		if(V_rate<0.00000000001)
 			break;
 	//	printf("V_rate r rmin rmax %lf %lf %lf %lf\n",V_rate,rate,ratemin,ratemax);
@@ -1045,7 +1045,7 @@ int EllipseGen::uniform(ifstream &input_stream, string outfile)
 	}while(fabs(rate-neededrate)>0.0001);
 
 	
-    printf("Âú×ãÒªÇóµÄÍÖÇòµÄ±ÈÂÊ rate %lf\n",rate);
+    printf("æ»¡è¶³è¦æ±‚çš„æ¤­çƒçš„æ¯”ç‡ rate %lf\n",rate);
 	realrate=rate;
 
 	needednumber=0;
@@ -1074,17 +1074,17 @@ int EllipseGen::uniform(ifstream &input_stream, string outfile)
 		return 0;
 	}
 
-	output_stream <<"%µ¥°ûÄÚ¿ÅÁ£¸öÊıºÍÌå»ı·ÖÊı" <<endl;
+	output_stream <<"%å•èƒå†…é¢—ç²’ä¸ªæ•°å’Œä½“ç§¯åˆ†æ•°" <<endl;
 	output_stream << needednumber << " " << rate << endl;
 
-    //Êä³öµ¥°ûÎ»ÖÃºÍ³ß´ç
-	output_stream <<"%µ¥°ûÆğÊ¼µã×ø±ê" <<endl;
+    //è¾“å‡ºå•èƒä½ç½®å’Œå°ºå¯¸
+	output_stream <<"%å•èƒèµ·å§‹ç‚¹åæ ‡" <<endl;
 	output_stream <<leftbar << " " <<backbar << " " <<downbar <<endl;
-	output_stream <<"%µ¥°û³¤¿í¸ß" <<endl;
+	output_stream <<"%å•èƒé•¿å®½é«˜" <<endl;
 	output_stream <<rightbar << " " <<formbar << " " <<upbar <<endl;
 
-	//Êä³öÍÖÇò15¸ö²ÎÊı£¨²ÎÊı·½³Ì£ºÍÖÇòÖĞĞÄ×ø±ê£¨3¸ö£©¡¢³ß´ç£¨3¸ö£©¡¢·½Î»½Ç£¨9¸ö£©£©
-	output_stream <<"%Êä³öÍÖÇò15¸ö²ÎÊı:ÍÖÇòÖĞĞÄ×ø±ê¡¢³ß´ç¡¢·½Î»½Ç" <<endl;
+	//è¾“å‡ºæ¤­çƒ15ä¸ªå‚æ•°ï¼ˆå‚æ•°æ–¹ç¨‹ï¼šæ¤­çƒä¸­å¿ƒåæ ‡ï¼ˆ3ä¸ªï¼‰ã€å°ºå¯¸ï¼ˆ3ä¸ªï¼‰ã€æ–¹ä½è§’ï¼ˆ9ä¸ªï¼‰ï¼‰
+	output_stream <<"%è¾“å‡ºæ¤­çƒ15ä¸ªå‚æ•°:æ¤­çƒä¸­å¿ƒåæ ‡ã€å°ºå¯¸ã€æ–¹ä½è§’" <<endl;
 
 
 	do
@@ -1160,7 +1160,7 @@ int EllipseGen::no_uniform(int distribution_sign2,ifstream& input_stream,string 
 
 	}
 
-	//·Ç¾ùÔÈ·Ö²¼Ìå»ı°Ù·Öº¬Á¿µÄ¶ÁÈë£¨<½ô´Õ·Ö²¼Ìå»ı°Ù·Öº¬Á¿£©
+	//éå‡åŒ€åˆ†å¸ƒä½“ç§¯ç™¾åˆ†å«é‡çš„è¯»å…¥ï¼ˆ<ç´§å‡‘åˆ†å¸ƒä½“ç§¯ç™¾åˆ†å«é‡ï¼‰
 	
 	istrstream istr1(get_line(input_stream,rline));
     istr1 >> neededrate ;
@@ -1246,7 +1246,7 @@ int EllipseGen::no_uniform(int distribution_sign2,ifstream& input_stream,string 
 		}
 
 	//------------------------------------------------------------------------------------------------------------------------
-	//Éú³ÉµÄ½ô´ÕÍÖÇò½á¹ûÊä³ö(080616º«·ÇÔö¼Ó)
+	//ç”Ÿæˆçš„ç´§å‡‘æ¤­çƒç»“æœè¾“å‡º(080616éŸ©éå¢åŠ )
 	//ofstream out_compact;
 	//out_compact.open("CompactResult.dat");
  //   if(!out_compact)
@@ -1254,15 +1254,15 @@ int EllipseGen::no_uniform(int distribution_sign2,ifstream& input_stream,string 
 	//	cout <<"Cannot open file.\n" <<"CompactResult.dat" <<endl;
 	//	return 0;
 	//}
-	//out_compact <<"%µ¥°ûÄÚ¿ÅÁ£¸öÊıºÍÌå»ı·ÖÊı" <<endl;
+	//out_compact <<"%å•èƒå†…é¢—ç²’ä¸ªæ•°å’Œä½“ç§¯åˆ†æ•°" <<endl;
 	//out_compact << compactnumber << endl;
- //   //Êä³öµ¥°ûÎ»ÖÃºÍ³ß´ç
-	//out_compact <<"%µ¥°ûÆğÊ¼µã×ø±ê" <<endl;
+ //   //è¾“å‡ºå•èƒä½ç½®å’Œå°ºå¯¸
+	//out_compact <<"%å•èƒèµ·å§‹ç‚¹åæ ‡" <<endl;
 	//out_compact <<leftbar << " " <<backbar << " " <<downbar <<endl;
-	//out_compact <<"%µ¥°û³¤¿í¸ß" <<endl;
+	//out_compact <<"%å•èƒé•¿å®½é«˜" <<endl;
 	//out_compact <<rightbar << " " <<formbar << " " <<upbar <<endl;
-	////Êä³öÍÖÇò15¸ö²ÎÊı£¨²ÎÊı·½³Ì£ºÍÖÇòÖĞĞÄ×ø±ê£¨3¸ö£©¡¢³ß´ç£¨3¸ö£©¡¢·½Î»½Ç£¨9¸ö£©£©
-	//out_compact <<"%Êä³öÍÖÇò15¸ö²ÎÊı:ÍÖÇòÖĞĞÄ×ø±ê¡¢³ß´ç¡¢·½Î»½Ç" <<endl;
+	////è¾“å‡ºæ¤­çƒ15ä¸ªå‚æ•°ï¼ˆå‚æ•°æ–¹ç¨‹ï¼šæ¤­çƒä¸­å¿ƒåæ ‡ï¼ˆ3ä¸ªï¼‰ã€å°ºå¯¸ï¼ˆ3ä¸ªï¼‰ã€æ–¹ä½è§’ï¼ˆ9ä¸ªï¼‰ï¼‰
+	//out_compact <<"%è¾“å‡ºæ¤­çƒ15ä¸ªå‚æ•°:æ¤­çƒä¸­å¿ƒåæ ‡ã€å°ºå¯¸ã€æ–¹ä½è§’" <<endl;
 	//for(j=0;j<compactnumber;j++)
 	//{
 	//	double X,Y,Z;
@@ -1365,7 +1365,7 @@ int EllipseGen::no_uniform(int distribution_sign2,ifstream& input_stream,string 
 	 ordery.push_back(i);
 	 orderz.push_back(i);
    }
-		//¶Ô±ÈÖµ½øĞĞÅÅĞò
+		//å¯¹æ¯”å€¼è¿›è¡Œæ’åº
   for(i=0;i<uninumber;i++)
   {   
 	  double cf;
@@ -1403,7 +1403,7 @@ int EllipseGen::no_uniform(int distribution_sign2,ifstream& input_stream,string 
 	  }
   }
 
-//Âú×ã¦Áifi(¦Îi(1))¡İ¦Ç µÄÍÖÇòĞòºÅ±£Áô
+//æ»¡è¶³Î±ifi(Î¾i(1))â‰¥Î· çš„æ¤­çƒåºå·ä¿ç•™
        vector<int>::iterator iter=orderx.begin();
         for(i=0;i<uninumber;i++)
 		{
@@ -1449,12 +1449,12 @@ int EllipseGen::no_uniform(int distribution_sign2,ifstream& input_stream,string 
 		  }
 		}
 	
-//¶ş·Ö·¨Ñ­»·È·¶¨Âú×ãÒªÇóµÄÍÖÇò
+//äºŒåˆ†æ³•å¾ªç¯ç¡®å®šæ»¡è¶³è¦æ±‚çš„æ¤­çƒ
 	mx=(int)orderx.size();
 	my=(int)ordery.size();
 	mz=(int)orderz.size();
 
-	k1=0;                        //Ñ­»·µÄ²½Êı
+	k1=0;                        //å¾ªç¯çš„æ­¥æ•°
 	int mzmin,mzmax;
 	mzmin=0;
 	mzmax=mz;
@@ -1494,7 +1494,7 @@ label1: ;
         
         if(k1==1)
 		{
-			hout << "×î´ó±ÈÂÊ£º" << rate << endl;
+			hout << "æœ€å¤§æ¯”ç‡ï¼š" << rate << endl;
     		if(neededrate<=rate)
                printf("The needed rate can be reached.\n");
             else 
@@ -1520,11 +1520,11 @@ label1: ;
 
 	}while(1);
 
-//	 printf("Êµ¼Ê±ÈÂÊrate=%lf\n",rate);
+//	 printf("å®é™…æ¯”ç‡rate=%lf\n",rate);
 
-	//ÊäÈëµ½Ñù±¾Êı¾İÎÄ¼ş
+	//è¾“å…¥åˆ°æ ·æœ¬æ•°æ®æ–‡ä»¶
 	ofstream out(data_file.c_str(),ios::app);
-	out <<"%µ¥°ûÄÚ¿ÅÁ£¸öÊıºÍÌå»ı·ÖÊı" << endl;
+	out <<"%å•èƒå†…é¢—ç²’ä¸ªæ•°å’Œä½“ç§¯åˆ†æ•°" << endl;
 	out << needednumber << " " << rate <<endl;
 	out.close();
 
@@ -1546,17 +1546,17 @@ label1: ;
 		return 0;
 	}
 
-	output_stream <<"%µ¥°ûÄÚ¿ÅÁ£¸öÊıºÍÌå»ı·ÖÊı" <<endl;
+	output_stream <<"%å•èƒå†…é¢—ç²’ä¸ªæ•°å’Œä½“ç§¯åˆ†æ•°" <<endl;
 	output_stream << needednumber << " " << rate << endl;
 
-    //Êä³öµ¥°ûÎ»ÖÃºÍ³ß´ç
-	output_stream <<"%µ¥°ûÆğÊ¼µã×ø±ê" <<endl;
+    //è¾“å‡ºå•èƒä½ç½®å’Œå°ºå¯¸
+	output_stream <<"%å•èƒèµ·å§‹ç‚¹åæ ‡" <<endl;
 	output_stream <<leftbar << " " <<backbar << " " <<downbar <<endl;
-	output_stream <<"%µ¥°û³¤¿í¸ß" <<endl;
+	output_stream <<"%å•èƒé•¿å®½é«˜" <<endl;
 	output_stream <<rightbar << " " <<formbar << " " <<upbar <<endl;
 
- //Êä³öÍÖÇò15¸ö²ÎÊı£¨²ÎÊı·½³Ì£ºÍÖÇòÖĞĞÄ×ø±ê£¨3¸ö£©¡¢³ß´ç£¨3¸ö£©¡¢·½Î»½Ç£¨9¸ö£©£©
-	output_stream <<"%Êä³öÍÖÇò15¸ö²ÎÊı:ÍÖÇòÖĞĞÄ×ø±ê¡¢³ß´ç¡¢·½Î»½Ç" <<endl;
+ //è¾“å‡ºæ¤­çƒ15ä¸ªå‚æ•°ï¼ˆå‚æ•°æ–¹ç¨‹ï¼šæ¤­çƒä¸­å¿ƒåæ ‡ï¼ˆ3ä¸ªï¼‰ã€å°ºå¯¸ï¼ˆ3ä¸ªï¼‰ã€æ–¹ä½è§’ï¼ˆ9ä¸ªï¼‰ï¼‰
+	output_stream <<"%è¾“å‡ºæ¤­çƒ15ä¸ªå‚æ•°:æ¤­çƒä¸­å¿ƒåæ ‡ã€å°ºå¯¸ã€æ–¹ä½è§’" <<endl;
 
 	for(j=0;j<needednumber;j++)
 	{
@@ -1640,7 +1640,7 @@ void EllipseGen::firstsettlez(struct parameter0 ***p,int k,int j,int i)
 };
 
  /**********************************************************************/
-  /*                    zµÄµÚ¶ş´Î¶¨Î»                                */
+  /*                    zçš„ç¬¬äºŒæ¬¡å®šä½                                */
  /**********************************************************************/
 
 double EllipseGen::secondsettlez(struct parameter0 ***p0,int k,int j,int i)
@@ -1851,14 +1851,14 @@ int EllipseGen::judgez(struct parameter0 *p1,struct parameter0 *p2,double x,doub
 
 
 /*******************************************************************************************************/
-/*                              z¶¨Î»Íê±Ï                             */
+/*                              zå®šä½å®Œæ¯•                             */
  /******************************************************************************************************/
 
 
 
 
  /**********************************************************************/
-  /*                    yµÄµÚ¶ş´Î¶¨Î»                                */
+  /*                    yçš„ç¬¬äºŒæ¬¡å®šä½                                */
  /**********************************************************************/
 
 double EllipseGen::secondsettley(struct parameter0 ***p0,int k,int j,int i)
@@ -2068,12 +2068,12 @@ int EllipseGen::judgey(struct parameter0 *p1,struct parameter0 *p2,double x,doub
 }
 
 /*******************************************************************************************************/
-/*                             y¶¨Î»Íê±Ï                             */
+/*                             yå®šä½å®Œæ¯•                             */
  /******************************************************************************************************/
 
 
   /**********************************************************************/
-  /*                    xµÄµÚ¶ş´Î¶¨Î»                                */
+  /*                    xçš„ç¬¬äºŒæ¬¡å®šä½                                */
  /**********************************************************************/
 
 double EllipseGen::secondsettlex(struct parameter0 ***p0,int k,int j,int i)
@@ -2277,7 +2277,7 @@ int EllipseGen::judgex(struct parameter0 *p1,struct parameter0 *p2,double y,doub
 	return(norm);
 }
 /*******************************************************************************************************/
-/*                             x¶¨Î»Íê±Ï                             */
+/*                             xå®šä½å®Œæ¯•                             */
  /******************************************************************************************************/
 
 
@@ -2535,7 +2535,7 @@ void EllipseGen::parametergeneration1(struct parameter0 *p1,int f_e_c_division,i
 		gama1=sqrt(sitagama)*t1+miugama;
 		miu1=sqrt(sitamiu)*t2+miumiu;
 
-		//½«gama1±ä»»×ö0-piÄÚµÄÖµ£¬miu1±ä»»×ö0-2piÄÚµÄÖµ
+		//å°†gama1å˜æ¢åš0-piå†…çš„å€¼ï¼Œmiu1å˜æ¢åš0-2piå†…çš„å€¼
 		if(gama1<0)
 		{
 			gama1=2*pi-fmod(-gama1,2*pi);
@@ -2732,9 +2732,9 @@ double EllipseGen::expfunction(double t,double x)
 }
 
 char* EllipseGen::get_line(ifstream& input_stream, char* rline){
-   //     char rline[250];     //¶ÁÈëµÄÒ»ĞĞ
+   //     char rline[250];     //è¯»å…¥çš„ä¸€è¡Œ
         input_stream.getline(rline,250);
-        //Ìø¹ı×¢ÊÍĞĞ
+        //è·³è¿‡æ³¨é‡Šè¡Œ
         while( !input_stream.eof() && rline[0] == '%' )
                 input_stream.getline(rline,250);
   //      yout << "rline: " << rline << endl;
@@ -2929,10 +2929,10 @@ double EllipseGen::volume(double x1,double y1,double z1,struct basicparameter *p
 	
 }
 
-//Éú³ÉËæ»úÊıµÄ³õÖµ
+//ç”Ÿæˆéšæœºæ•°çš„åˆå€¼
 double EllipseGen::seed(void)
 {
-	//ÓÃÓÚËæ»úÉú³ÉµÄÆğÊ¼Ê±¼ä
+	//ç”¨äºéšæœºç”Ÿæˆçš„èµ·å§‹æ—¶é—´
 	return ((double)(rand())/RAND_MAX)*M;
 }
 

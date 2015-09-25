@@ -1,13 +1,13 @@
 //===========================================================================
 // EllipseSurface.cpp
-// ÍÖÇòÃæÀà³ÉÔ±º¯Êı
+// æ¤­çƒé¢ç±»æˆå‘˜å‡½æ•°
 // Member Functions in a class of Ellipse Surface
 //===========================================================================
 #include "EllipseSurface.h"
 #define ZERO 1.0e-12
 
 //---------------------------------------------------------------------------
-//¹¹Ôìº¯Êı£¬ÒÑÖªÍÖÇòÃæÒ»°ã·½³ÌµÄÇé¿ö(´Ë¹¹Ôìº¯Êı²»ÍêÕû£¬Ğ¡ĞÄÊ¹ÓÃ£©
+//æ„é€ å‡½æ•°ï¼Œå·²çŸ¥æ¤­çƒé¢ä¸€èˆ¬æ–¹ç¨‹çš„æƒ…å†µ(æ­¤æ„é€ å‡½æ•°ä¸å®Œæ•´ï¼Œå°å¿ƒä½¿ç”¨ï¼‰
 EllipseSurface::EllipseSurface(	double xx, double yy, double zz, double xy, double yz,
 												double zx, double x,  double y,  double z,  double c	)
 {
@@ -23,7 +23,7 @@ EllipseSurface::EllipseSurface(	double xx, double yy, double zz, double xy, doub
 	c_c =c;
 }
 //---------------------------------------------------------------------------
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 EllipseSurface::EllipseSurface(	double     x0, double     y0, double     z0,
 												double      a, double      b, double      c,
 												double alpha1, double alpha2, double alpha3,
@@ -41,7 +41,7 @@ EllipseSurface::EllipseSurface(	double     x0, double     y0, double     z0,
 							beta1,beta2,beta3,gama1,gama2,gama3	);
 }
 //---------------------------------------------------------------------------
-//¼ÆËã¸ø¶¨×ø±ê£¨x,y,z£©´úÈëÍÖÇòÃæ·½³ÌµÄÖµ
+//è®¡ç®—ç»™å®šåæ ‡ï¼ˆx,y,zï¼‰ä»£å…¥æ¤­çƒé¢æ–¹ç¨‹çš„å€¼
 double EllipseSurface::fvalue(double x, double y, double z)
 {
 	double xx = x-x0;
@@ -53,7 +53,7 @@ double EllipseSurface::fvalue(double x, double y, double z)
 	return ff;
 }
 //---------------------------------------------------------------------------
-//¼ÆËãFx(x,y,z)
+//è®¡ç®—Fx(x,y,z)
 double EllipseSurface::fxvalue(double x, double y, double z)
 {
 	double xx = x-x0;
@@ -63,7 +63,7 @@ double EllipseSurface::fxvalue(double x, double y, double z)
 	return fx;
 }
 //---------------------------------------------------------------------------
-//¼ÆËãFy(x,y,z)
+//è®¡ç®—Fy(x,y,z)
 double EllipseSurface::fyvalue(double x, double y, double z)
 {
 	double xx = x-x0;
@@ -73,7 +73,7 @@ double EllipseSurface::fyvalue(double x, double y, double z)
 	return fy;
 }
 //---------------------------------------------------------------------------
-//¼ÆËãFz(x,y,z)
+//è®¡ç®—Fz(x,y,z)
 double EllipseSurface::fzvalue(double x, double y, double z)
 {
 	double xx = x-x0;
@@ -83,7 +83,7 @@ double EllipseSurface::fzvalue(double x, double y, double z)
 	return fz;
 }
 //---------------------------------------------------------------------------
-//¼ÆËã3½×ĞĞÁĞÊ½µÄÖµ£¨Çó½âÈı½×ÏßĞÔ·½³Ì×éÊ±Ê¹ÓÃ£©
+//è®¡ç®—3é˜¶è¡Œåˆ—å¼çš„å€¼ï¼ˆæ±‚è§£ä¸‰é˜¶çº¿æ€§æ–¹ç¨‹ç»„æ—¶ä½¿ç”¨ï¼‰
 double EllipseSurface::det_3order(double a[3][3])
 {
 	double s1 = a[0][0]*(a[1][1]*a[2][2]-a[1][2]*a[2][1]);
@@ -92,14 +92,14 @@ double EllipseSurface::det_3order(double a[3][3])
 	return s1-s2+s3;
 }
 //---------------------------------------------------------------------------
-//¸ø¶¨µãµ½ÍÖÇòÃæµÄ¾àÀë
+//ç»™å®šç‚¹åˆ°æ¤­çƒé¢çš„è·ç¦»
 double EllipseSurface::dis_to(Point *point)
 {
 	Point rp = project_normal(point);
 	return point->distance_to(rp);
 }
 //---------------------------------------------------------------------------
-//µãºÍÍÖÇòÃæµÄÎ»ÖÃ¹ØÏµ£¨Ê¹ÓÃÍÖÇòÃæÒ»°ã·½³Ì£©
+//ç‚¹å’Œæ¤­çƒé¢çš„ä½ç½®å…³ç³»ï¼ˆä½¿ç”¨æ¤­çƒé¢ä¸€èˆ¬æ–¹ç¨‹ï¼‰
 int EllipseSurface::is_contain_usually( Point* thepoint, int mod )
 {
 	double xx=thepoint->x;
@@ -116,7 +116,7 @@ int EllipseSurface::is_contain_usually( Point* thepoint, int mod )
 	else return 0;
 }
 //---------------------------------------------------------------------------
-//µãºÍÍÖÇòÃæµÄÎ»ÖÃ¹ØÏµ
+//ç‚¹å’Œæ¤­çƒé¢çš„ä½ç½®å…³ç³»
 int EllipseSurface::is_contain( Point* thepoint )
 {
     double ff = fvalue(thepoint->x,thepoint->y,thepoint->z);
@@ -125,32 +125,32 @@ int EllipseSurface::is_contain( Point* thepoint )
 	else return 0;
 }
 //---------------------------------------------------------------------------
-//Ñ°ÕÒÏß¶ÎÓëÍÖÇòÃæµÄ½»µã
+//å¯»æ‰¾çº¿æ®µä¸æ¤­çƒé¢çš„äº¤ç‚¹
 int EllipseSurface::intersect(Point &point1, Point &point2, Point &rpoint)
 {
 	int flag1 = is_contain( &point1 );
-	if ( flag1 == 0 )		 //point1 ÔÚÃæÉÏ
+	if ( flag1 == 0 )		 //point1 åœ¨é¢ä¸Š
 	{   
 		rpoint = point1;
 		return 1;
 	}
 	int flag2 = is_contain( &point2 );
-	if ( flag2 == 0 )		//point2 ÔÚÃæÉÏ
+	if ( flag2 == 0 )		//point2 åœ¨é¢ä¸Š
 	{   
 		rpoint = point2;
 		return 1;
 	}
 
-	if( flag1 * flag2 > 0 ) return 0;   //point1 point2 ÔÚÃæÍ¬²à
+	if( flag1 * flag2 > 0 ) return 0;   //point1 point2 åœ¨é¢åŒä¾§
 
-	//Ö±½ÓÍ¶Ó°µ½ÍÖÇòÃæÉÏ
+	//ç›´æ¥æŠ•å½±åˆ°æ¤­çƒé¢ä¸Š
 	TDVector pvec(point1, point2);
 	int error;
 	rpoint = project(&point1,&pvec,&error,1);
 	return error;                               
 }
 //---------------------------------------------------------------------------
-//Ñ°ÕÒÏß¶ÎÓëÍÖÇòÃæµÄ½»µã
+//å¯»æ‰¾çº¿æ®µä¸æ¤­çƒé¢çš„äº¤ç‚¹
 int EllipseSurface::intersect(Line &line, Point &rpoint)
 {
 	Point point1 = line.point1;
@@ -159,7 +159,7 @@ int EllipseSurface::intersect(Line &line, Point &rpoint)
 }
 
 //---------------------------------------------------------------------------
-//Çó¸ø¶¨µãµ½ÍÖÇòÃæµÄÍ¶Ó°£¨ÑØ·¨ÏòÍ¶Ó°£©
+//æ±‚ç»™å®šç‚¹åˆ°æ¤­çƒé¢çš„æŠ•å½±ï¼ˆæ²¿æ³•å‘æŠ•å½±ï¼‰
 Point EllipseSurface::project_normal( Point* thepoint, int *error )
 {
 	bool debuging = false;
@@ -169,16 +169,16 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 	double zz = thepoint->z;
         
 	int ic = is_contain(thepoint);
-	//×ÔÉíÔÚÍÖÇòÃæÉÏ
+	//è‡ªèº«åœ¨æ¤­çƒé¢ä¸Š
 	if( ic == 0 )
 	{
 		if( error != NULL ) *error = 1;
 		return *thepoint;
 	}
 
-	//¼ÆËã¸ø¶¨µãÓëÍÖÇòÖĞĞÄµãÁ¬ÏßÓëÍÖÇòÃæµÄ½»µã
+	//è®¡ç®—ç»™å®šç‚¹ä¸æ¤­çƒä¸­å¿ƒç‚¹è¿çº¿ä¸æ¤­çƒé¢çš„äº¤ç‚¹
 	Point p0 = {x0, y0, z0};
-	//¼ì²ép0ºÍthepointÊÇ²»ÊÇÒ»¸öµã£¨ÓĞ¿ÉÄÜÒªÍ¶Ó°µÄµã¾ÍÊÇÇòĞÄµã£©
+	//æ£€æŸ¥p0å’Œthepointæ˜¯ä¸æ˜¯ä¸€ä¸ªç‚¹ï¼ˆæœ‰å¯èƒ½è¦æŠ•å½±çš„ç‚¹å°±æ˜¯çƒå¿ƒç‚¹ï¼‰
 	TDVector ppv( p0, *thepoint );
 	if( ppv.length() <= ZERO )
 	{
@@ -187,13 +187,13 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 	Point p1;
 	if( ic < 0 )
 	{
-		//ÍÖÇòÄÚ
+		//æ¤­çƒå†…
 		TDVector pvec( p0, *thepoint );
 		p1 = project(thepoint, &pvec);
 	}
 	else
 	{
-		//ÍÖÇòÍâ
+		//æ¤­çƒå¤–
 		TDVector pvec( *thepoint, p0 );
 		p1 = project( thepoint, &pvec );
 	}
@@ -204,15 +204,15 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 		hout << "The point: " << xx << " " << yy << " " << zz << endl;
 	}
 
-	//²ÉÓÃÌİ¶È·¨Çó½â£¬BB·½·¨
-	//³õÖµ
+	//é‡‡ç”¨æ¢¯åº¦æ³•æ±‚è§£ï¼ŒBBæ–¹æ³•
+	//åˆå€¼
 	TDVector xv0(xx,yy,zz);
-	//³õÊ¼º¯ÊıÖµ£¨Èı¸öº¯ÊıÖµ£©
+	//åˆå§‹å‡½æ•°å€¼ï¼ˆä¸‰ä¸ªå‡½æ•°å€¼ï¼‰
 	double f10 = fvalue(xv0.x, xv0.y, xv0.z);
 	double f20 = 0.0;
 	double f30 = 0.0;
 	TDVector fv0(f10,f20,f30);
-	//²½³¤³õÖµ
+	//æ­¥é•¿åˆå€¼
 	double alpha = 1.0;
 
 	TDVector xv1(p1.x,p1.y,p1.z);
@@ -240,9 +240,9 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 								<<  "     " << fv1.z << endl;
 	}
 
-	//µü´ú¿ªÊ¼
-	//¼ÇÂ¼Á½´Îµü´ú²úÉúµÄµãµÄ×îĞ¡¾àÀë£¬·ÀÖ¹·¢É¢
-	//£¨µ±¾àÀëÔö´óµ½100±¶Ê±Í£Ö¹£¬ÒòÎªÌİ¶È·¨±¾ÉíÒ²²»ÊÇµ¥µ÷µÄ£©
+	//è¿­ä»£å¼€å§‹
+	//è®°å½•ä¸¤æ¬¡è¿­ä»£äº§ç”Ÿçš„ç‚¹çš„æœ€å°è·ç¦»ï¼Œé˜²æ­¢å‘æ•£
+	//ï¼ˆå½“è·ç¦»å¢å¤§åˆ°100å€æ—¶åœæ­¢ï¼Œå› ä¸ºæ¢¯åº¦æ³•æœ¬èº«ä¹Ÿä¸æ˜¯å•è°ƒçš„ï¼‰
 	double dis_min = 1E200;
 	int is_failed = 0;
 	int cl_num=0;
@@ -267,7 +267,7 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 					 (xv2.z-zz)*fyvalue(xv2.x,xv2.y,xv2.z);
 		TDVector fv2(f12,f22,f32);
 
-		//¸üĞÂ±äÁ¿
+		//æ›´æ–°å˜é‡
 		xv0 = xv1;
 		xv1 = xv2;
 		fv0 = fv1;
@@ -278,7 +278,7 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 		if( dxv_len < dis_min ) dis_min = dxv_len;
 		else if( dxv_len > dis_min*1000 )
 		{
-			//·¢É¢ÁË£¬²»ĞÒ°¡
+			//å‘æ•£äº†ï¼Œä¸å¹¸å•Š
 			if( debuging ) hout << "Failed. dis: " <<dxv_len <<" dis_min:" <<dis_min << endl << endl;
 			is_failed = 1;
 			break;
@@ -304,7 +304,7 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 	}
 	if( is_failed == 0 )
 	{
-		//µü´úºóµÄ½á¹ûÓĞÊ±ºò²»ÄÜÂú×ã¾«¶ÈÒªÇó£¬ËùÒÔÔÙÑØµãµÄ·½ÏòÍ¶Ó°Ò»ÏÂ
+		//è¿­ä»£åçš„ç»“æœæœ‰æ—¶å€™ä¸èƒ½æ»¡è¶³ç²¾åº¦è¦æ±‚ï¼Œæ‰€ä»¥å†æ²¿ç‚¹çš„æ–¹å‘æŠ•å½±ä¸€ä¸‹
 		Point rp = {xv1.x, xv1.y, xv1.z};
 		TDVector p2svec(*thepoint,rp);
 		Point rp1 = project(thepoint,&p2svec);
@@ -329,10 +329,10 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 	 }
 }
 //---------------------------------------------------------------------------
-//Çó¸ø¶¨µãÑØ¸ø¶¨·½Ïòµ½ÍÖÇòÃæµÄÍ¶Ó°
+//æ±‚ç»™å®šç‚¹æ²¿ç»™å®šæ–¹å‘åˆ°æ¤­çƒé¢çš„æŠ•å½±
 Point EllipseSurface::project(Point* thepoint, TDVector* vec, int *error, int mod)
 {
-	//µ¥Î»»¯Í¶Ó°ÏòÁ¿
+	//å•ä½åŒ–æŠ•å½±å‘é‡
 	TDVector lvec = *vec;
 	if( lvec.length() < 1.0e-8 )
 	{
@@ -359,11 +359,11 @@ Point EllipseSurface::project(Point* thepoint, TDVector* vec, int *error, int mo
 
 	if( sol_2order_equ(a,b,c,t) == 1 )
 	{
-		//»¹ÊÇÓÃmodÀ´¿ØÖÆ°É£¬mod==0:  ·µ»Ø×î½üµÄ£¬mod==1: ÏÈ°´·½Ïò·µ»Ø
+		//è¿˜æ˜¯ç”¨modæ¥æ§åˆ¶å§ï¼Œmod==0:  è¿”å›æœ€è¿‘çš„ï¼Œmod==1: å…ˆæŒ‰æ–¹å‘è¿”å›
 		if( mod == 0 )
 		{
-			//¿´À´»¹ÊÇÒªÑ¡È¡¾àÀë×î½üµÄµã£¬·ñÔò¹âË³´¦ÀíµÄÊ±ºò¸ã²»Çå·½Ïò
-			//ÏÈÕâÑùÁË£¬»ØÍ·ÔÙËµ
+			//çœ‹æ¥è¿˜æ˜¯è¦é€‰å–è·ç¦»æœ€è¿‘çš„ç‚¹ï¼Œå¦åˆ™å…‰é¡ºå¤„ç†çš„æ—¶å€™æä¸æ¸…æ–¹å‘
+			//å…ˆè¿™æ ·äº†ï¼Œå›å¤´å†è¯´
 			Point point1={A*t[0]+x1,B*t[0]+y1,C*t[0]+z1};
 			Point point2={A*t[1]+x1,B*t[1]+y1,C*t[1]+z1};
 			double dis1 = thepoint->distance_to(point1);
@@ -395,7 +395,7 @@ Point EllipseSurface::project(Point* thepoint, TDVector* vec, int *error, int mo
 				else
 				{
 					Point point2={A*t[1]+x1,B*t[1]+y1,C*t[1]+z1};
-					//È¡¾àÀë½üµÄµã
+					//å–è·ç¦»è¿‘çš„ç‚¹
 					if( thepoint->distance_to(point1)<thepoint->distance_to(point2))
 					{
 						rpoint = point1;
@@ -417,7 +417,7 @@ Point EllipseSurface::project(Point* thepoint, TDVector* vec, int *error, int mo
 	return rpoint;
 }
 //---------------------------------------------------------------------------
-//½âÒ»Ôª¶ş´Î·½³Ì£¬ÎŞ½â·µ»Ø0,½á¹û±£´æÔÚx£¨Á½¸öÖµ£©
+//è§£ä¸€å…ƒäºŒæ¬¡æ–¹ç¨‹ï¼Œæ— è§£è¿”å›0,ç»“æœä¿å­˜åœ¨xï¼ˆä¸¤ä¸ªå€¼ï¼‰
 int EllipseSurface::sol_2order_equ(double a, double b, double c, double* x)
 {
 	double dd = b*b-4.0*a*c;
@@ -434,7 +434,7 @@ int EllipseSurface::sol_2order_equ(double a, double b, double c, double* x)
 	return 1;
 }
 //---------------------------------------------------------------------------
-//½âÒ»¸öÈı½×ÏßĞÔ·½³Ì×é£¨A*x=B),½á¹û·ÅÔÚxÖĞ£¬¿¨À³Ä··¨Ôò
+//è§£ä¸€ä¸ªä¸‰é˜¶çº¿æ€§æ–¹ç¨‹ç»„ï¼ˆA*x=B),ç»“æœæ”¾åœ¨xä¸­ï¼Œå¡è±å§†æ³•åˆ™
 int EllipseSurface::sol_3order_lina_equs(double a[3][3], double b[3], double x[3])
 {
 	double D = det_3order(a);
@@ -476,7 +476,7 @@ int EllipseSurface::sol_3order_lina_equs(double a[3][3], double b[3], double x[3
 	return 1;
 }
 //---------------------------------------------------------------------------
-//°Ñ¸ø¶¨µÄ15¸ö²ÎÊı×ª»»³ÉÍÖÇòÒ»°ã·½³ÌµÄ10¸ö²ÎÊı
+//æŠŠç»™å®šçš„15ä¸ªå‚æ•°è½¬æ¢æˆæ¤­çƒä¸€èˆ¬æ–¹ç¨‹çš„10ä¸ªå‚æ•°
 void EllipseSurface::translate_para(double     x0, double     y0, double     z0,
 													double      a, double      b, double      c,
 													double alpha1, double alpha2, double alpha3,
@@ -495,7 +495,7 @@ void EllipseSurface::translate_para(double     x0, double     y0, double     z0,
 	coe6 = a*a*b*b*A3*C3 + a*a*c*c*A2*C2 + b*b*c*c*A1*C1;
 	rhs  = a*a*b*b*c*c;
 
-	//»¯¼ò£¬Ê¹coe1=1;
+	//åŒ–ç®€ï¼Œä½¿coe1=1;
 	coe2 = coe2/coe1;
 	coe3 = coe3/coe1;
 	coe4 = coe4/coe1;
@@ -526,7 +526,7 @@ void EllipseSurface::print( int mod )
 	}
 	else
 	{
-		hout << "10²ÎÊı:"	<< xx_c << " " << yy_c << " " << zz_c << endl
+		hout << "10å‚æ•°:"	<< xx_c << " " << yy_c << " " << zz_c << endl
 							<< xy_c << " " << yz_c << " " << zx_c << endl
 							<< x_c  << " " << y_c  << " " << z_c  << endl
 							<< c_c  << endl;
@@ -534,12 +534,12 @@ void EllipseSurface::print( int mod )
 }						
 
 //---------------------------------------------------------------------------
-//¸ù¾İÒ»¶¨±ÈÀı½ôËõÍÖÇò£¬¶ÔÍÖÇòÉÏÃ¿¸öµã×ö×ø±ê±ä»»
+//æ ¹æ®ä¸€å®šæ¯”ä¾‹ç´§ç¼©æ¤­çƒï¼Œå¯¹æ¤­çƒä¸Šæ¯ä¸ªç‚¹åšåæ ‡å˜æ¢
 int EllipseSurface::change_coor(Point *opoint, Point *point, double ratio)
 {
 	if (ratio>1.0)
 	{
-		hout << "      ÍÖÇòÊÕËõ±ÈÀı¾¹È»±È1.0»¹´ó£¬´íÎó£¡" << endl;
+		hout << "      æ¤­çƒæ”¶ç¼©æ¯”ä¾‹ç«Ÿç„¶æ¯”1.0è¿˜å¤§ï¼Œé”™è¯¯ï¼" << endl;
 		return 0;
 	}
 

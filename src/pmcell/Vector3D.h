@@ -1,6 +1,6 @@
 
 //==========================================
-//3Î¬ÏòÁ¿Àà£»
+//3ç»´å‘é‡ç±»ï¼›
 //Vector3D.h
 //==========================================
 #ifndef HEADER_Vector3D
@@ -19,17 +19,17 @@ public:
 	double x,y,z;
 
 	Vector3D(double ix=0,double iy=0,double iz=0);
-	//ÖØÔØ²Ù×÷·û£»	
+	//é‡è½½æ“ä½œç¬¦ï¼›	
 	Vector3D operator+(const Vector3D& d);
 	Vector3D operator-(const Vector3D& d);
 	double   operator*(const Vector3D& d);
 	Vector3D operator*(double d);
 	Vector3D operator/(double d);
 	bool     operator== (const Vector3D& d);
-	//¶şÎ¬ÏòÁ¿µ¥Î»»¯£»
+	//äºŒç»´å‘é‡å•ä½åŒ–ï¼›
 	Vector3D Normallize();
 	double   Length();
-	//ÖØÔØÊä³öÁ÷²Ù×÷·û£»
+	//é‡è½½è¾“å‡ºæµæ“ä½œç¬¦ï¼›
 	friend ostream& operator<<(ostream& o, const Vector3D& d);
 	friend class Node;
 };//========================================

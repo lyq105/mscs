@@ -1,7 +1,7 @@
 //===========================================================================
 // Geometry.h
-// ¼¸ºÎµã¡¢Ïß¡¢Ãæ¡¢×ø±êÏµºÍ¼¸ºÎËã·¨µÈÀàÍ·ÎÄ¼ş
-// Classes of Point,line£¬surface and coordinates and so on
+// å‡ ä½•ç‚¹ã€çº¿ã€é¢ã€åæ ‡ç³»å’Œå‡ ä½•ç®—æ³•ç­‰ç±»å¤´æ–‡ä»¶
+// Classes of Point,lineï¼Œsurface and coordinates and so on
 //===========================================================================
 
 #ifndef GEOMETRY_H
@@ -14,7 +14,7 @@ using namespace hns;
 
 enum Curve_Type { line=1, arc , curve };
 //---------------------------------------------------------------------------
-//¶¨Òåµã
+//å®šä¹‰ç‚¹
 class Point
 {
 	public:
@@ -31,20 +31,20 @@ class Point
 };
 
 //---------------------------------------------------------------------------
-//¶¨ÒåÈıÎ¬ÏòÁ¿
+//å®šä¹‰ä¸‰ç»´å‘é‡
 class TDVector 
 {
 	public:
-		TDVector( double xx=0, double yy=0, double zz=0 );		//¹¹Ôìº¯Êı
+		TDVector( double xx=0, double yy=0, double zz=0 );		//æ„é€ å‡½æ•°
         TDVector( Point &p1, Point &p2 );
 
-		double dot_product( TDVector *tdvec );					//ÇóÏòÁ¿µã»ı
-		TDVector  cro_product( TDVector *tdvec );				//ÇóÏòÁ¿²æ»ı
-		double angle_between(  TDVector *tdvec );				//Á½ÏòÁ¿¼Ğ½Ç£¨0¡«PI,»¡¶È£©
+		double dot_product( TDVector *tdvec );					//æ±‚å‘é‡ç‚¹ç§¯
+		TDVector  cro_product( TDVector *tdvec );				//æ±‚å‘é‡å‰ç§¯
+		double angle_between(  TDVector *tdvec );				//ä¸¤å‘é‡å¤¹è§’ï¼ˆ0ï½PI,å¼§åº¦ï¼‰
 
-		TDVector& unitize();									//ÏòÁ¿µ¥Î»»¯
+		TDVector& unitize();									//å‘é‡å•ä½åŒ–
 
-		TDVector operator+ ( TDVector tdv );					//ÏòÁ¿ÔËËã
+		TDVector operator+ ( TDVector tdv );					//å‘é‡è¿ç®—
         TDVector operator+ ( double d );
 		TDVector operator- ( TDVector tdv );
         TDVector operator- ( double d );
@@ -55,9 +55,9 @@ class TDVector
 
 		bool operator== ( TDVector tdv ) ;
 
-		TDVector vertical_vec();								//·µ»ØÒ»¸öÓë±¾ÏòÁ¿´¹Ö±µÄÏòÁ¿
+		TDVector vertical_vec();								//è¿”å›ä¸€ä¸ªä¸æœ¬å‘é‡å‚ç›´çš„å‘é‡
      
-		double length();										//·µ»ØÏòÁ¿µÄ³¤¶ÈÖµ
+		double length();										//è¿”å›å‘é‡çš„é•¿åº¦å€¼
 
 		//-------------------------------------------------------------------
 		double x,y,z;
@@ -67,25 +67,25 @@ class TDVector
 };
 
 //---------------------------------------------------------------------------
-//¶¨Òå×ø±êÏµ
+//å®šä¹‰åæ ‡ç³»
 class Coors
 {
 	public:
-        Coors();                                      //¹¹Ôìº¯Êı
+        Coors();                                      //æ„é€ å‡½æ•°
         Coors(Point &p);
 		Coors(TDVector &v1, TDVector &v2, TDVector &v3);
         Coors(Point &p, TDVector &v1, TDVector &v2, TDVector &v3);
 
-		void print() ;								  //Êä³ö
+		void print() ;								  //è¾“å‡º
 
 		//-------------------------------------------------------------------
-		Point ori;                                    //×ø±êÔ­µã
-        TDVector vec_x,vec_y,vec_z;                   //Èı¸ö×ø±êÖáÏòÁ¿
+		Point ori;                                    //åæ ‡åŸç‚¹
+        TDVector vec_x,vec_y,vec_z;                   //ä¸‰ä¸ªåæ ‡è½´å‘é‡
  
 };  
 
 //---------------------------------------------------------------------------
-//¶¨ÒåÇúÏß
+//å®šä¹‰æ›²çº¿
 class Curve 
 {
 	public:
@@ -101,7 +101,7 @@ class Curve
         virtual double zz_(double tt){ return 0.0; };
         virtual double length(){return 0.0; };
         virtual Curve_Type curve_type() const { return Curve_Type(0); };
-        virtual double nearest_point(Point*)=0;   //ÇúÏßÉÏ¾àÀë¸ø¶¨µã×î½üµÄµã
+        virtual double nearest_point(Point*)=0;   //æ›²çº¿ä¸Šè·ç¦»ç»™å®šç‚¹æœ€è¿‘çš„ç‚¹
 };
 
 //---------------------------------------------------------------------------
@@ -141,9 +141,9 @@ class Line : public Curve
 						(point2.z-point1.z)*(point2.z-point1.z));
         };
         Curve_Type curve_type () const { return line; };
-        double nearest_point(Point*);         //Ö±ÏßÉÏ¾àÀë¸ø¶¨µã×î½üµÄµã
+        double nearest_point(Point*);         //ç›´çº¿ä¸Šè·ç¦»ç»™å®šç‚¹æœ€è¿‘çš„ç‚¹
 protected:
-        double A, B, C ;       //Ö±Ïß·½Ïò
+        double A, B, C ;       //ç›´çº¿æ–¹å‘
 };
 
 //---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ class Arc : public Curve
 };
 
 //---------------------------------------------------------------------------
-//¶¨ÒåÁ¢·½Ìå
+//å®šä¹‰ç«‹æ–¹ä½“
 class Cubic 
 {
 	public:
@@ -184,23 +184,23 @@ class Cubic
 };
 
 //---------------------------------------------------------------------------
-//¶¨ÒåÃæ
+//å®šä¹‰é¢
 class Surface 
 {
 	public:
-        virtual double length_u(){ return 0.0; }   //uÏò³¤¶È
+        virtual double length_u(){ return 0.0; }   //uå‘é•¿åº¦
         virtual double length_v(){ return 0.0; }
         virtual int is_contain(Point *point){ return -2;}
         virtual Point pp(double u, double v);
         virtual int boundary_p(double u, double v, Point* thepoint, Cubic* cb) ;
         virtual Point project_normal(Point* thepoint,int *error=NULL) ;
         virtual Point project(Point* thepoint, TDVector* vec, int *error=NULL, int mod=0) ;
-        virtual int intersect(Point &point1, Point &point2, Point &rpoint) = 0 ; //Çó½»µã
+        virtual int intersect(Point &point1, Point &point2, Point &rpoint) = 0 ; //æ±‚äº¤ç‚¹
         virtual int intersect(Line &line, Point &rpoint) = 0 ;
         virtual double dis_to(Point* thepoint){ return 0.0; }
         virtual double fvalue(double x, double y, double z){ return 0.0; }
 
-		//¸ù¾İÒ»¶¨±ÈÀı½ôËõÍÖÇò£¬¶ÔÍÖÇòÉÏÃ¿¸öµã×ö×ø±ê±ä»»
+		//æ ¹æ®ä¸€å®šæ¯”ä¾‹ç´§ç¼©æ¤­çƒï¼Œå¯¹æ¤­çƒä¸Šæ¯ä¸ªç‚¹åšåæ ‡å˜æ¢
 		virtual int change_coor(Point *opoint, Point *point, double ratio){ return 0; };
 
         virtual void print() const{} ;
@@ -210,7 +210,7 @@ class Surface
 };
 
 //---------------------------------------------------------------------------
-//¶¨ÒåÊµÌå 
+//å®šä¹‰å®ä½“ 
 struct Solid 
 {
 	double x_min,x_max,y_min,y_max,z_min,z_max;

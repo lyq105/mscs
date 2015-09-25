@@ -1,6 +1,6 @@
 //===========================================================================
 // Yns.h
-// ÓàĞÂ¸ÕµÄÃû¿Õ¼äµÈÀàÍ·ÎÄ¼ş
+// ä½™æ–°åˆšçš„åç©ºé—´ç­‰ç±»å¤´æ–‡ä»¶
 // Classes of Yu's namespace definition
 //===========================================================================
 #ifndef	HNS_H
@@ -34,10 +34,10 @@ public:
 class foutstream 
 {
 public:
-	//¹¹Ôìº¯Êı
+	//æ„é€ å‡½æ•°
 	foutstream();
 
-	//²Ù×÷·û¶¨Òå
+	//æ“ä½œç¬¦å®šä¹‰
 	foutstream& operator << (short n);
 	foutstream& operator << (unsigned short n);
 	foutstream& operator << (int n);
@@ -59,8 +59,8 @@ public:
 	int setf(int n);
 	int setf(int n1,int n2); 
 
-//	void open_deffo_stream(char* file,int mod=ios::app);	//app±íÊ¾ĞøĞ´
-	void open_deffo_stream(char* file,int mod=ios::out);		//outÊÇ±íÊ¾ÖØĞÂĞ´
+//	void open_deffo_stream(char* file,int mod=ios::app);	//appè¡¨ç¤ºç»­å†™
+	void open_deffo_stream(char* file,int mod=ios::out);		//outæ˜¯è¡¨ç¤ºé‡æ–°å†™
 	void close_deffo_stream( );
 
 	string output_file;
@@ -73,8 +73,8 @@ private:
 namespace hns
 {
 	extern foutstream hout;
-//	void open_deffo_stream(char* file,int mod=ios::app);	//app±íÊ¾ĞøĞ´
-	void open_deffo_stream(char* file,int mod=ios::out);		//outÊÇ±íÊ¾ÖØĞÂĞ´
+//	void open_deffo_stream(char* file,int mod=ios::app);	//appè¡¨ç¤ºç»­å†™
+	void open_deffo_stream(char* file,int mod=ios::out);		//outæ˜¯è¡¨ç¤ºé‡æ–°å†™
 
 	void close_deffo_stream( );
 	foutstream& endl(foutstream& os);

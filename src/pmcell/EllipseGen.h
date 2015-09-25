@@ -46,17 +46,17 @@ class EllipseGen
 		void parametergeneration1(struct parameter0 *p1,int f_e_c_division,int distribution_sign1);
 		void parametergeneration2(struct parameter0 *p0);
 		double recursion(double *iseed);
-		double unifrnd(double c,double d,double *iseed);//¾ùÔÈ·Ö²¼·¢ÉúÆ÷
-		double gasdev(double *iseed);//±ê×¼ÕıÌ¬·Ö²¼·¢ÉúÆ÷
+		double unifrnd(double c,double d,double *iseed);//å‡åŒ€åˆ†å¸ƒå‘ç”Ÿå™¨
+		double gasdev(double *iseed);//æ ‡å‡†æ­£æ€åˆ†å¸ƒå‘ç”Ÿå™¨
 		double min(double x0,double x1);
 		double max(double x0,double x1);
-		char* get_line(ifstream& input_stream, char* rline);//ÓÃÀ´¶ÁÈ¡ÊäÈëÊı¾İ
-		double volume(double x1,double y1,double z1,struct parameter *p0);//¼ÆËãÍÖÇòµÄÌå»ı
-		double normfunction(double t0,double t1,double x);//ÕıÌ¬·Ö²¼º¯Êı
-		double expfunction(double t,double x);//Ö¸Êı·Ö²¼º¯Êı
+		char* get_line(ifstream& input_stream, char* rline);//ç”¨æ¥è¯»å–è¾“å…¥æ•°æ®
+		double volume(double x1,double y1,double z1,struct parameter *p0);//è®¡ç®—æ¤­çƒçš„ä½“ç§¯
+		double normfunction(double t0,double t1,double x);//æ­£æ€åˆ†å¸ƒå‡½æ•°
+		double expfunction(double t,double x);//æŒ‡æ•°åˆ†å¸ƒå‡½æ•°
 		double volume(double x1,double y1,double z1,struct basicparameter *p0);
 		double neededrate;
-		double seed();  //Éú³ÉËæ»úÊıµÄ³õÖµ
+		double seed();  //ç”Ÿæˆéšæœºæ•°çš„åˆå€¼
 };
 
 //---------------------------------------------------------------------------

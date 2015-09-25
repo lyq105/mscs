@@ -1,13 +1,13 @@
 //===========================================================================
 // Geometry.cpp
-// º∏∫Œµ„°¢œﬂ°¢√Ê°¢◊¯±Íœµ∫Õº∏∫ŒÀ„∑®µ»¿‡≥…‘±∫Ø ˝
-// Member Functions in classes of Point,line£¨surface and coordinates and so on
+// Âá†‰ΩïÁÇπ„ÄÅÁ∫ø„ÄÅÈù¢„ÄÅÂùêÊ†áÁ≥ªÂíåÂá†‰ΩïÁÆóÊ≥ïÁ≠âÁ±ªÊàêÂëòÂáΩÊï∞
+// Member Functions in classes of Point,lineÔºåsurface and coordinates and so on
 //===========================================================================
 #include "Geometry.h"
 
-//œÚ¡ø‘ÀÀ„¿‡TDVector
+//ÂêëÈáèËøêÁÆóÁ±ªTDVector
 //---------------------------------------------------------------------------
-//ππ‘Ï∫Ø ˝
+//ÊûÑÈÄ†ÂáΩÊï∞
 TDVector::TDVector( double xx, double yy, double zz )
 {
 	x = xx;
@@ -22,13 +22,13 @@ TDVector::TDVector( Point &p1, Point &p2 )
 	z = p2.z - p1.z;
 }
 //---------------------------------------------------------------------------
-//œÚ¡øµ„≥À
+//ÂêëÈáèÁÇπ‰πò
 double TDVector::dot_product( TDVector *tdvec )
 {
 	return x * tdvec->x + y * tdvec->y + z * tdvec->z ;
 }
 //---------------------------------------------------------------------------
-//œÚ¡ø≤Ê≥À
+//ÂêëÈáèÂèâ‰πò
 TDVector TDVector::cro_product( TDVector *tdvec )
 {
 	double xx = y * tdvec->z - z * tdvec->y ;
@@ -38,7 +38,7 @@ TDVector TDVector::cro_product( TDVector *tdvec )
 	return TDVector(xx,yy,zz);
 }
 //---------------------------------------------------------------------------
-//¡Ω∏ˆœÚ¡ø÷Æº‰µƒº–Ω«
+//‰∏§‰∏™ÂêëÈáè‰πãÈó¥ÁöÑÂ§πËßí
 double TDVector::angle_between( TDVector *tdvec )
 {
 	double len1 = length();
@@ -67,7 +67,7 @@ double TDVector::angle_between( TDVector *tdvec )
 	return acos(acos_v);
 }
 //---------------------------------------------------------------------------
-//œÚ¡øµ•ŒªªØ
+//ÂêëÈáèÂçï‰ΩçÂåñ
 TDVector& TDVector::unitize()
 {
 	double len = length();
@@ -78,55 +78,55 @@ TDVector& TDVector::unitize()
 	return *this;
 }
 //---------------------------------------------------------------------------
-//∑µªÿœÚ¡øµƒ≥§∂»÷µ
+//ËøîÂõûÂêëÈáèÁöÑÈïøÂ∫¶ÂÄº
 double TDVector::length()
 {
 	return sqrt(x * x + y * y + z * z );
 }
 
 //---------------------------------------------------------------------------
-//œÚ¡ø‘ÀÀ„
-TDVector TDVector::operator+ ( TDVector tdv )						//œÚ¡øº”∑®
+//ÂêëÈáèËøêÁÆó
+TDVector TDVector::operator+ ( TDVector tdv )						//ÂêëÈáèÂä†Ê≥ï
 {
 	return TDVector( x + tdv.x, y + tdv.y, z + tdv.z );
 }
 
-TDVector TDVector::operator+ ( double d )							//œÚ¡øº”∑®(Õ¨º”“ª∏ˆ ˝)
+TDVector TDVector::operator+ ( double d )							//ÂêëÈáèÂä†Ê≥ï(ÂêåÂä†‰∏Ä‰∏™Êï∞)
 {
 	return TDVector( x + d, y + d, z + d );
 }
 
-TDVector TDVector::operator- ( TDVector tdv )						//œÚ¡øºı∑®		
+TDVector TDVector::operator- ( TDVector tdv )						//ÂêëÈáèÂáèÊ≥ï		
 {
 	return TDVector( x - tdv.x, y - tdv.y, z - tdv.z );
 }
 
-TDVector TDVector::operator- ( double d )							//œÚ¡øºı∑®(Õ¨ºı“ª∏ˆ ˝)
+TDVector TDVector::operator- ( double d )							//ÂêëÈáèÂáèÊ≥ï(ÂêåÂáè‰∏Ä‰∏™Êï∞)
 {
 	return TDVector( x - d, y - d, z - d );
 }
 
-TDVector TDVector::operator* ( TDVector tdv )						//œÚ¡ø≥À∑®
+TDVector TDVector::operator* ( TDVector tdv )						//ÂêëÈáè‰πòÊ≥ï
 {
 	return TDVector( x * tdv.x, y * tdv.y, z * tdv.z );
 }
 
-TDVector TDVector::operator/ ( TDVector tdv )						//œÚ¡ø≥˝∑®
+TDVector TDVector::operator/ ( TDVector tdv )						//ÂêëÈáèÈô§Ê≥ï
 {
 	return TDVector( x / tdv.x, y / tdv.y, z / tdv.z );
 }
 
-TDVector TDVector::operator* ( double m )							//œÚ¡ø≥À∑®£®∑≈¥Ûm±∂£©
+TDVector TDVector::operator* ( double m )							//ÂêëÈáè‰πòÊ≥ïÔºàÊîæÂ§ßmÂÄçÔºâ
 {
 	return TDVector( x * m, y * m, z * m );
 }
 
-TDVector TDVector::operator/ ( double d )							//œÚ¡ø≥˝∑®£®Àı–°d±∂£©
+TDVector TDVector::operator/ ( double d )							//ÂêëÈáèÈô§Ê≥ïÔºàÁº©Â∞èdÂÄçÔºâ
 {
 	return TDVector( x / d, y / d, z / d );
 }
 
-bool TDVector::operator== ( TDVector tdv )				//œÚ¡øœ‡µ»
+bool TDVector::operator== ( TDVector tdv )				//ÂêëÈáèÁõ∏Á≠â
 {
 	if( fabs(tdv.x) + fabs(tdv.y) + fabs(tdv.z) == 0)
 	{
@@ -145,7 +145,7 @@ bool TDVector::operator== ( TDVector tdv )				//œÚ¡øœ‡µ»
 }
 
 //---------------------------------------------------------------------------
-//∑µªÿ“ª∏ˆ”Î±æœÚ¡ø¥π÷±µƒœÚ¡ø
+//ËøîÂõû‰∏Ä‰∏™‰∏éÊú¨ÂêëÈáèÂûÇÁõ¥ÁöÑÂêëÈáè
 TDVector TDVector::vertical_vec()
 {
 	if( x == 0 ) return TDVector( 1, 0, 0 );
@@ -159,7 +159,7 @@ TDVector TDVector::vertical_vec()
 }
 
 //*************************************************************************//
-//µ„¿‡
+//ÁÇπÁ±ª
 //---------------------------------------------------------------------------
 Point Point::operator+( Point &pt )
 {
@@ -204,9 +204,9 @@ double Point::distance_to( Point &pt )
 }
 
 //*************************************************************************//
-//◊¯±Íœµ¿‡
+//ÂùêÊ†áÁ≥ªÁ±ª
 //---------------------------------------------------------------------------
-//ππ‘Ï∫Ø ˝
+//ÊûÑÈÄ†ÂáΩÊï∞
 Coors::Coors()
 {
 	ori.x = 0;
@@ -217,7 +217,7 @@ Coors::Coors()
 	vec_z = TDVector(0,0,1);
 }
 //---------------------------------------------------------------------------
-//÷ÿ‘ÿ
+//ÈáçËΩΩ
 Coors::Coors(Point &p)
 {
 	ori = p;
@@ -227,7 +227,7 @@ Coors::Coors(Point &p)
 }
 
 //---------------------------------------------------------------------------
-//÷ÿ‘ÿ
+//ÈáçËΩΩ
 Coors::Coors(TDVector &v1, TDVector &v2, TDVector &v3)
 {
 	ori.x = 0;
@@ -239,7 +239,7 @@ Coors::Coors(TDVector &v1, TDVector &v2, TDVector &v3)
 }
 
 //---------------------------------------------------------------------------
-//÷ÿ‘ÿ
+//ÈáçËΩΩ
 Coors::Coors(Point &p, TDVector &v1, TDVector &v2, TDVector &v3)
 {
 	ori = p;
@@ -251,7 +251,7 @@ Coors::Coors(Point &p, TDVector &v1, TDVector &v2, TDVector &v3)
 //---------------------------------------------------------------------------
 
 //*************************************************************************//
-//œﬂ¿‡
+//Á∫øÁ±ª
 //---------------------------------------------------------------------------
 Line::Line(Point p1, Point p2) : Curve(p1,p2)
 {
@@ -260,7 +260,7 @@ Line::Line(Point p1, Point p2) : Curve(p1,p2)
 	C = p2.z - p1.z ;
 }
 //---------------------------------------------------------------------------
-//µ„µΩ÷±œﬂµƒæ‡¿Î
+//ÁÇπÂà∞Áõ¥Á∫øÁöÑË∑ùÁ¶ª
 double Line::nearest_point(Point* point)
 {
 	return (A*(point->x - point1.x) +
@@ -270,7 +270,7 @@ double Line::nearest_point(Point* point)
 }
 
 //*************************************************************************//
-//√Ê¿‡
+//Èù¢Á±ª
 //---------------------------------------------------------------------------
 Point Surface::pp(double u, double v)
 {
