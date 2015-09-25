@@ -93,6 +93,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     renderer->SetBackground(0,0,0);
     renderer->SetBackground2(0,0,0);
+    vtkSmartPointer<vtkAxesActor> axes =
+        vtkSmartPointer<vtkAxesActor>::New();
+    renderer->AddActor(axes);
+    renderer->RemoveAllViewProps();
 
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
@@ -283,7 +287,7 @@ void MainWindow::openSTL(QString stl_filename)
     actor->GetProperty()->SetColor(0,1,1);
     actor->GetProperty()->SetEdgeColor(0,0,0);
     // actor->GetProperty()->EdgeVisibilityOn();
-
+    renderer->RemoveAllViewProps();
     renderer->AddActor(actor);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
@@ -403,6 +407,7 @@ void MainWindow::import_bdf(QString bdf_filename)
     actor->GetProperty()->SetColor(0,1,1);
     actor->GetProperty()->SetEdgeColor(0,0,0);
     actor->GetProperty()->EdgeVisibilityOn();
+    renderer->RemoveAllViewProps();
     renderer->AddActor(actor);
 
     //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
@@ -454,6 +459,7 @@ void MainWindow::meshSTL(QString stl_filename)
     actor->GetProperty()->SetColor(0,1,1);
     actor->GetProperty()->SetEdgeColor(0,0,0);
     actor->GetProperty()->EdgeVisibilityOn();
+    renderer->RemoveAllViewProps();
     renderer->AddActor(actor);
 
 
@@ -568,6 +574,7 @@ void MainWindow::read_neutral_format(QString filename )
     actor->GetProperty()->SetColor(0,1,1);
     actor->GetProperty()->SetEdgeColor(0,0,0);
     actor->GetProperty()->EdgeVisibilityOn();
+    renderer->RemoveAllViewProps();
     renderer->AddActor(actor);
 
     //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
