@@ -30,7 +30,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_globalInfo">
       <attribute name="title">
@@ -115,7 +115,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QCheckBox" name="checkBox_12">
+             <widget class="QCheckBox" name="cb_fibre">
               <property name="text">
                <string>短纤维颗粒</string>
               </property>
@@ -129,14 +129,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+             <widget class="QDoubleSpinBox" name="dsb_fibre_ratio"/>
             </item>
            </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QCheckBox" name="checkBox_14">
+             <widget class="QCheckBox" name="cb_money">
               <property name="text">
                <string>薄钱币颗粒</string>
               </property>
@@ -150,14 +150,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+             <widget class="QDoubleSpinBox" name="dsb_money_ratio"/>
             </item>
            </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QCheckBox" name="checkBox_13">
+             <widget class="QCheckBox" name="cb_ellipsoid">
               <property name="text">
                <string>椭球颗粒</string>
               </property>
@@ -171,14 +171,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+             <widget class="QDoubleSpinBox" name="dsb_ellipsoid_ratio"/>
             </item>
            </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QCheckBox" name="checkBox_5">
+             <widget class="QCheckBox" name="cb_coating">
               <property name="text">
                <string>添加界面层</string>
               </property>
@@ -192,7 +192,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+             <widget class="QDoubleSpinBox" name="dsb_coating_ratio"/>
             </item>
            </layout>
           </item>
@@ -200,6 +200,20 @@
          <zorder></zorder>
          <zorder></zorder>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;颗粒体分比&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="dsb_volume_ratio"/>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_7">
@@ -215,7 +229,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+           <widget class="QDoubleSpinBox" name="dsb_g_meshsize"/>
           </item>
          </layout>
         </widget>
@@ -235,7 +249,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tab_parameter">
       <attribute name="title">
        <string>随机参数设置</string>
       </attribute>
@@ -275,23 +289,23 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="checkBox_27">
+           <widget class="QCheckBox" name="fibre">
             <property name="text">
              <string>短纤维颗粒</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_116"/>
+           <widget class="QDoubleSpinBox" name="dsb_fibre_amax"/>
           </item>
           <item row="1" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_117"/>
+           <widget class="QDoubleSpinBox" name="dsb_fibre_amin"/>
           </item>
           <item row="1" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_118"/>
+           <widget class="QDoubleSpinBox" name="dsb_fibre_bmin"/>
           </item>
           <item row="1" column="4">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_119"/>
+           <widget class="QDoubleSpinBox" name="dsb_fibre_cmin"/>
           </item>
           <item row="2" column="0">
            <widget class="QCheckBox" name="checkBox_28">
@@ -301,16 +315,16 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_127"/>
+           <widget class="QDoubleSpinBox" name="dsb_ellipsoid_amax"/>
           </item>
           <item row="2" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_121"/>
+           <widget class="QDoubleSpinBox" name="dsb_ellipsoid_amin"/>
           </item>
           <item row="2" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_122"/>
+           <widget class="QDoubleSpinBox" name="dsb_ellipsoid_bmin"/>
           </item>
           <item row="2" column="4">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_120"/>
+           <widget class="QDoubleSpinBox" name="dsb_ellipsoid_cmin"/>
           </item>
           <item row="3" column="0">
            <widget class="QCheckBox" name="checkBox_29">
@@ -320,16 +334,16 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_123"/>
+           <widget class="QDoubleSpinBox" name="dsb_money_amax"/>
           </item>
           <item row="3" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_125"/>
+           <widget class="QDoubleSpinBox" name="dsb_money_amin"/>
           </item>
           <item row="3" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_126"/>
+           <widget class="QDoubleSpinBox" name="dsb_money_bmin"/>
           </item>
           <item row="3" column="4">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_124"/>
+           <widget class="QDoubleSpinBox" name="dsb_money_cmin"/>
           </item>
          </layout>
         </widget>
@@ -357,14 +371,14 @@
           <item row="0" column="1">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>A_max</string>
+             <string>a_max</string>
             </property>
            </widget>
           </item>
           <item row="0" column="3">
            <widget class="QLabel" name="label_15">
             <property name="text">
-             <string>B_min</string>
+             <string>b_max</string>
             </property>
            </widget>
           </item>
@@ -376,49 +390,49 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_32"/>
+           <widget class="QDoubleSpinBox" name="dsb_sigma1"/>
           </item>
           <item row="0" column="4">
            <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>C_min</string>
+             <string>b_min</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_28"/>
+           <widget class="QDoubleSpinBox" name="dsb_amax"/>
           </item>
           <item row="3" column="0">
-           <widget class="QRadioButton" name="radioButton_7">
+           <widget class="QRadioButton" name="rb_d_normal">
             <property name="text">
              <string>正态分布</string>
             </property>
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_26"/>
+           <widget class="QDoubleSpinBox" name="dsb_bmax"/>
           </item>
           <item row="1" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_27"/>
+           <widget class="QDoubleSpinBox" name="dsb_amin"/>
           </item>
           <item row="3" column="4">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_33"/>
+           <widget class="QDoubleSpinBox" name="dsb_mu2"/>
           </item>
           <item row="3" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_30"/>
+           <widget class="QDoubleSpinBox" name="dsb_sigma2"/>
           </item>
           <item row="0" column="2">
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>A_min</string>
+             <string>a_min</string>
             </property>
            </widget>
           </item>
           <item row="3" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_31"/>
+           <widget class="QDoubleSpinBox" name="dsb_mu1"/>
           </item>
           <item row="1" column="4">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_29"/>
+           <widget class="QDoubleSpinBox" name="dsb_bmin"/>
           </item>
           <item row="2" column="1">
            <widget class="QLabel" name="label_6">
@@ -428,7 +442,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButton_6">
+           <widget class="QRadioButton" name="rb_d_uniform">
             <property name="text">
              <string>均匀分布</string>
             </property>
@@ -444,52 +458,52 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton_3">
+           <widget class="QRadioButton" name="rb_cd_uiniform">
             <property name="text">
              <string>均匀分布</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButton_5">
+           <widget class="QRadioButton" name="rb_cd_power">
             <property name="text">
              <string>指数分布</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_34"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_power_1"/>
           </item>
           <item row="1" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_35"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_power_2"/>
           </item>
           <item row="1" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_36"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_power_3"/>
           </item>
           <item row="2" column="0">
-           <widget class="QRadioButton" name="radioButton_4">
+           <widget class="QRadioButton" name="rb_cd_normal">
             <property name="text">
              <string>正态分布</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_40"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_normal_sigma1"/>
           </item>
           <item row="2" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_41"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_normal_sigma2"/>
           </item>
           <item row="2" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_42"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_normal_sigma3"/>
           </item>
           <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_37"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_normal_mu1"/>
           </item>
           <item row="3" column="2">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_38"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_normal_mu2"/>
           </item>
           <item row="3" column="3">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_39"/>
+           <widget class="QDoubleSpinBox" name="dsb_cd_normal_mu3"/>
           </item>
          </layout>
         </widget>

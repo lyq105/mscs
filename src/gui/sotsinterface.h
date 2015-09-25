@@ -6,11 +6,26 @@
 #include <string>
 
 
-struct Cell_info
+struct PMCell_Info
 {
+    /// 单胞类型
     std::string cell_type;
+    /// 单胞对角顶点
     double x0[3],x1[3];
-    double value[100];
+    /// 颗粒类型
+    int type[3];
+    /// 是否添加界面层
+    bool coating;
+    /// 网剖分参数
+    double global_meshsize;
+    ///轴长参数设置
+    double amax[3],amin[3],bmin[3],bmax[3];
+    /// 倾角分布参数
+    int d_sign;
+    double d_value[4];
+    /// 中心坐标分布参数
+    int coord_sign;
+    double coord_value[6];
 };
 
 struct Material
@@ -34,10 +49,11 @@ public:
     void set_prj_name(std::string name){ prj_name = name;}
     void set_prj_folder(std::string folder){ prj_folder = folder;}
     void set_analysis_type(std::string type){ analysis_type = type;}
-    void set_cell_info(Cell_info& cell_info);
+    void set_pmcell_info(PMCell_Info& cell_info);
 
 
     vtkSmartPointer<vtkUnstructuredGrid> get_cell_data();
+    PMCell_Info& get_pmcell_info(){return cell_info;}
     void get_material(int mat_index);
 
     void write_cell_solution(std::string filename);
@@ -48,7 +64,7 @@ private:
     std::string analysis_type;
     std::string prj_folder;
     std::string prj_name;
-    Cell_info cell_info;
+    PMCell_Info cell_info;
 };
 
 
