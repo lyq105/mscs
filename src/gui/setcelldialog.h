@@ -15,6 +15,15 @@ public:
     explicit SetCellDialog(QWidget *parent = 0);
     ~SetCellDialog();
 
+private slots:
+    void on_rb_cd_uiniform_clicked();
+    void on_rb_cd_power_clicked();
+    void on_rb_cd_normal_clicked();
+
+    void on_rb_d_uniform_clicked();
+
+    void on_rb_d_normal_clicked();
+
 private:
     void set_default_value();
     void get_cell_info();
