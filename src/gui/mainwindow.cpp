@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QScrollBar *pScroll = message_content->verticalScrollBar();
     pScroll->setSliderPosition(pScroll->maximum());
     message_content->setText("kai shi le xie xie");
-    message_content->append(QString::fromLocal8Bit("<red>错误</red>"));
+    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
 
     createStatusBar();
     createSlots();
