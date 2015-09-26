@@ -65,20 +65,34 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
 
-    ui->statusBar->showMessage("Initializing...",1000);
+
     ui->menu_mesh->setEnabled(0);
-    QTextEdit* message_content = new QTextEdit;
+
+    /// 设置输出窗口
+    message_content = new QTextEdit;
     message_content->setReadOnly(1);
     ui->message_box->hide();
-
     ui->message_box->setWidget(message_content);
     QScrollBar *pScroll = message_content->verticalScrollBar();
     pScroll->setSliderPosition(pScroll->maximum());
+    message_content->setText("kai shi le xie xie");
+    message_content->append(QString::fromLocal8Bit("<red>错误</red>"));
 
-    creatStatusBar();
-    creatSlots();
+    createStatusBar();
+    createSlots();
+    createVTKview();
+}
 
+MainWindow::~MainWindow()
+{
+    //    delete renderer;
+    delete message_content;
+    delete qvtkWidget;
+    delete ui;
+}
 
+void MainWindow::createVTKview()
+{
     qvtkWidget = new QVTKWidget(this);
     setCentralWidget(qvtkWidget);
     renderer = vtkRenderer::New();
@@ -86,43 +100,54 @@ MainWindow::MainWindow(QWidget *parent) :
     vtkSmartPointer<vtkRenderWindow> renderWindow =
             vtkSmartPointer<vtkRenderWindow>::New();
     renderer->ResetCamera();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+    //qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
     // qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     qvtkWidget->SetRenderWindow(renderWindow);
-    //renderer->SetBackground(169/255., 169./255, 169./255);
+    renderer->SetBackground(169/255., 169./255, 169./255);
+    renderer->SetBackground(1, 1, 1);
 
-    renderer->SetBackground(0,0,0);
-    renderer->SetBackground2(0,0,0);
+    //renderer->SetBackground2(1,1,1);
+    //renderer->SetGradientBackground(1);
     vtkSmartPointer<vtkAxesActor> axes =
-        vtkSmartPointer<vtkAxesActor>::New();
-    renderer->AddActor(axes);
-    renderer->RemoveAllViewProps();
+            vtkSmartPointer<vtkAxesActor>::New();
+    //renderer->AddActor(axes);
+    //renderer->RemoveAllViewProps();
+
+    vtkSmartPointer<vtkOrientationMarkerWidget> widget =
+            vtkSmartPointer<vtkOrientationMarkerWidget>::New();
+    widget->SetOutlineColor( 0, 0, 0 );
+    widget->SetOrientationMarker( axes );
+    widget->SetInteractor( qvtkWidget->GetInteractor() );
+    widget->SetViewport( 0.0, 0.0, 1, 1 );
+    widget->SetEnabled( 1 );
+    widget->InteractiveOn();
+    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+
+//    vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
+//    ren->SetViewport(0,0,0.2,0.2);
+//    ren->AddActor(axes);
+//    ren->SetBackground(1,1,1);
+//    qvtkWidget->GetRenderWindow()->AddRenderer(ren);
 
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     qvtkWidget->GetRenderWindow()->Render();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
-//    QCoreApplication::processEvents();
-}
-
-MainWindow::~MainWindow()
-{
-    //    delete renderer;
-    delete qvtkWidget;
-    delete ui;
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+    //    QCoreApplication::processEvents();
 }
 
 
-
-void MainWindow::creatStatusBar()
+////================================================================================================
+void MainWindow::createStatusBar()
 {
     QLabel* _pQLabel = new QLabel;
     _pQLabel->show();
     ui->statusBar->addPermanentWidget(_pQLabel);
+    ui->statusBar->showMessage("Initializing...",1000);
 }
 
-void MainWindow::creatSlots()
+void MainWindow::createSlots()
 {
     // about
     connect(ui->action_Mscs, SIGNAL(triggered()), this, SLOT(about()));
@@ -170,7 +195,7 @@ void MainWindow::import_cell_mesh()
     //    QDir defaultDir = QFSFileEngine::homePath();
     QString filter = tr(";;BDF Files(*.bdf)");
     QString sFileName = QFileDialog::getOpenFileName(
-                this, QString(tr("bdf")).toLocal8Bit(),
+                this, QString::fromLocal8Bit("导入单胞网格文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
     if(!sFileName.isNull())import_bdf(sFileName);
@@ -188,7 +213,7 @@ void MainWindow::import_inp()
     //    QDir defaultDir = QFSFileEngine::homePath();
     QString filter = tr("");
     QString sFileName = QFileDialog::getOpenFileName(
-                this, QString(tr("直接导入计算文件")).toLocal8Bit(),
+                this, QString::fromLocal8Bit("直接导入计算文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
     return;
@@ -291,7 +316,7 @@ void MainWindow::openSTL(QString stl_filename)
     renderer->AddActor(actor);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
     //   return 1;
 
 }
@@ -303,20 +328,20 @@ void MainWindow::import_bdf(QString bdf_filename)
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
     vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
-      intValue->SetNumberOfComponents(1);
-      intValue->SetName("subdomainid");
- //     intValue->InsertNextValue(5);
-//    vtkSmartPointer<vtkDoubleArray> mat =
-//        vtkSmartPointer<vtkDoubleArray>::New();
+    intValue->SetNumberOfComponents(1);
+    intValue->SetName("subdomainid");
+    //     intValue->InsertNextValue(5);
+    //    vtkSmartPointer<vtkDoubleArray> mat =
+    //        vtkSmartPointer<vtkDoubleArray>::New();
 
-//      // Create the data to store (here we just use (0,0,0))
-//      double locationValue[3] = {0,0,0};
+    //      // Create the data to store (here we just use (0,0,0))
+    //      double locationValue[3] = {0,0,0};
 
-//      location->SetNumberOfComponents(3);
-//      location->SetName("MyDoubleArray");
-//      location->InsertNextTuple(locationValue);
-      // The data is added to FIELD data (rather than POINT data as usual)
-//      polydata->GetFieldData()->AddArray(location);
+    //      location->SetNumberOfComponents(3);
+    //      location->SetName("MyDoubleArray");
+    //      location->InsertNextTuple(locationValue);
+    // The data is added to FIELD data (rather than POINT data as usual)
+    //      polydata->GetFieldData()->AddArray(location);
 
     std::ifstream infile(bdf_filename.toStdString().c_str());
     std::string s,l;
@@ -357,7 +382,7 @@ void MainWindow::import_bdf(QString bdf_filename)
                 vtkIdType n,subdomainId;
                 ss >> n >> subdomainId >>  a >> b >> c >> d;
                 if(subdomainId == 1) continue;
-//                std::cout << n << subdomainId << a << b << c <<d << std::endl;
+                //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
                 intValue->InsertNextValue(subdomainId);
@@ -366,7 +391,7 @@ void MainWindow::import_bdf(QString bdf_filename)
                 tetra->GetPointIds()->SetId(1, b-1);
                 tetra->GetPointIds()->SetId(2, c-1);
                 tetra->GetPointIds()->SetId(3, d-1);
-//                std::cout << n << std::endl;
+                //                std::cout << n << std::endl;
                 cellArray->InsertNextCell(tetra);
             }
         }
@@ -413,8 +438,8 @@ void MainWindow::import_bdf(QString bdf_filename)
     //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
 
 }
 
@@ -580,8 +605,8 @@ void MainWindow::read_neutral_format(QString filename )
     //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-//    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
+    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
 }
 
 

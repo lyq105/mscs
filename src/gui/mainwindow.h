@@ -12,6 +12,7 @@ class vtkRenderer;
 class vtkActor;
 class vtkPolyData;
 class vtkAppendPolyData;
+class QTextEdit;
 
 
 class MainWindow : public QMainWindow
@@ -43,13 +44,12 @@ private slots:
     void import_cell_mesh();
     void import_cell_geo();
     void set_cell();
-//    void
-
 
 private:
-    void creatSlots();
-    void creatStatusBar();
-    void creatToolbar();
+    void createSlots();
+    void createStatusBar();
+    void createToolbar();
+    void createVTKview();
 
 
     void openSTL(QString stl_filename);
@@ -61,6 +61,7 @@ private:
 
     SOTSinterface sots;
     Ui::MainWindow *ui;
+    QTextEdit* message_content;
     QVTKWidget* qvtkWidget;
     vtkRenderer* renderer;
 };

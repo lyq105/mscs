@@ -308,7 +308,7 @@
            <widget class="QDoubleSpinBox" name="dsb_fibre_cmin"/>
           </item>
           <item row="2" column="0">
-           <widget class="QCheckBox" name="checkBox_28">
+           <widget class="QCheckBox" name="ellipsoid">
             <property name="text">
              <string>椭球颗粒</string>
             </property>
@@ -327,7 +327,7 @@
            <widget class="QDoubleSpinBox" name="dsb_ellipsoid_cmin"/>
           </item>
           <item row="3" column="0">
-           <widget class="QCheckBox" name="checkBox_29">
+           <widget class="QCheckBox" name="coin">
             <property name="text">
              <string>薄钱币颗粒</string>
             </property>
