@@ -228,6 +228,7 @@ void MainWindow::new_project()
         sots.set_prj_folder(anatype.get_prj_folder().toStdString());
         sots.set_prj_name(anatype.get_prj_name().toStdString());
     }
+    //freopen()
 }
 void MainWindow::about()
 {
