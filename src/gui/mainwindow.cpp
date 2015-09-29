@@ -228,7 +228,11 @@ void MainWindow::new_project()
         sots.set_prj_folder(anatype.get_prj_folder().toStdString());
         sots.set_prj_name(anatype.get_prj_name().toStdString());
     }
-    //freopen()
+    QString logfile = anatype.get_prj_folder() + QString("/") + anatype.get_prj_name() +".log";
+    cout << logfile.toStdString().c_str() << endl;
+    freopen(logfile.toStdString().c_str(),"w",stdout);
+    cout << "这是一个分析文件" << endl;
+    //freopen("CON", "w", stdout);
 }
 void MainWindow::about()
 {
@@ -244,7 +248,24 @@ void MainWindow::show_message_box()
 void MainWindow::show_message_box(bool checked)
 {
     if (checked)
+    {
+//        fflush(stdout);
+//        if (_pReadStream->atEnd())
+//        {
+//            return;
+//        }
+
+//        QChar aChar;
+//        while (!_pReadStream->atEnd())
+//        {
+//            _pReadStream->operator >>(aChar);
+//            _messageTextEdit.insertPlainText(aChar);
+//        }
+
+//        QScrollBar *pScroll = _messageTextEdit.verticalScrollBar();
+//        pScroll->setSliderPosition(pScroll->maximum());
         ui->message_box->show();
+    }
     else
         ui->message_box->hide();
 }
