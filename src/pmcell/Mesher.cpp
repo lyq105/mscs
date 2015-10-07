@@ -65,8 +65,8 @@ int Mesher::Mesh_generate(ifstream &infile)
 
 	if(mesh_tet_map(mesh_size) == 0 )
 	{
-		hout << "~_~ 剖分失败！可能原因：增强项重叠或者最小体积单元与最大体积单元相差太大!" << endl;
-		hout << "****************************************************************************************" <<endl;	
+        std::cout << "~_~ 剖分失败！可能原因：增强项重叠或者最小体积单元与最大体积单元相差太大!" << endl;
+        std::cout << "****************************************************************************************" <<endl;
 		return 0;
 	}
 	
@@ -83,19 +83,19 @@ int Mesher::Mesh_generate(ifstream &infile)
 		//经过确认materialId ==0 是基体单元，materialId ==1 是椭球单元
 		clock_t ct0,ct1;
 		ct0 = clock();
-		hout << "-_- 开始生成界面层网格... " << endl;
+        std::cout << "-_- 开始生成界面层网格... " << endl;
 		if(gen_coating_mesh(thick_ratio, layer_num) == 0)
 		{
-			hout << "~_~ 生成界面层网格失败！" << endl;
-			hout << "*******************************************" <<endl;	
+            std::cout << "~_~ 生成界面层网格失败！" << endl;
+            std::cout << "*******************************************" <<endl;
 			return 0;
 		}
 
-		hout << "    输出tecplot网格数据....." << endl;
+        std::cout << "    输出tecplot网格数据....." << endl;
 		if (export_tecplot_data() == 0)
 		{
-			hout << "~_~ 输出tecplot网格数据失败！" << endl;
-			hout << "*******************************************" << endl;
+            std::cout << "~_~ 输出tecplot网格数据失败！" << endl;
+            std::cout << "*******************************************" << endl;
 			return 0;
 		}
 
@@ -108,24 +108,24 @@ int Mesher::Mesh_generate(ifstream &infile)
 		//}
 
 		ct1 = clock();
-		hout << "    生成界面层耗时：" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "秒" << endl;
-		hout << "^_^ 界面层网格生成完毕!" << endl<<endl;
+        std::cout << "    生成界面层耗时：" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "秒" << endl;
+        std::cout << "^_^ 界面层网格生成完毕!" << endl<<endl;
 	}
 	else
 	{
 		//在不生成边界层的情况下，将四面体单元类型倒为混合单元类型
 		clock_t ct0,ct1;
 		ct0 = clock();
-		hout << "-_- 将四面体网格转换...... " << endl;
+        std::cout << "-_- 将四面体网格转换...... " << endl;
 		if (change_elements_to_blend() == 0)
 		{
-			hout << " 将四面体单元类型倒为混合单元类型操作失败！" << endl;
-			hout << "*******************************************" << endl;
+            std::cout << " 将四面体单元类型倒为混合单元类型操作失败！" << endl;
+            std::cout << "*******************************************" << endl;
 			return 0;
 		}
 		ct1 = clock();
-		hout << "    转换四面体网格耗时：" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "秒" << endl;
-		hout << "^_^ 转换四面体网格完毕!" << endl << endl;
+        std::cout << "    转换四面体网格耗时：" << (double)(ct1 - ct0)/CLOCKS_PER_SEC << "秒" << endl;
+        std::cout << "^_^ 转换四面体网格完毕!" << endl << endl;
 	}
 	
 	//确定所有节点的相关单元信息
@@ -242,7 +242,7 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 		string str = "Mesh";
 		string MeshName = title+str+ch[num1]+ch[num2]+".dat";
 		ofstream out(MeshName.c_str(),ios::binary);
-		if(!out) { hout << "不能打开网格数据文件" << MeshName << "!" << endl;  exit(0); }
+        if(!out) { std::cout << "不能打开网格数据文件" << MeshName << "!" << endl;  exit(0); }
 		//---------------------------------------------------------------------
 		//单元数据
 		int nume = int(elements_vec.size());
@@ -286,7 +286,7 @@ int Mesher::Mesh_BinaryData(int mod, string data_file, int CNum)
 		string str = "Mesh";
 		string MeshName = title+str+ch[num1]+ch[num2]+".dat";
 		ifstream in(MeshName.c_str(),ios::binary);
-		if(!in) { hout << "不能打开网格数据文件" << MeshName << "!" << endl;  exit(0); }
+        if(!in) { std::cout << "不能打开网格数据文件" << MeshName << "!" << endl;  exit(0); }
 		//---------------------------------------------------------------------
 		//单元数据
 		int nume;
@@ -353,9 +353,9 @@ int Mesher::mesh_tet_map( double glength )
 
 	nodes_vec.clear();
 
-	hout<< "-_- 开始四面体网格剖分" << endl<<endl;
+    std::cout<< "-_- 开始四面体网格剖分" << endl<<endl;
 	//---------------------------------------------------------------------------
-	hout<< "-_- 开始生成背景网格（六面体）......" << endl;
+    std::cout<< "-_- 开始生成背景网格（六面体）......" << endl;
 	clock_t ct_background_begin = clock();
 
 	//生成背景网格
@@ -381,56 +381,56 @@ int Mesher::mesh_tet_map( double glength )
 	vector<int> sign_rec_faces(num_rec_faces,-1);
 
 	clock_t ct_background_end = clock();
-	hout << "    生成（六面体）背景网格耗时：" << (double)( ct_background_end - ct_background_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
-	hout << "^_^ 生成背景网格（六面体）完毕。" << endl<<endl;
+    std::cout << "    生成（六面体）背景网格耗时：" << (double)( ct_background_end - ct_background_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
+    std::cout << "^_^ 生成背景网格（六面体）完毕。" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout << "-_- 开始调整生成的六面体网格，拟合界面......" << endl;
+    std::cout << "-_- 开始调整生成的六面体网格，拟合界面......" << endl;
 	clock_t ct_adj_begin = clock();
 
 	//调整生成的六面体，使所有的六面体都能拆分成四面体，而没有四面体跨边界
 	if(adjust_hexes(hexes_vec,sign_rec_faces) == 0)
 	{
-		hout << " 调整生成的六面体操作(adjust_hexes)失败！" << endl;
-		hout << "*********************************************" << endl;
+        std::cout << " 调整生成的六面体操作(adjust_hexes)失败！" << endl;
+        std::cout << "*********************************************" << endl;
 		return 0;
 	}
 
 	clock_t ct_adj_end = clock();
-	hout << "    调整背景六面体网格耗时：" << (double)( ct_adj_end - ct_adj_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
-	hout << "^_^ 调整生成的六面体网格完毕。" << endl<<endl;
+    std::cout << "    调整背景六面体网格耗时：" << (double)( ct_adj_end - ct_adj_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
+    std::cout << "^_^ 调整生成的六面体网格完毕。" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout << "-_- 开始拆分六面体为四面体，拟合边界......" << endl;  
+    std::cout << "-_- 开始拆分六面体为四面体，拟合边界......" << endl;
 	clock_t ct_split_begin = clock();
 
 	//拆分六面体为四面体
 	if(split_hexes(hexes_vec,sign_rec_faces) == 0) 
 	{
-		hout << "拆分六面体为四面体操作失败！" << endl;
-		hout << "***********************************" << endl;
+        std::cout << "拆分六面体为四面体操作失败！" << endl;
+        std::cout << "***********************************" << endl;
 		return 0;
 	}
 
-	hout << "    生成节点nodes: " << (int)nodes_vec.size() << "    生成单元elements: " << (int)eles_vec.size() << endl;
+    std::cout << "    生成节点nodes: " << (int)nodes_vec.size() << "    生成单元elements: " << (int)eles_vec.size() << endl;
         
 	clock_t ct_split_end = clock();
-	hout << "    拆分六面体为四面体耗时：" << (double)( ct_split_end - ct_split_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
-	hout << "^_^ 拆分六面体为四面体完毕。" << endl<<endl;
+    std::cout << "    拆分六面体为四面体耗时：" << (double)( ct_split_end - ct_split_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
+    std::cout << "^_^ 拆分六面体为四面体完毕。" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout << "-_- 确定每个四面体的材料性质......" << endl;
+    std::cout << "-_- 确定每个四面体的材料性质......" << endl;
  	clock_t ct_mat_begin = clock();
 
 	//确定每个四面体的材料
 	deter_eles_mat();
 
  	clock_t ct_mat_end = clock();;
-	hout << "    确定每个四面体的材料性质耗时："<< (double)( ct_mat_end - ct_mat_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
-	hout << "^_^ 确定每个四面体的材料性质完毕。" << endl<<endl;
+    std::cout << "    确定每个四面体的材料性质耗时："<< (double)( ct_mat_end - ct_mat_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
+    std::cout << "^_^ 确定每个四面体的材料性质完毕。" << endl<<endl;
 
 	//---------------------------------------------------------------------------
-	hout<< "-_- 调整跨界面单元，使所有单元不会刺穿边界，并消除薄元。" << endl ;
+    std::cout<< "-_- 调整跨界面单元，使所有单元不会刺穿边界，并消除薄元。" << endl ;
 	clock_t ct_bound_begin = clock();
 	double alength = glength*0.5 ;
 
@@ -457,14 +457,14 @@ int Mesher::mesh_tet_map( double glength )
 	}
 
 	//输出数据
-	if( debuging_map_mesh ) hout << " eles_across_boundary_be.size(): " << (int)eles_across_boundary_be.size() << endl;
-	if( debuging_map_mesh ) hout << " eles_across_boundary_bf.size(): " << (int)eles_across_boundary_bf.size() << endl;
-	if( debuging_map_mesh ) hout << " eles_across_boundary_nbf.size(): " << (int)eles_across_boundary_nbf.size() << endl;
-	if( debuging_map_mesh ) hout << " eles_across_boundary_dmb.size(): " << (int)eles_across_boundary_dmb.size() << endl;
-	if( debuging_map_mesh ) hout << " eles_across_boundary_ndmb.size(): " << (int)eles_across_boundary_ndmb.size() << endl;
+    if( debuging_map_mesh ) std::cout << " eles_across_boundary_be.size(): " << (int)eles_across_boundary_be.size() << endl;
+    if( debuging_map_mesh ) std::cout << " eles_across_boundary_bf.size(): " << (int)eles_across_boundary_bf.size() << endl;
+    if( debuging_map_mesh ) std::cout << " eles_across_boundary_nbf.size(): " << (int)eles_across_boundary_nbf.size() << endl;
+    if( debuging_map_mesh ) std::cout << " eles_across_boundary_dmb.size(): " << (int)eles_across_boundary_dmb.size() << endl;
+    if( debuging_map_mesh ) std::cout << " eles_across_boundary_ndmb.size(): " << (int)eles_across_boundary_ndmb.size() << endl;
         
   
-	hout << "    跨边界单元数：" <<(int)(	eles_across_boundary_be.size()+
+    std::cout << "    跨边界单元数：" <<(int)(	eles_across_boundary_be.size()+
 																	eles_across_boundary_bf.size()+
 																	eles_across_boundary_dmb.size()+
 																	eles_across_boundary_ndmb.size() ) << endl;
@@ -506,7 +506,7 @@ int Mesher::mesh_tet_map( double glength )
 	for( int i=(int)deleting_ele.size()-1; i>=0; i-- )
 	{
 		eles_vec.erase(eles_vec.begin()+deleting_ele[i]);
-		if( debuging_map_mesh ) hout << "erase element: " << deleting_ele[i] << endl;
+        if( debuging_map_mesh ) std::cout << "erase element: " << deleting_ele[i] << endl;
 	}
 
 	//检查新生成的边中有无很小的边，有则清除（合并节点）
@@ -514,13 +514,13 @@ int Mesher::mesh_tet_map( double glength )
 //	check_tiny_edges(new_edges,min_dis); （此功能尚未完成）
 
 	clock_t ct_bound_end = clock();
-	hout<< "    调整跨界面单元耗时：" << (double)( ct_bound_end - ct_bound_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
-	hout<< "^_^ 调整跨界面单元成功完成." << endl;
+    std::cout<< "    调整跨界面单元耗时：" << (double)( ct_bound_end - ct_bound_begin )/CLOCKS_PER_SEC << " 秒。" << endl;
+    std::cout<< "^_^ 调整跨界面单元成功完成." << endl;
 
 	int min_max_en[2];
 	double min_max_vl[2];
 	cal_min_max_tet_volume(min_max_en,min_max_vl);
-	hout << "      最小体积：" << min_max_vl[0] << " 单元：" << min_max_en[0] << endl;
+    std::cout << "      最小体积：" << min_max_vl[0] << " 单元：" << min_max_en[0] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -528,21 +528,21 @@ int Mesher::mesh_tet_map( double glength )
 	//}
 	//hout << eles_vec[min_max_en[0]].materialId << endl;
 
-	hout << "      最大体积：" << min_max_vl[1] << " 单元：" << min_max_en[1] << endl;
+    std::cout << "      最大体积：" << min_max_vl[1] << " 单元：" << min_max_en[1] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
 	//	hout << eles_vec[min_max_en[1]].nodesId[i] << " " ;
 	//}
 	//hout << eles_vec[min_max_en[1]].materialId << endl;
-	hout << endl;
+    std::cout << endl;
 	
 	//输出四面体体积分布情况
 //	tet_vol_distrib(min_max_vl,"_a");
 	//输出四面体质量分布情况
 //	tet_quality("_a");
 	//---------------------------------------------------------------------------
-	hout<< "-_- 开始进行光顺处理......" << endl;
+    std::cout<< "-_- 开始进行光顺处理......" << endl;
 	clock_t ct_smooth_begin = clock();
 
 	//光顺处理
@@ -578,7 +578,7 @@ int Mesher::mesh_tet_map( double glength )
 	while( smoothing_3d(1) && smoothing_3d(0) && circle_num < 15 )
 	{
 		circle_num ++ ;
-		hout << "    光顺次数 NO: " << circle_num << "次" <<endl;
+        std::cout << "    光顺次数 NO: " << circle_num << "次" <<endl;
 	}
 
 	//检查一下有没有单元材料属性没确定，只是用来检测程序是否运行正常，因为后面改了很多，不敢保证了
@@ -586,27 +586,27 @@ int Mesher::mesh_tet_map( double glength )
 	{
 		if( eles_vec[i].materialId == -1 )
 		{
-			hout <<"Element "	<< i ;
-			hout << " Nodes: "	<< eles_vec[i].nodesId[0] << " "
+            std::cout <<"Element "	<< i ;
+            std::cout << " Nodes: "	<< eles_vec[i].nodesId[0] << " "
 											<< eles_vec[i].nodesId[1] << " "
 											<< eles_vec[i].nodesId[2] << " "
 											<< eles_vec[i].nodesId[3] ;
-			hout << " material id: -1." <<endl;
+            std::cout << " material id: -1." <<endl;
 
 			//强制这些单元材料为颗粒材料
 			eles_vec[i].materialId = 1;
-			hout << "强制Element" << i << "materialid为1." << endl;
+            std::cout << "强制Element" << i << "materialid为1." << endl;
 		}
 	}
 
 	clock_t ct_smooth_end = clock();
-	hout<< "    光顺处理耗时：" << (double)( ct_smooth_end - ct_smooth_begin )/CLOCKS_PER_SEC << " 秒" << endl;
-	hout<< "    单元："<< (int)eles_vec.size() <<" 节点：" << (int)nodes_vec.size() << endl;
-	hout<< "^_^ 光顺处理成功完毕." << endl;
+    std::cout<< "    光顺处理耗时：" << (double)( ct_smooth_end - ct_smooth_begin )/CLOCKS_PER_SEC << " 秒" << endl;
+    std::cout<< "    单元："<< (int)eles_vec.size() <<" 节点：" << (int)nodes_vec.size() << endl;
+    std::cout<< "^_^ 光顺处理成功完毕." << endl;
 
 
 	cal_min_max_tet_volume(min_max_en,min_max_vl);
-	hout << "      最小体积：" << min_max_vl[0] << " 单元：" << min_max_en[0] << endl;
+    std::cout << "      最小体积：" << min_max_vl[0] << " 单元：" << min_max_en[0] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -614,7 +614,7 @@ int Mesher::mesh_tet_map( double glength )
 	//}
 	//hout << eles_vec[min_max_en[0]].materialId << endl;
 
-	hout << "      最大体积：" << min_max_vl[1] << " 单元：" << min_max_en[1] << endl;
+    std::cout << "      最大体积：" << min_max_vl[1] << " 单元：" << min_max_en[1] << endl;
 	//hout << "        " ;
 	//for( int i=0; i<4; i++ )
 	//{
@@ -623,10 +623,10 @@ int Mesher::mesh_tet_map( double glength )
 	//hout << eles_vec[min_max_en[1]].materialId << endl;
 
 	double  min_max_vl_radio = min_max_vl[0]/min_max_vl[1];
-	hout << "      最小体积与最大体积之比为：" << min_max_vl_radio << endl;
+    std::cout << "      最小体积与最大体积之比为：" << min_max_vl_radio << endl;
 	if(  min_max_vl_radio < 0.01 )
 	{
-		hout << "      请注意! 剖分单元的最小体积与最大体积相差太大！！" << endl;
+        std::cout << "      请注意! 剖分单元的最小体积与最大体积相差太大！！" << endl;
 //		return 0;
 	}
 
@@ -639,15 +639,15 @@ int Mesher::mesh_tet_map( double glength )
 //	Reincrese_vol_raito();
 	
 	double vol_ratio = volume_ratio();
-	hout << "      椭球体积与基体体积之比：" << vol_ratio << endl <<endl;
+    std::cout << "      椭球体积与基体体积之比：" << vol_ratio << endl <<endl;
 
 	 //确定边界节点和单元
 	deter_boundary_nodes();
 
 	clock_t ct_mesh_end = clock();
-	hout << "      共剖分节点：" << (int)nodes_vec.size() << "  单元：" << (int)eles_vec.size() << endl;
-	hout << "      整个剖分过程共耗时：" << (double)( ct_mesh_end - ct_mesh_begin )/CLOCKS_PER_SEC << " 秒" << endl;
-	hout << "^_^ 四面体网格剖分成功!" << endl<<endl; 
+    std::cout << "      共剖分节点：" << (int)nodes_vec.size() << "  单元：" << (int)eles_vec.size() << endl;
+    std::cout << "      整个剖分过程共耗时：" << (double)( ct_mesh_end - ct_mesh_begin )/CLOCKS_PER_SEC << " 秒" << endl;
+    std::cout << "^_^ 四面体网格剖分成功!" << endl<<endl;
 
 	return 1;
 }
@@ -877,8 +877,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 		where_is_nodes[i] = where_is( &nodes_vec[i],  is_on, i );
 		if( where_is_nodes[i] == -3 ) 
 		{
-			hout << " 确定每个节点的位置操作(where_is)失败! " << endl;
-			hout << "*******************************************" << endl;
+            std::cout << " 确定每个节点的位置操作(where_is)失败! " << endl;
+            std::cout << "*******************************************" << endl;
 			return 0;
 		}
 		is_on_nodes[i] = is_on;
@@ -896,13 +896,13 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 	{
 		if( debuging )	//可以输出单元及节点编号和节点所处位置情况
 		{
-			hout << "-----------------------------------------------------------" << endl;
-			hout << "hexahedron " << i << "(" << (int)hexes.size() << "): ";
+            std::cout << "-----------------------------------------------------------" << endl;
+            std::cout << "hexahedron " << i << "(" << (int)hexes.size() << "): ";
 			for( int j=0; j<8; j++ )
 			{
-				hout << "      " << hexes[i].nodesId[j];
+                std::cout << "      " << hexes[i].nodesId[j];
 			}
-			hout << endl;
+            std::cout << endl;
 
 			int show = 0;
 			for( int j=0; j<8; j++ )
@@ -917,20 +917,20 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 			if( show == 1)
 			{
-				hout << "hex No. " << i << endl;
-				hout << "    where is the nodes: " ;
-				hout.setf(ios::right,ios::adjustfield);
+                std::cout << "hex No. " << i << endl;
+                std::cout << "    where is the nodes: " ;
+                std::cout.setf(ios::right,ios::adjustfield);
 				for( int j=0; j<8; j++ )
 				{
-					hout << "    " << where_is_nodes[hexes[i].nodesId[j]];
+                    std::cout << "    " << where_is_nodes[hexes[i].nodesId[j]];
 				}
-				hout << endl;
-				hout << "    is on the surface : " ;
+                std::cout << endl;
+                std::cout << "    is on the surface : " ;
 				for( int j=0; j<8; j++ )
 				{
-					hout << "    " << is_on_nodes[hexes[i].nodesId[j]];
+                    std::cout << "    " << is_on_nodes[hexes[i].nodesId[j]];
 				}
-				hout << endl;
+                std::cout << endl;
 			}
 		}
 
@@ -953,7 +953,7 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			{   
 				if( debuging )
 				{
-					hout << "       node: " << j << endl;
+                    std::cout << "       node: " << j << endl;
 				}
 
 				int nei_i[3];    //三个相邻的节点编号（局部编号）
@@ -990,11 +990,11 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 					dis0 = nodes_vec[nn].distance_to(&pnodes[0]);
 				}
 
-				if( debuging ) hout << "         dis0: " << dis0 << endl;
+                if( debuging ) std::cout << "         dis0: " << dis0 << endl;
 
 				double nei_dis[3];
 
-				if( debuging ) hout << "         nei dis: " ;
+                if( debuging ) std::cout << "         nei dis: " ;
 
 				int move_nei=1;			//是否能够移动相邻节点的标志，等于0不可以移动，等于1可以移动
 
@@ -1021,8 +1021,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 						if( debuging )
 						{
-							hout << "nn: " << nn << " nn1: " << nei_num[k] ;
-							hout << " dis1: " << dis1 << " dis2: " << dis2 << endl;
+                            std::cout << "nn: " << nn << " nn1: " << nei_num[k] ;
+                            std::cout << " dis1: " << dis1 << " dis2: " << dis2 << endl;
 						}
 
 						if( dis1 > dis2 )			//把这个邻近节点直接从它所在的椭球粗暴的拉到本节点所在椭球
@@ -1034,8 +1034,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 						}
 						else
 						{
-							hout << " dis2 > dis1，可能有重叠的椭球，暂不处理 " << endl;
-							hout << "*******************************************" << endl;
+                            std::cout << " dis2 > dis1，可能有重叠的椭球，暂不处理 " << endl;
+                            std::cout << "*******************************************" << endl;
 							return 0;
 						}
 					}
@@ -1052,11 +1052,11 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 						nei_dis[k] = nodes_vec[nei_num[k]].distance_to(&pnodes[k+1]);
 					}
 
-					if( debuging ) hout << "       " << nei_num[k] << "        " << nei_dis[k] ;
+                    if( debuging ) std::cout << "       " << nei_num[k] << "        " << nei_dis[k] ;
 
 				}
 
-				if( debuging ) hout << endl;
+                if( debuging ) std::cout << endl;
 
 				//检查是否应该移动邻节点到椭球面上
 				for( int k=0; k<3; k++ )
@@ -1066,7 +1066,7 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 					 if( nei_dis[k] > dis0 || (movable_ns[nei_num[k]] == 0&&nei_dis[k]>min_dis) )
 					{
-						if(debuging) hout << "movable_ns["<<nei_num[k]<<"]: " << movable_ns[nei_num[k]]<< " nei_dis["<<k<<"]: " << nei_dis[k] << endl;
+                        if(debuging) std::cout << "movable_ns["<<nei_num[k]<<"]: " << movable_ns[nei_num[k]]<< " nei_dis["<<k<<"]: " << nei_dis[k] << endl;
 						move_nei = 0;		//只要有一个不能移动，其他的外节点能移动也不行
 						break;
 					}
@@ -1074,13 +1074,13 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 				if( debuging )
 				{
-					hout << "Project result: ";
+                    std::cout << "Project result: ";
 					for( int k=0; k<4; k++ )
 					{
-						hout << "    " << error[k] ;
+                        std::cout << "    " << error[k] ;
 					}
-					hout << endl;
-					hout << "move_nei: " << move_nei << endl;
+                    std::cout << endl;
+                    std::cout << "move_nei: " << move_nei << endl;
 				}
 
 				if( move_nei == 0 )
@@ -1093,11 +1093,11 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 					if( debuging )
 					{
-						hout << "Moved Node " << nn << "(1) to the surface." << endl;
-						hout << "    Before: " << "      " << nodes_vec[nn].x ;
-						hout <<  "      " << nodes_vec[nn].y ;
-						hout <<  "      " << nodes_vec[nn].z ;
-						hout << endl;
+                        std::cout << "Moved Node " << nn << "(1) to the surface." << endl;
+                        std::cout << "    Before: " << "      " << nodes_vec[nn].x ;
+                        std::cout <<  "      " << nodes_vec[nn].y ;
+                        std::cout <<  "      " << nodes_vec[nn].z ;
+                        std::cout << endl;
 					}
                                         
 					//移动本节点后，本节点在椭球边界面上，所以应该加在is_on_ln向量中		
@@ -1110,10 +1110,10 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 					if( debuging )
 					{
-						hout << "    After : " << "      " << nodes_vec[nn].x ;
-						hout <<  "     " << nodes_vec[nn].y ;
-						hout <<  "     " << nodes_vec[nn].z ;
-						hout << endl;
+                        std::cout << "    After : " << "      " << nodes_vec[nn].x ;
+                        std::cout <<  "     " << nodes_vec[nn].y ;
+                        std::cout <<  "     " << nodes_vec[nn].z ;
+                        std::cout << endl;
 					}
 				}
 				else
@@ -1122,9 +1122,9 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 					{
 						if( debuging )
 						{
-							hout << "Moving No." << k << " neighbor (node " << nei_num[k] << ")" <<endl;
-							hout << "    nei_win: " << nei_win[k] << " project error: " << error[k+1] ;
-							hout << " movable: " << movable_ns[nei_num[k]] << endl;
+                            std::cout << "Moving No." << k << " neighbor (node " << nei_num[k] << ")" <<endl;
+                            std::cout << "    nei_win: " << nei_win[k] << " project error: " << error[k+1] ;
+                            std::cout << " movable: " << movable_ns[nei_num[k]] << endl;
 						}
 						//如果该邻节点与本节点在同一颗粒中仍旧跳过
 						if( nei_win[k] == win ) continue;
@@ -1136,8 +1136,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 							//已经在别的颗粒表面，但又非常近，于是乎，强制认为已经在边界上了（把两个颗粒连起来）
 							if( debuging )
 							{
-								hout << "nei_dis[" << k <<"]: " << nei_dis[k] ;
-								hout << " min_dis: " << min_dis << endl;
+                                std::cout << "nei_dis[" << k <<"]: " << nei_dis[k] ;
+                                std::cout << " min_dis: " << min_dis << endl;
 							}
 							if( nei_dis[k] == 0 )
 							{
@@ -1168,11 +1168,11 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
                                                   
 						if( debuging )
 						{
-							hout << "Moved Node " << nei_num[k] << "(2) to the surface." << endl;
-							hout << "    Before: " << "      " << nodes_vec[nei_num[k]].x ;
-							hout <<  "      " << nodes_vec[nei_num[k]].y ;
-							hout <<  "      " << nodes_vec[nei_num[k]].z ;
-							hout << endl;
+                            std::cout << "Moved Node " << nei_num[k] << "(2) to the surface." << endl;
+                            std::cout << "    Before: " << "      " << nodes_vec[nei_num[k]].x ;
+                            std::cout <<  "      " << nodes_vec[nei_num[k]].y ;
+                            std::cout <<  "      " << nodes_vec[nei_num[k]].z ;
+                            std::cout << endl;
 						}
 
 						is_on_ln.push_back(nei_i[k]);
@@ -1185,10 +1185,10 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
                                                 
 						if( debuging )
 						{
-							hout << "    After : " << "      " << nodes_vec[nei_num[k]].x ;
-							hout << "      " << nodes_vec[nei_num[k]].y ;
-							hout << "      " << nodes_vec[nei_num[k]].z ;
-							hout << endl;
+                            std::cout << "    After : " << "      " << nodes_vec[nei_num[k]].x ;
+                            std::cout << "      " << nodes_vec[nei_num[k]].y ;
+                            std::cout << "      " << nodes_vec[nei_num[k]].z ;
+                            std::cout << endl;
 						}                                          
 					}
 				}
@@ -1217,8 +1217,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 			if( debuging )
 			{
-				hout << "checking node " << j << "(" << nn << ").............." << endl;
-				hout << "    win: " << win << endl;
+                std::cout << "checking node " << j << "(" << nn << ").............." << endl;
+                std::cout << "    win: " << win << endl;
 			}
                         
 			if( win != -1 && is_on_nodes[nn] == 0 )
@@ -1259,8 +1259,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 						if(debuging)
 						{
-							hout << "    Node " << k << "(" << nn1 << "): ";
-							hout << " win1: " << win1 << " dis1: " << dis1 << endl;
+                            std::cout << "    Node " << k << "(" << nn1 << "): ";
+                            std::cout << " win1: " << win1 << " dis1: " << dis1 << endl;
 						}
 
 						if( dis1 < ZERO ) continue; //已经在界面上了
@@ -1276,25 +1276,25 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 		//当前六面体的拆分样式（六个面的斜线方向）
 		int face_style[6];
-		if( debuging ) hout << "face_style initial: " ;
+        if( debuging ) std::cout << "face_style initial: " ;
 		for( int j=0; j<6; j++ )
 		{
 			int sn = hexes[i].facesId[j];
 			face_style[j] = sign_faces[sn];
-			if( debuging ) hout << "    " << sign_faces[sn];
+            if( debuging ) std::cout << "    " << sign_faces[sn];
 		}
-		if( debuging ) hout << endl;
+        if( debuging ) std::cout << endl;
                 
 		for( int j=0; j<(int)wb.size(); j++ )
 		{
 			if( debuging )
 			{
-				hout << "Belongs to particle: " << wb[j] << ": ";
+                std::cout << "Belongs to particle: " << wb[j] << ": ";
 				for( int k=0; k<(int)wnodes[j].size(); k++ )
 				{
-					hout << "    " << wnodes[j][k] ;
+                    std::cout << "    " << wnodes[j][k] ;
 				}
-				hout << endl;
+                std::cout << endl;
 			}
 
 			if( wnodes[j].size() == 1 )
@@ -1353,33 +1353,33 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 			if( show == 1)
 			{
-				hout << "hex No. " << i << endl;
-				hout << "    where is the nodes: " ;
-				hout.setf(ios::right,ios::adjustfield);
+                std::cout << "hex No. " << i << endl;
+                std::cout << "    where is the nodes: " ;
+                std::cout.setf(ios::right,ios::adjustfield);
 				for( int j=0; j<8; j++ )
 				{
-					hout << "     " << where_is_nodes[hexes[i].nodesId[j]];
+                    std::cout << "     " << where_is_nodes[hexes[i].nodesId[j]];
 				}
-				hout << endl;
-				hout << "    is on the surface : " ;
+                std::cout << endl;
+                std::cout << "    is on the surface : " ;
 				for( int j=0; j<8; j++ )
 				{
-					hout << "     " << is_on_nodes[hexes[i].nodesId[j]];
+                    std::cout << "     " << is_on_nodes[hexes[i].nodesId[j]];
 				}
-				hout << endl;
+                std::cout << endl;
 
-				hout << "    surface signal    : " ;
+                std::cout << "    surface signal    : " ;
 				for( int j=0; j<6; j++ )
 				{
-					hout << "     " << hexes[i].facesId[j];
+                    std::cout << "     " << hexes[i].facesId[j];
 				}
-				hout << endl;
-				hout << "                        " ;
+                std::cout << endl;
+                std::cout << "                        " ;
 				for( int j=0; j<6; j++ )
 				{
-					hout << "     " << sign_faces[hexes[i].facesId[j]];
+                    std::cout << "     " << sign_faces[hexes[i].facesId[j]];
 				}
-				hout << endl;
+                std::cout << endl;
 			}
 		}
 	}
@@ -1387,8 +1387,8 @@ int Mesher::adjust_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 //	保证单胞侧面上的点还要在侧面上，边线上的点还要在边线上，角点保持不动
 	recover_bnodes(bnodes_vec);
 
-	hout << "    总投影：" << pv <<"次！" ;
-	hout << "    失败：" << pl << "次！" << endl;
+    std::cout << "    总投影：" << pv <<"次！" ;
+    std::cout << "    失败：" << pl << "次！" << endl;
 /*
 	string file="adjusted_hexes.dat";
 	string oldfile=hout.output_file;
@@ -1439,11 +1439,11 @@ int Mesher::where_is( Node* node,  int &is_on, int node_count )
 			{
 				if( node_count >= 0 )
 				{
-					hout << node_count << "号节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain < 0中） " << endl;
+                    std::cout << node_count << "号节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain < 0中） " << endl;
 				}
 				else
 				{
-					hout << "发现有节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain < 0中） " << endl;
+                    std::cout << "发现有节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain < 0中） " << endl;
 				}
 				rvalue = -3;
 			}
@@ -1462,11 +1462,11 @@ int Mesher::where_is( Node* node,  int &is_on, int node_count )
 			{
 				if( node_count >= 0 )
 				{
-					hout << node_count << "号节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain == 0中） " << endl;
+                    std::cout << node_count << "号节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain == 0中） " << endl;
 				}
 				else
 				{
-					hout << "发现有节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain == 0中） " << endl;
+                    std::cout << "发现有节点同时在" << already_contained << "和" << rvalue << "两个椭球体内或界面上（于where is函数is_contain == 0中） " << endl;
 				}
 				rvalue = -3;
 			}
@@ -1489,7 +1489,7 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
 {
         bool debuging = false;
 //      if( error != NULL && *error == 2 ) debuging = true;
-        if( debuging ) hout << "Node: " << node.x << " " << node.y << " " << node.z << " flag: " << node.flag << endl;
+        if( debuging ) std::cout << "Node: " << node.x << " " << node.y << " " << node.z << " flag: " << node.flag << endl;
 
 
         int lerror;
@@ -1501,9 +1501,9 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
 
         if( debuging )
 		{
-			hout << "First projection(" << lerror << "): " ;
-			hout << rp.x << " " << rp.y << " " << rp.z ;
-			hout << " ff: " << sur->fvalue(rp.x, rp.y, rp.z ) << endl;
+            std::cout << "First projection(" << lerror << "): " ;
+            std::cout << rp.x << " " << rp.y << " " << rp.z ;
+            std::cout << " ff: " << sur->fvalue(rp.x, rp.y, rp.z ) << endl;
 		}
 
         if( node.flag < 0 ) return Node(rp);   //内部节点
@@ -1561,11 +1561,11 @@ Node Mesher::project2_elli_surf(Node &node,Surface* sur, int *error)
              
         if( debuging )
 		{
-                hout << "Second projection(" << lerror1 << "): " ;
-                hout << rp1.x << " " << rp1.y << " " << rp1.z << endl;
+                std::cout << "Second projection(" << lerror1 << "): " ;
+                std::cout << rp1.x << " " << rp1.y << " " << rp1.z << endl;
         }
 
-        if( debuging ) hout << "lerror1: " << lerror1 << endl;
+        if( debuging ) std::cout << "lerror1: " << lerror1 << endl;
 
         if( lerror1 == 0 )
 		{
@@ -1777,13 +1777,13 @@ int Mesher::recover_bnodes(vector<int> &bnodes)
                 Node *node = &nodes_vec[bnodes_vec[i]];
                 if( debuging )
 				{
-                        hout << "------------------------------------------------------" << endl;
-                        hout << "i: " << i << " node(" << bnodes[i] << "): " ;
-                        hout << "     " << node->x ;
-                        hout << "     " << node->y ;
-                        hout << "     " << node->z ;
-                        hout << "     " << node->flag ;
-                        hout << endl;
+                        std::cout << "------------------------------------------------------" << endl;
+                        std::cout << "i: " << i << " node(" << bnodes[i] << "): " ;
+                        std::cout << "     " << node->x ;
+                        std::cout << "     " << node->y ;
+                        std::cout << "     " << node->z ;
+                        std::cout << "     " << node->flag ;
+                        std::cout << endl;
                 }
                 switch( node->flag )
 				{
@@ -1881,12 +1881,12 @@ int Mesher::recover_bnodes(vector<int> &bnodes)
                 }
                 if( debuging )
 				{
-                        hout << "After recovery: " ;
-                        hout << "      " << node->x ;
-                        hout << "      " << node->y ;
-                        hout << "      " << node->z ;
-                        hout << "      " << node->flag ;
-                        hout << endl;
+                        std::cout << "After recovery: " ;
+                        std::cout << "      " << node->x ;
+                        std::cout << "      " << node->y ;
+                        std::cout << "      " << node->z ;
+                        std::cout << "      " << node->flag ;
+                        std::cout << endl;
                 }
         }
         return 1;
@@ -1904,37 +1904,37 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 	{
 		if( debuging )
 		{
-			hout << "-------------------------------------------------------" << endl;
-			hout << "Hexahedron  " << "    " << i << "(" << "    " << (int)hexes.size() << "): " ;
+            std::cout << "-------------------------------------------------------" << endl;
+            std::cout << "Hexahedron  " << "    " << i << "(" << "    " << (int)hexes.size() << "): " ;
 			for( int j=0; j<8; j++ )
 			{
-				hout << "    " << hexes[i].nodesId[j] ;
+                std::cout << "    " << hexes[i].nodesId[j] ;
 			}
-			hout << endl;
-			hout << "where is nodes        : " ;
+            std::cout << endl;
+            std::cout << "where is nodes        : " ;
 			for( int j=0; j<8; j++ )
 			{
-				hout << "      " << where_is_nodes[hexes[i].nodesId[j]] ;
+                std::cout << "      " << where_is_nodes[hexes[i].nodesId[j]] ;
 			}
-			hout << endl;
-			hout << "in on face            : " ;
+            std::cout << endl;
+            std::cout << "in on face            : " ;
 			for( int j=0; j<8; j++ )
 			{
-				hout << "      " << is_on_nodes[hexes[i].nodesId[j]] ;
+                std::cout << "      " << is_on_nodes[hexes[i].nodesId[j]] ;
 			}
-			hout << endl;
-			hout << "surfaces signal       : " ;
+            std::cout << endl;
+            std::cout << "surfaces signal       : " ;
 			for( int j=0; j<6; j++ )
 			{
-				hout << "      " << hexes[i].facesId[j] ;
+                std::cout << "      " << hexes[i].facesId[j] ;
 			}
-			hout << endl;
-			hout << "                        " ;
+            std::cout << endl;
+            std::cout << "                        " ;
 			for( int j=0; j<6; j++ )
 			{
-				hout << "      " << sign_faces[hexes[i].facesId[j]] ;
+                std::cout << "      " << sign_faces[hexes[i].facesId[j]] ;
 			}
-			hout << endl;
+            std::cout << endl;
 		}
 
 		int hex_info[14];
@@ -2005,12 +2005,12 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 		if( debuging )
 		{
-			hout << "surfaces signal (new) : " ;
+            std::cout << "surfaces signal (new) : " ;
 			for( int j=0; j<6; j++ )
 			{
-				hout << "      " << face_style[j] ;
+                std::cout << "      " << face_style[j] ;
 			}
-			hout << endl;
+            std::cout << endl;
 		}
 
 		for( int j=0; j<6; j++ )
@@ -2044,7 +2044,7 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 			}
 		}
 
-		if(debuging) hout << "splited into elements: " << endl;
+        if(debuging) std::cout << "splited into elements: " << endl;
 		for( int j=0; j<(int)tets.size(); j++ )
 		{
 			int ele_num = (int)eles_vec.size();
@@ -2056,12 +2056,12 @@ int Mesher::split_hexes(vector<Hexahedron> &hexes, vector<int> &sign_faces)
 
 			if( debuging )
 			{
-				hout << "Element id: " << ele_num << " Nodes: " ;
+                std::cout << "Element id: " << ele_num << " Nodes: " ;
 				for(int k=0; k<4; k++ )
 				{
-					hout << "      " << tets[j].nodesId[k];
+                    std::cout << "      " << tets[j].nodesId[k];
 				}
-				hout << endl;
+                std::cout << endl;
 			}
 		}
 	}
@@ -2154,13 +2154,13 @@ int Mesher::best_split_hex2_tet(int* hex_info,vector<Tetrahedron> &tets)
 	bool debuging = false;
 	if( debuging )
 	{
-		hout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		hout << "split info: " ;
+        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        std::cout << "split info: " ;
 		for( int i=0; i<6; i++ )
 		{
-			hout << "    " << hex_info[i+8] ;
+            std::cout << "    " << hex_info[i+8] ;
 		}
-		hout << endl;
+        std::cout << endl;
 	}
 	for( int i=0; i<6; i++ )
 	{
@@ -2202,13 +2202,13 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
           
 	if(debuging)
 	{                
-		hout << "==========================================" << endl;
-		hout << "hex: " ;
+        std::cout << "==========================================" << endl;
+        std::cout << "hex: " ;
 		for( int i=0; i<14; i++ )
 		{
-			hout << hex[i] << " " ;
+            std::cout << hex[i] << " " ;
 		}
-		hout << endl;
+        std::cout << endl;
 	}
 	vector<Tetrahedron> local_tets;  //以局部节点编号表示的四面体
 
@@ -2249,9 +2249,9 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 		if( sign_tri_face[i] > 0 ) continue;		//表示已经经过处理
 		if(debuging)
 		{
-			hout << "-------------------------------------" << endl;
-			hout << "tri face " << i+1 << endl;
-			hout << "sign_dealed_tri_faces: " << sign_dealed_tri_faces[i] << endl;
+            std::cout << "-------------------------------------" << endl;
+            std::cout << "tri face " << i+1 << endl;
+            std::cout << "sign_dealed_tri_faces: " << sign_dealed_tri_faces[i] << endl;
 		}
 		//收集能与第i个三角面片构成四面体的节点
 		if( sign_dealed_tri_faces[i] == 0 )
@@ -2259,18 +2259,18 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 			i_vec.push_back(i);  //记录搜索过可用节点的三角面片编号，以备后退时使用
 			if( debuging )
 			{
-				hout << "vertexes signal: " ;
+                std::cout << "vertexes signal: " ;
 				for( int j=0; j<8; j++ )
 				{
-					hout << vertexes[j] << " " ;
+                    std::cout << vertexes[j] << " " ;
 				}
-				hout << endl;
-				hout << "Surfaces signal: " ;
+                std::cout << endl;
+                std::cout << "Surfaces signal: " ;
 				for( int j=0; j<8; j++ )
 				{
-					hout << sign_dealed_tri_faces[j] << " " ;
+                    std::cout << sign_dealed_tri_faces[j] << " " ;
 				}
-				hout << endl;
+                std::cout << endl;
 			}
 			//确定需要检查的4个节点（三角面片对面的四个节点，并把最近的节点放在最后）
 			int check_nn[4];
@@ -2333,15 +2333,15 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 
 		if(debuging)
 		{
-			hout << "The nodes can be used to form a tet: " ;
-			hout << (int)node_for_face[i].size() << endl;
+            std::cout << "The nodes can be used to form a tet: " ;
+            std::cout << (int)node_for_face[i].size() << endl;
 			for( int j=0; j<(int)node_for_face[i].size(); j++ )
 			{
-				hout << "     " << node_for_face[i][j][0] ;
-				hout << "     " << node_for_face[i][j][1] ;
-				hout << "     " << node_for_face[i][j][2] ;
-				hout << "     " << node_for_face[i][j][3] ;
-				hout << endl;
+                std::cout << "     " << node_for_face[i][j][0] ;
+                std::cout << "     " << node_for_face[i][j][1] ;
+                std::cout << "     " << node_for_face[i][j][2] ;
+                std::cout << "     " << node_for_face[i][j][3] ;
+                std::cout << endl;
 			}
 		}
 
@@ -2374,7 +2374,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 					sign_diag_line = i+1;
 					if(debuging)
 					{
-						hout << "diag_line: " << diag_line << endl;
+                        std::cout << "diag_line: " << diag_line << endl;
 					}
 				}
 			}
@@ -2383,7 +2383,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 				vertexes[tri_faces[i].nodesId[1]] = i+1;
 				if( debuging )
 				{
-					hout << "Sign the node NO. " << tri_faces[i].nodesId[1] << " for used." << endl;
+                    std::cout << "Sign the node NO. " << tri_faces[i].nodesId[1] << " for used." << endl;
 				}
 			}
 			//存在直边，需要标记已经处理过的三角面片，否则会生成重复单元
@@ -2400,7 +2400,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 							sign_tri_face[fn] = i+1;
 							if(debuging)
 							{
-								hout << "Sign the surface NO. " << fn << " for used." << endl;
+                                std::cout << "Sign the surface NO. " << fn << " for used." << endl;
 							}
 						}
 					}
@@ -2412,7 +2412,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 							sign_tri_face[fn] = i+1;
 							if(debuging)
 							{
-								hout << "Sign the surface NO. " << fn << " for used." << endl;
+                                std::cout << "Sign the surface NO. " << fn << " for used." << endl;
 							}
 						}
 					}
@@ -2423,7 +2423,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 		{
 			if( debuging )
 			{
-				hout << "Not pass. Back." << endl;
+                std::cout << "Not pass. Back." << endl;
 			}
 			//构造失败，清除在这一步所做的标记并回退到上一步
 			sign_dealed_tri_faces[i]=0;
@@ -2443,7 +2443,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 					sign_tri_face[j]=0;
 					if(debuging)
 					{
-						hout << "Unmark the surface NO. " << j << " for used." << endl;
+                        std::cout << "Unmark the surface NO. " << j << " for used." << endl;
 					}
 				}
 			}
@@ -2458,7 +2458,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 				sign_diag_line = 0;
 				if(debuging)
 				{
-					hout << "Clear the diag_line signal." << endl;
+                    std::cout << "Clear the diag_line signal." << endl;
 				}
 			}
 			for( int j=0; j<8; j++ )
@@ -2468,7 +2468,7 @@ int Mesher::hex2_6tet(int hex[14], vector<Tetrahedron > &tets,double volume)
 					vertexes[j] = 0;
 					if( debuging )
 					{
-						hout << "Unmark the node NO. " << j << " for used." << endl;
+                        std::cout << "Unmark the node NO. " << j << " for used." << endl;
 					}
 				}
 			}
@@ -2801,7 +2801,7 @@ int Mesher::can_form_1tet(Tri_2D_ele &tri, int nn, int *hex, int &diag_line, int
 	{
 		ls[i] = -1;
 		int n0 = tri.nodesId[i];
-		if( debuging ) hout << "n0: " << n0 << " nn: " << nn <<endl;
+        if( debuging ) std::cout << "n0: " << n0 << " nn: " << nn <<endl;
 		//是否重复
 		if( n0 == nn ) return 0;
 		//是否为直边
@@ -2814,7 +2814,7 @@ int Mesher::can_form_1tet(Tri_2D_ele &tri, int nn, int *hex, int &diag_line, int
 		//是否为斜边，如果是，要检查是否协调
 		int style;
 		int is_dia_edge = deter_face_num(n0,nn,&style);
-		if( debuging ) hout << "is dia edge: " << is_dia_edge << endl;
+        if( debuging ) std::cout << "is dia edge: " << is_dia_edge << endl;
 		if( is_dia_edge >= 0 )
 		{
 			if( hex[8+is_dia_edge] == style )
@@ -3075,26 +3075,26 @@ double Mesher::angle_point2_tri(int j, Tri_2D_ele* tri, int *hex, int *check_nn)
 	bool debuging = false;
 	if( debuging )
 	{
-		hout << "----------------------------------------------------" << endl;
-		hout << "j: " << j << endl;
-		hout << "tri      : " ;
+        std::cout << "----------------------------------------------------" << endl;
+        std::cout << "j: " << j << endl;
+        std::cout << "tri      : " ;
 		for( int i=0; i<3; i++ )
 		{
-			hout << "     " << tri->nodesId[i] ;
+            std::cout << "     " << tri->nodesId[i] ;
 		}
-		hout << endl;
-		hout << "Hex      : " ;
+        std::cout << endl;
+        std::cout << "Hex      : " ;
 		for( int i=0; i<14; i++ )
 		{
-			hout << "     " << hex[i] ;
+            std::cout << "     " << hex[i] ;
 		}
-		hout << endl;
-		hout << "check_nn : " ;
+        std::cout << endl;
+        std::cout << "check_nn : " ;
 		for( int i=0; i<4; i++ )
 		{
-			hout << "     " << check_nn[i] ;
+            std::cout << "     " << check_nn[i] ;
 		}
-		hout << endl;
+        std::cout << endl;
 	}
 	if( j==0 )
 	{
@@ -3103,11 +3103,11 @@ double Mesher::angle_point2_tri(int j, Tri_2D_ele* tri, int *hex, int *check_nn)
 		int node3_num = tri->nodesId[2];
 		if( debuging )
 		{
-			hout << "Checked tri: ";
-			hout << "     " << node1_num ;
-			hout << "     " << node2_num ;
-			hout << "     " << node3_num ;
-			hout << endl;
+            std::cout << "Checked tri: ";
+            std::cout << "     " << node1_num ;
+            std::cout << "     " << node2_num ;
+            std::cout << "     " << node3_num ;
+            std::cout << endl;
 		}
 		Tri_2D_ele tri1(node1_num,node2_num,node3_num);
 		return angle_of_2tri(tri,&tri1);
@@ -3156,12 +3156,12 @@ double Mesher::angle_of_2tri(Tri_2D_ele* tri1, Tri_2D_ele* tri2, int node1_num, 
 	{
 		if( tri1->nodesId[i] == nn10 )
 		{
-			hout << "Error occurs while trying to compute the angle between two tri face." << endl;
+            std::cout << "Error occurs while trying to compute the angle between two tri face." << endl;
 			return 0.0;
 		}
 		if( tri2->nodesId[i] == nn20 )
 		{
-			hout << "Error occurs while trying to compute the angle between two tri face." << endl;
+            std::cout << "Error occurs while trying to compute the angle between two tri face." << endl;
 			return 0.0;
 		}
 	}
@@ -3241,7 +3241,7 @@ double Mesher::angle_of_2tri(Tri_2D_ele* tri1, Tri_2D_ele* tri2, int node1_num, 
 	acos_v = v3.dot_product( &normal2 ) / ( v3.length() * normal2.length() );
 	if( fabs(acos_v) > 1.0+ZERO )
 	{
-		hout << "acos_v: " << acos_v << endl;
+        std::cout << "acos_v: " << acos_v << endl;
 	}
 	theter1 = acos( acos_v );
 
@@ -3371,19 +3371,19 @@ int Mesher::deter_mat_ele(int ele_num)
 		}
 	}
 
-	if( debuging ) hout << "--------------------deter_mat_ele(int ele_num)---------------------" << endl;
-	if( debuging ) hout << "element " << ele_num << "\n";
+    if( debuging ) std::cout << "--------------------deter_mat_ele(int ele_num)---------------------" << endl;
+    if( debuging ) std::cout << "element " << ele_num << "\n";
 
 	int rv = deter_mat_ele(&eles_vec[ele_num],int(debuging));
 	int itt = is_thin_tet(ele_num);
-	if( debuging ) hout << "itt: " << itt << endl;
+    if( debuging ) std::cout << "itt: " << itt << endl;
 	if( itt == 1 )
 	{
 		thin_tets.push_back(ele_num);
 	}
-	if( debuging ) hout << "material ID. " << eles_vec[ele_num].materialId << endl;
-	if( debuging ) hout << "rv: " << rv << endl;   
-	if( debuging ) hout << "-----------------------------------------" << endl;
+    if( debuging ) std::cout << "material ID. " << eles_vec[ele_num].materialId << endl;
+    if( debuging ) std::cout << "rv: " << rv << endl;
+    if( debuging ) std::cout << "-----------------------------------------" << endl;
 	return rv;
 }
 
@@ -3405,21 +3405,21 @@ int Mesher::deter_mat_ele(Tetrahedron* act_tet, int mod)
 
 	if( debuging )
 	{
-		hout << "nodes of element " << ": ";
-		hout << act_tet->nodesId[0] << " " ;
-		hout << act_tet->nodesId[1] << " " ;
-		hout << act_tet->nodesId[2] << " " ;
-		hout << act_tet->nodesId[3] << endl;
-		hout << "where is the nodes: " ;
-		hout << wws[0] << " " ;
-		hout << wws[1] << " " ;
-		hout << wws[2] << " " ;
-		hout << wws[3] << endl;
-		hout << "is on the nodes: " ;
-		hout << ions[0] << " " ;
-		hout << ions[1] << " " ;
-		hout << ions[2] << " " ;
-		hout << ions[3] << endl;
+        std::cout << "nodes of element " << ": ";
+        std::cout << act_tet->nodesId[0] << " " ;
+        std::cout << act_tet->nodesId[1] << " " ;
+        std::cout << act_tet->nodesId[2] << " " ;
+        std::cout << act_tet->nodesId[3] << endl;
+        std::cout << "where is the nodes: " ;
+        std::cout << wws[0] << " " ;
+        std::cout << wws[1] << " " ;
+        std::cout << wws[2] << " " ;
+        std::cout << wws[3] << endl;
+        std::cout << "is on the nodes: " ;
+        std::cout << ions[0] << " " ;
+        std::cout << ions[1] << " " ;
+        std::cout << ions[2] << " " ;
+        std::cout << ions[3] << endl;
 	}
 
 	//确定此单元的材料
@@ -3448,7 +3448,7 @@ int Mesher::deter_mat_ele(Tetrahedron* act_tet, int mod)
 			{
 				if( debuging )
 				{
-					hout << "    node " << act_tet->nodesId[i] << " is not on." << endl;
+                    std::cout << "    node " << act_tet->nodesId[i] << " is not on." << endl;
 				}
 				is_cross_tet = lwh;
 			}
@@ -3521,27 +3521,27 @@ int Mesher::is_thin_tet(int ele_num)
 
 	if( debuging )
 	{
-		hout << "-------------------is_thin_tet()-----------------------------" << endl;
-		hout << "ele_num: " << ele_num << " " ;
-		hout << "  nodes: " ;
+        std::cout << "-------------------is_thin_tet()-----------------------------" << endl;
+        std::cout << "ele_num: " << ele_num << " " ;
+        std::cout << "  nodes: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "     " << eles_vec[ele_num].nodesId[k]  ;
+            std::cout << "     " << eles_vec[ele_num].nodesId[k]  ;
 		}
-		hout << " mat: " << eles_vec[ele_num].materialId ;
-		hout <<endl;
-		hout << "  where: " ;
+        std::cout << " mat: " << eles_vec[ele_num].materialId ;
+        std::cout <<endl;
+        std::cout << "  where: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "     " << where_is_nodes[eles_vec[ele_num].nodesId[k]]  ;
+            std::cout << "     " << where_is_nodes[eles_vec[ele_num].nodesId[k]]  ;
 		}
-		hout << endl;
-		hout << "  is on: " ;
+        std::cout << endl;
+        std::cout << "  is on: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "     " << is_on_nodes[eles_vec[ele_num].nodesId[k]]  ;
+            std::cout << "     " << is_on_nodes[eles_vec[ele_num].nodesId[k]]  ;
 		}
-		hout << endl;
+        std::cout << endl;
 	}
 
 	//检查单元有效性（是否已经删除（四个节点相同））
@@ -3565,7 +3565,7 @@ int Mesher::is_thin_tet(int ele_num)
 			break;
 		}
 	}
-	if( debuging ) hout << " is_grov_tet: " << is_grov_tet << endl;
+    if( debuging ) std::cout << " is_grov_tet: " << is_grov_tet << endl;
 	if( is_grov_tet == 1 ) return 1;
 
 	double angle_limit = 160.0*PI/180.0;
@@ -3573,7 +3573,7 @@ int Mesher::is_thin_tet(int ele_num)
 
 	int nseq[4];
 	double max_angle = max_angle_of_tet(ele_num,nseq);
-	if( debuging ) hout << " max_angle: " << max_angle*180./PI << endl;
+    if( debuging ) std::cout << " max_angle: " << max_angle*180./PI << endl;
 	if( max_angle >= angle_limit )
 	{
 		double dis1 = nodes_vec[nseq[0]].distance_to(&nodes_vec[nseq[3]]);
@@ -3659,7 +3659,7 @@ int Mesher::put_into_cbev( int ele_num, double alength, int type )
 	//首先找出有一个边在单胞边界线上的单元
 	if( type < 1 && has_cross_edge_edge( act_tet ) != 0 )
 	{
-		if( debuging ) hout << " Putting ele " << ele_num << " into be." <<endl;
+        if( debuging ) std::cout << " Putting ele " << ele_num << " into be." <<endl;
 		eles_across_boundary_be.push_back( ele_num );
 		return 1;
 	}
@@ -3670,7 +3670,7 @@ int Mesher::put_into_cbev( int ele_num, double alength, int type )
 		int hceeof = has_cross_edge_edge_on_face( act_tet );
 		if( hceeof >= 1 )
 		{
-			if( debuging ) hout << " Putting ele " << ele_num << " into bf." <<endl;
+            if( debuging ) std::cout << " Putting ele " << ele_num << " into bf." <<endl;
 			eles_across_boundary_bf.push_back( ele_num );
 			return 2;
 		}
@@ -3684,21 +3684,21 @@ int Mesher::put_into_cbev( int ele_num, double alength, int type )
 		{
 			if( left_movable == 1 && right_movable == 1)
 			{    
-				if( debuging ) hout << " Putting ele " << ele_num << " into dmb." <<endl;
+                if( debuging ) std::cout << " Putting ele " << ele_num << " into dmb." <<endl;
 
 				eles_across_boundary_dmb.push_back(ele_num);
 				return 3 ;
 			}
 			else 
 			{                   
-				if( debuging ) hout << " Putting ele " << ele_num << " into ndmb." <<endl;
+                if( debuging ) std::cout << " Putting ele " << ele_num << " into ndmb." <<endl;
 				eles_across_boundary_ndmb.push_back(ele_num);
 				return 4 ;
 			}
 		}
 	}
 
-	if( debuging ) hout << " Putting ele " << ele_num << " into ndmb." <<endl;
+    if( debuging ) std::cout << " Putting ele " << ele_num << " into ndmb." <<endl;
 	eles_across_boundary_ndmb.push_back(ele_num);
 	return 4;
 }
@@ -4227,7 +4227,7 @@ int Mesher::deter_oper_edge( Tetrahedron *act_tet, int& left_movable, int& right
 				//重叠啦
 				//强制认为左侧节点在右侧节点所在颗粒的边界上，以方便后边确定
 				//最好是想办法标志此单元为跨边界单元，嗯，以后再说
-				hout	<< "cross two particles: " << act_tet->nodesId[ln] << "("
+                std::cout	<< "cross two particles: " << act_tet->nodesId[ln] << "("
 						<< ww[ln] << ") "
 						<< act_tet->nodesId[rn] << "("
 						<< ww[rn] << ")" << endl;
@@ -4527,7 +4527,7 @@ double Mesher::cal_relative_min_volume( int node_num )
 
 		if( debuging )
 		{
-			hout	<< "       element " << nodes_vec[node_num].relative_eles_vec[i]
+            std::cout	<< "       element " << nodes_vec[node_num].relative_eles_vec[i]
 					<< " : "
 					<< act_tet->nodesId[0] << " "
 					<< act_tet->nodesId[1] << " "
@@ -4596,15 +4596,15 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 
 	if( debuging )
 	{
-		hout << "-----------------------rectify_tet()------------------------" << endl;
-		hout << "ele_num: " << ele_num << " " << " size: " << (int)eles_vec.size() << endl ;
-		hout << "  nodes: " ;
+        std::cout << "-----------------------rectify_tet()------------------------" << endl;
+        std::cout << "ele_num: " << ele_num << " " << " size: " << (int)eles_vec.size() << endl ;
+        std::cout << "  nodes: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "      " << eles_vec[ele_num].nodesId[k]  ;
+            std::cout << "      " << eles_vec[ele_num].nodesId[k]  ;
 		}
-		hout << " mat: " << eles_vec[ele_num].materialId ;
-		hout <<endl;
+        std::cout << " mat: " << eles_vec[ele_num].materialId ;
+        std::cout <<endl;
 	}
 
 
@@ -4617,7 +4617,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 	}
 	if( debuging )
 	{
-		hout << "  is_deleted: " << is_deleted << endl;
+        std::cout << "  is_deleted: " << is_deleted << endl;
 	}
 	if( is_deleted == 1 ) return 1;
 
@@ -4628,7 +4628,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 	for( int i=0; i<4; i++ )
 	{
 		int nn = eles_vec[ele_num].nodesId[i];
-		if( debuging ) hout << "nn : " << nn << endl;
+        if( debuging ) std::cout << "nn : " << nn << endl;
 
 		int nn_re = num_of_thin_tet_re(nn);
 		if( nn_re > re_all_on_face ) re_all_on_face = nn_re;
@@ -4643,7 +4643,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 	}
 	if( eles_vec[ele_num].materialId == 0 ) is_all_on_face = 0;
 
-	if( debuging ) hout << "  is_all_on_face: " << is_all_on_face <<endl;
+    if( debuging ) std::cout << "  is_all_on_face: " << is_all_on_face <<endl;
 
 	if( is_all_on_face == 1 )
 	{
@@ -4707,25 +4707,25 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 
 	if( debuging )
 	{
-		hout << "  nodes: " ;
+        std::cout << "  nodes: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "      " << nsn[k]  ;
+            std::cout << "      " << nsn[k]  ;
 		}
-		hout << endl;
-		hout << "  where: " ;
+        std::cout << endl;
+        std::cout << "  where: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "      " << where_is_nodes[nsn[k]]  ;
+            std::cout << "      " << where_is_nodes[nsn[k]]  ;
 		}
-		hout << endl;
-		hout << "  is on: " ;
+        std::cout << endl;
+        std::cout << "  is on: " ;
 		for( int k=0; k<4; k++ )
 		{
-			hout << "      " << is_on_nodes[nsn[k]]  ;
+            std::cout << "      " << is_on_nodes[nsn[k]]  ;
 		}
-		hout << endl;
-		hout << "  max_ang: " << max_ang*180.0/PI << endl;
+        std::cout << endl;
+        std::cout << "  max_ang: " << max_ang*180.0/PI << endl;
 	}
 
 	if( max_ang < max_angle ) return 0;
@@ -4762,10 +4762,10 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 
 		if( debuging )
 		{
-			hout << " angle: " << max_ang*180/PI << endl;
+            std::cout << " angle: " << max_ang*180/PI << endl;
 
-			hout	<< "dis: " << nodes_vec[nsn[0]].distance_to(&nodes_vec[nsn[3]]) << " min: " << lmin_dis <<endl;
-			hout	<< "Generated a new node: " << new_node_num
+            std::cout	<< "dis: " << nodes_vec[nsn[0]].distance_to(&nodes_vec[nsn[3]]) << " min: " << lmin_dis <<endl;
+            std::cout	<< "Generated a new node: " << new_node_num
 					<< " where: " << where_is_nodes[new_node_num]
 					<< " is on: " << is_on_nodes[new_node_num] <<endl << endl;
 		}
@@ -4800,7 +4800,7 @@ int Mesher::rectify_tet(int ele_num, vector<int> &new_ele_num)
 			if( is_all_on_face == 1 )
 			{
 				int mn = face_particle(nsn[0],nsn[3]);
-				if(debuging) hout << "mn: " << mn << endl;
+                if(debuging) std::cout << "mn: " << mn << endl;
 				if( mn == 0 )
 				{
 					wh = -1;
@@ -4863,9 +4863,9 @@ int Mesher::face_particle(int n1,int n2)
 {
 	bool debuging = false;
 
-	if( debuging ) hout << "n1: " << n1 << " n2: " << n2 << endl;
+    if( debuging ) std::cout << "n1: " << n1 << " n2: " << n2 << endl;
 	int wn2=1;
-	if( debuging ) hout << "    elements: " ;
+    if( debuging ) std::cout << "    elements: " ;
 	for( int i=0; i<(int)nodes_vec[n1].relative_eles_vec.size(); i++ )
 	{
 		int ele_num = nodes_vec[n1].relative_eles_vec[i];
@@ -4873,7 +4873,7 @@ int Mesher::face_particle(int n1,int n2)
 		if( isc1 == -1 ) continue;
 		int isc2 = eles_vec[ele_num].is_contain(n2);
 		if( isc2 == -1 ) continue;
-		if( debuging ) hout << ele_num << " mat: " <<  eles_vec[ele_num].materialId << endl;
+        if( debuging ) std::cout << ele_num << " mat: " <<  eles_vec[ele_num].materialId << endl;
 		if( eles_vec[ele_num].materialId == 0 )
 		{
 			wn2 = 0;
@@ -4901,11 +4901,11 @@ int Mesher::insert_node(int node1_num, int node2_num, int node3_num,
 		if( node2_i == -1 )		continue;
 		if( debuging )
 		{
-			hout << "insert node into tet: " << ele_num ;
-			hout << " nodes: " << eles_vec[ele_num].nodesId[0] << " " ;
-			hout << eles_vec[ele_num].nodesId[1] << " " ;
-			hout << eles_vec[ele_num].nodesId[2] << " " ;
-			hout << eles_vec[ele_num].nodesId[3] << endl ;
+            std::cout << "insert node into tet: " << ele_num ;
+            std::cout << " nodes: " << eles_vec[ele_num].nodesId[0] << " " ;
+            std::cout << eles_vec[ele_num].nodesId[1] << " " ;
+            std::cout << eles_vec[ele_num].nodesId[2] << " " ;
+            std::cout << eles_vec[ele_num].nodesId[3] << endl ;
 		}
 
 		//确定是哪条边
@@ -4968,11 +4968,11 @@ int Mesher::deal_with_eles_across_boundary_be(vector<Bar> &new_edges,int debugin
 	}
 	for( int i=0; i<(int)eles_across_boundary_be.size(); i++ )
 	{
-		if( debuging_map_mesh) hout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		if( debuging_map_mesh) hout	<< "deal_with_eles_across_boundary_be" << endl;
+        if( debuging_map_mesh) std::cout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        if( debuging_map_mesh) std::cout	<< "deal_with_eles_across_boundary_be" << endl;
 		int ele_num = eles_across_boundary_be[i] ;
-		if( debuging_map_mesh) hout	<< " i: " << i << " max: " << (int)eles_across_boundary_be.size() << " ele_num: " << ele_num << endl;
-		if( debuging_map_mesh) hout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
+        if( debuging_map_mesh) std::cout	<< " i: " << i << " max: " << (int)eles_across_boundary_be.size() << " ele_num: " << ele_num << endl;
+        if( debuging_map_mesh) std::cout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
 														<< eles_vec[ele_num].nodesId[1] << " "
 														<< eles_vec[ele_num].nodesId[2] << " "
 														<< eles_vec[ele_num].nodesId[3] << endl;
@@ -4986,7 +4986,7 @@ int Mesher::deal_with_eles_across_boundary_be(vector<Bar> &new_edges,int debugin
 				eles_across_boundary_bf.push_back( ele_num );
 				if( debuging_map_mesh )
 				{
-					hout << " put into eles_across_boundary_bf!" << endl;
+                    std::cout << " put into eles_across_boundary_bf!" << endl;
 				}
 				break ;
 			}
@@ -5024,11 +5024,11 @@ int Mesher::deal_with_eles_across_boundary_bf(vector<Bar> &new_edges,int debugin
 	}
 	for( int i=0; i<(int)eles_across_boundary_bf.size(); i++ )
 	{
-		if( debuging_map_mesh) hout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		if( debuging_map_mesh) hout	<< "deal_with_eles_across_boundary_bf" << endl;
+        if( debuging_map_mesh) std::cout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        if( debuging_map_mesh) std::cout	<< "deal_with_eles_across_boundary_bf" << endl;
 		int ele_num = eles_across_boundary_bf[i] ;
-		if( debuging_map_mesh) hout	<< " i: " << i << " ele_num: " << ele_num << endl;
-		if( debuging_map_mesh) hout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
+        if( debuging_map_mesh) std::cout	<< " i: " << i << " ele_num: " << ele_num << endl;
+        if( debuging_map_mesh) std::cout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
 														<< eles_vec[ele_num].nodesId[1] << " "
 														<< eles_vec[ele_num].nodesId[2] << " "
 														<< eles_vec[ele_num].nodesId[3] << endl;
@@ -5041,14 +5041,14 @@ int Mesher::deal_with_eles_across_boundary_bf(vector<Bar> &new_edges,int debugin
 			int hceeof = has_cross_edge_edge_on_face( &eles_vec[ele_num] ) ;
 			if( debuging_map_mesh)
 			{
-				hout << " hceeof: " << hceeof << endl;
+                std::cout << " hceeof: " << hceeof << endl;
 			}
 			if( hceeof <= 0 )
 			{
 				eles_across_boundary_dmb.push_back( ele_num );
 				if( debuging_map_mesh)
 				{
-					hout << " put into eles_across_boundary_dmb!" << endl;
+                    std::cout << " put into eles_across_boundary_dmb!" << endl;
 				}
 				break;
 			}
@@ -5086,13 +5086,13 @@ int Mesher::deal_with_eles_across_boundary_dmb(vector<Bar> &new_edges,int debugi
 	}
 	for( int i=0; i<(int)eles_across_boundary_dmb.size(); i++ )
 	{
-		if( debuging_map_mesh) hout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		if( debuging_map_mesh) hout	<< "deal_with_eles_across_boundary_dmb" << endl;
+        if( debuging_map_mesh) std::cout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        if( debuging_map_mesh) std::cout	<< "deal_with_eles_across_boundary_dmb" << endl;
 
 		int ele_num = eles_across_boundary_dmb[i] ;
 
-		if( debuging_map_mesh) hout	<< " i: " << i << " ele_num: " << ele_num << endl;
-		if( debuging_map_mesh) hout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
+        if( debuging_map_mesh) std::cout	<< " i: " << i << " ele_num: " << ele_num << endl;
+        if( debuging_map_mesh) std::cout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
 														<< eles_vec[ele_num].nodesId[1] << " "
 														<< eles_vec[ele_num].nodesId[2] << " "
 														<< eles_vec[ele_num].nodesId[3] << endl;
@@ -5110,7 +5110,7 @@ int Mesher::deal_with_eles_across_boundary_dmb(vector<Bar> &new_edges,int debugi
 					eles_across_boundary_ndmb.push_back(ele_num);
 					if( debuging_map_mesh)
 					{
-						hout << " put into eles_across_boundary_ndmb!" << endl;
+                        std::cout << " put into eles_across_boundary_ndmb!" << endl;
 					}
 					break ; 
 				}
@@ -5153,16 +5153,16 @@ int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debug
 	for( int i=0; i<(int)eles_across_boundary_ndmb.size(); i++ )
 	{
 		int ele_num = eles_across_boundary_ndmb[i] ;
-		if( debuging_map_mesh) hout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		if( debuging_map_mesh) hout << "deal_with_eles_across_boundary_ndmb" << endl;
-		if( debuging_map_mesh) hout << " i: " << i << " size: " << (int)eles_across_boundary_ndmb.size() << " ele_num: " << ele_num << " size: " << (int)eles_vec.size() << endl;
+        if( debuging_map_mesh) std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        if( debuging_map_mesh) std::cout << "deal_with_eles_across_boundary_ndmb" << endl;
+        if( debuging_map_mesh) std::cout << " i: " << i << " size: " << (int)eles_across_boundary_ndmb.size() << " ele_num: " << ele_num << " size: " << (int)eles_vec.size() << endl;
 
 		int circle_num = 0;
 		while(true && circle_num < 5)
 		{
 			circle_num ++ ;
-			if( debuging_map_mesh) hout	<< "~~~~~~~~~~~~~~~~" << endl;
-			if( debuging_map_mesh) hout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
+            if( debuging_map_mesh) std::cout	<< "~~~~~~~~~~~~~~~~" << endl;
+            if( debuging_map_mesh) std::cout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
 															<< eles_vec[ele_num].nodesId[1] << " "
 															<< eles_vec[ele_num].nodesId[2] << " "
 															<< eles_vec[ele_num].nodesId[3] << endl;
@@ -5175,7 +5175,7 @@ int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debug
 				break;
 			}
 			int dme = deter_mat_ele(ele_num);
-			if( debuging_map_mesh) hout << "ddme: " << dme << endl;
+            if( debuging_map_mesh) std::cout << "ddme: " << dme << endl;
 			if( dme != -1 ) break;
 		}
 
@@ -5201,23 +5201,23 @@ int Mesher::deal_with_eles_across_boundary_ndmb(vector<Bar> &new_edges,int debug
 	for( int i=0; i<(int)eles_across_boundary_ndmb.size(); i++ )
 	{
 		int ele_num = eles_across_boundary_ndmb[i] ;
-		if( debuging_map_mesh) hout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		if( debuging_map_mesh) hout << "deal_with_eles_across_boundary_ndmb_undealed_ele" << endl;
-		if( debuging_map_mesh) hout << " i: " << i << " size: " << (int)eles_across_boundary_ndmb.size() << " ele_num: " << ele_num << " size: " << (int)eles_vec.size() << endl;
+        if( debuging_map_mesh) std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        if( debuging_map_mesh) std::cout << "deal_with_eles_across_boundary_ndmb_undealed_ele" << endl;
+        if( debuging_map_mesh) std::cout << " i: " << i << " size: " << (int)eles_across_boundary_ndmb.size() << " ele_num: " << ele_num << " size: " << (int)eles_vec.size() << endl;
 
 		int circle_num = 0;
 		while(true && circle_num < 25)
 		{
 			circle_num ++ ;
 
-			if( debuging_map_mesh) hout	<< "~~~~~~~~~~~~~~~~" << endl;
-			if( debuging_map_mesh) hout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
+            if( debuging_map_mesh) std::cout	<< "~~~~~~~~~~~~~~~~" << endl;
+            if( debuging_map_mesh) std::cout	<< " act_tet: " << eles_vec[ele_num].nodesId[0] << " "
 															<< eles_vec[ele_num].nodesId[1] << " "
 															<< eles_vec[ele_num].nodesId[2] << " "
 															<< eles_vec[ele_num].nodesId[3] << endl;
 
 			deal_with_ele_across_boundary(ele_num,3,new_edges,debuging);
-			if( debuging_map_mesh) hout << "dme: " << deter_mat_ele(ele_num) << endl;
+            if( debuging_map_mesh) std::cout << "dme: " << deter_mat_ele(ele_num) << endl;
 			if( deter_mat_ele(ele_num) != -1 ) break;
 		}
 	}
@@ -5235,9 +5235,9 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 	bool debuging_map_mesh = false ;
 	if( mod ==1 ) debuging_map_mesh = true;
 
-	if( debuging_map_mesh ) hout << "++++++++++++++++++++++++++++" << endl;
+    if( debuging_map_mesh ) std::cout << "++++++++++++++++++++++++++++" << endl;
 
-	if( debuging_map_mesh) hout << "ele_num: " << ele_num << " ele type: " << ele_kind << endl;
+    if( debuging_map_mesh) std::cout << "ele_num: " << ele_num << " ele type: " << ele_kind << endl;
 
 	double alength = global_length*0.8;
 	if( ele_kind == 1 ) alength = global_length*0.5;   //侧面上跨边界单元
@@ -5272,14 +5272,14 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 	}
 
 	//求与增强材料界面的交点       
-	if( debuging_map_mesh) hout	<< "edge_num: " << edge_num
+    if( debuging_map_mesh) std::cout	<< "edge_num: " << edge_num
 													<< " nodes: " << eles_vec[ele_num].nodesId[nodes_id[0]] << " "
 													<< eles_vec[ele_num].nodesId[nodes_id[1]] << endl;
 	if( debuging_map_mesh)
 	{
-		hout << " where is nodes:  " << wh[0] << " " << wh[1] << " " << wh[2] << " " << wh[3] << endl;
-		hout << " is on interface: " << is_on[0] << " " << is_on[1] << " " << is_on[2] << " " << is_on[3] << endl;
-		hout << " left_movable: " << left_movable << " right_movable: " << right_movable << endl; 
+        std::cout << " where is nodes:  " << wh[0] << " " << wh[1] << " " << wh[2] << " " << wh[3] << endl;
+        std::cout << " is on interface: " << is_on[0] << " " << is_on[1] << " " << is_on[2] << " " << is_on[3] << endl;
+        std::cout << " left_movable: " << left_movable << " right_movable: " << right_movable << endl;
 	}
 
 	Point p1 = {	nodes_vec[eles_vec[ele_num].nodesId[nodes_id[0]]].x,
@@ -5291,8 +5291,8 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 	Point rp ;
 	if( debuging_map_mesh)
 	{
-		hout << " node1: " << p1.x << " " << p1.y << " " << p1.z << endl;
-		hout << " node2: " << p2.x << " " << p2.y << " " << p2.z << endl;
+        std::cout << " node1: " << p1.x << " " << p1.y << " " << p1.z << endl;
+        std::cout << " node2: " << p2.x << " " << p2.y << " " << p2.z << endl;
 	}
 	if( thecell->surfaces_vec[*pww]->intersect( p1, p2, rp ) )
 	{
@@ -5302,13 +5302,13 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		int node4_num = eles_vec[ele_num].nodesId[nodes_id[3]] ;
 
 		Node node( rp );
-		if( debuging_map_mesh) hout << " rp: " << rp.x << "  " << rp.y << "  " << rp.z << endl;
+        if( debuging_map_mesh) std::cout << " rp: " << rp.x << "  " << rp.y << "  " << rp.z << endl;
 
 		//检查将要移动的两个节点的相邻节点是否有3个节点都在交界面上的情况
 		int is_all_on1 = is_re_all_on_face( node1_num, *pww );
 		int is_all_on2 = is_re_all_on_face( node2_num, *pww );
 
-		if( debuging_map_mesh) hout << " is_all_on1: " << is_all_on1 << " is_all_on2: " << is_all_on2 << endl;
+        if( debuging_map_mesh) std::cout << " is_all_on1: " << is_all_on1 << " is_all_on2: " << is_all_on2 << endl;
 
 		//经验表明：当节点离界面很近时，无论如何应该移动到界面上，即使is_all_on==1;
 		double dis2_sur1 = thecell->surfaces_vec[*pww]->dis_to(&p1);
@@ -5320,7 +5320,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		if( is_all_on1 >= 1 ) left_movable = 0;
 		if( is_all_on2 >= 1 ) right_movable = 0;
 
-		if( debuging_map_mesh) hout	<< " node1: " << node1_num
+        if( debuging_map_mesh) std::cout	<< " node1: " << node1_num
 														<< " node2: " << node2_num << endl;
 
 		double dis1 = node.distance_to( &nodes_vec[node1_num] );
@@ -5348,21 +5348,21 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 			}
 		}
 
-		if( debuging_map_mesh) hout << "dis1: " << dis1 << " dis2: " << dis2 << " alength: " << alength << endl;
+        if( debuging_map_mesh) std::cout << "dis1: " << dis1 << " dis2: " << dis2 << " alength: " << alength << endl;
 		int moved_nn = -1 ;
 		if( move_which_node == 0 )
 		{
 			if( dis1 < alength )
 			{
-				if( debuging_map_mesh) hout << " dis1 < dis2, move node " << node1_num << " to the new position.\n";
+                if( debuging_map_mesh) std::cout << " dis1 < dis2, move node " << node1_num << " to the new position.\n";
 				Node temp_n = nodes_vec[node1_num] ;//保留副本，以便出现错误时恢复
 				nodes_vec[node1_num].move_to( &node );
 				double relative_min_volume = cal_relative_min_volume( node1_num );
-				if( debuging_map_mesh) hout << " relative_min_volume: " << relative_min_volume << endl;
+                if( debuging_map_mesh) std::cout << " relative_min_volume: " << relative_min_volume << endl;
 				if( relative_min_volume < min_volume )
 				{
 					nodes_vec[node1_num].move_to( &temp_n );
-					if( debuging_map_mesh) hout << " but failed. " << endl;
+                    if( debuging_map_mesh) std::cout << " but failed. " << endl;
 				}
 				else
 				{
@@ -5376,16 +5376,16 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		{
 			if( dis2 < alength )
 			{
-				if( debuging_map_mesh) hout << " dis1 > dis2, move node " << node2_num << " to the new position.\n";
+                if( debuging_map_mesh) std::cout << " dis1 > dis2, move node " << node2_num << " to the new position.\n";
 				Node temp_n = nodes_vec[node2_num] ;//保留副本，以便出现错误时恢复
 				nodes_vec[node2_num].move_to( &node );
 				double relative_min_volume = cal_relative_min_volume( node2_num );
-				if( debuging_map_mesh) hout << " relative_min_volume: " << relative_min_volume << endl;
+                if( debuging_map_mesh) std::cout << " relative_min_volume: " << relative_min_volume << endl;
 
 				if( relative_min_volume < min_volume )
 				{
 					nodes_vec[node2_num].move_to( &temp_n );  
-					if( debuging_map_mesh) hout << " but failed. " << endl;   
+                    if( debuging_map_mesh) std::cout << " but failed. " << endl;
 				}
 				else
 				{
@@ -5400,7 +5400,7 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 		int oper_nn=moved_nn;
 
 		//移动了节点
-		if( debuging_map_mesh )	hout << "moved node num: " << moved_nn << endl;
+        if( debuging_map_mesh )	std::cout << "moved node num: " << moved_nn << endl;
 
 		if( moved_nn != -1 )
 		{
@@ -5434,9 +5434,9 @@ int Mesher::deal_with_ele_across_boundary( int ele_num, int ele_kind, vector<Bar
 				}
 			}
 
-			if( debuging_map_mesh) hout << " node: " << node.x << "  " << node.y << "  " << node.z << endl;
+            if( debuging_map_mesh) std::cout << " node: " << node.x << "  " << node.y << "  " << node.z << endl;
 			int node_num = (int)nodes_vec.size();    //新生成节点号
-			if( debuging_map_mesh) hout << " generate a node, node_num: " << node_num << endl;
+            if( debuging_map_mesh) std::cout << " generate a node, node_num: " << node_num << endl;
 
 			nodes_vec.push_back( node );
 			where_is_nodes.push_back( *pww );
@@ -5512,7 +5512,7 @@ int Mesher::is_re_all_on_face( int node_num, int wh )
 		if( is_all_on == 1 )
 		{
 			aof_num++;
-			if( debuging )  hout	<< " ele: " << ele_num  << " : "
+            if( debuging )  std::cout	<< " ele: " << ele_num  << " : "
 											<< eles_vec[ele_num].nodesId[0] << " "
 											<< eles_vec[ele_num].nodesId[1] << " "
 											<< eles_vec[ele_num].nodesId[2] << " "
@@ -5594,11 +5594,11 @@ void Mesher::harmonize_tets( int node1_num, int node2_num, int node3_num,
 		if( node2_i == -1 ) continue;
 		if( debuging )
 		{
-			hout << "harmonize tet: " << ele_num ;
-			hout << " nodes: " << eles_vec[ele_num].nodesId[0] << " " ;
-			hout << eles_vec[ele_num].nodesId[1] << " " ;
-			hout << eles_vec[ele_num].nodesId[2] << " " ;
-			hout << eles_vec[ele_num].nodesId[3] << endl ;
+            std::cout << "harmonize tet: " << ele_num ;
+            std::cout << " nodes: " << eles_vec[ele_num].nodesId[0] << " " ;
+            std::cout << eles_vec[ele_num].nodesId[1] << " " ;
+            std::cout << eles_vec[ele_num].nodesId[2] << " " ;
+            std::cout << eles_vec[ele_num].nodesId[3] << endl ;
 		}     
 
 		//处理新生成的边
@@ -5749,7 +5749,7 @@ void Mesher::tet_vol_distrib( double min_max_vl[2], string str, int n, int mod )
 	{
 		string file="tet_vol_distrib"+str+".dat";
 		ofstream disout( file.c_str() ) ;
-		if ( !disout )  hout << "无法打开文件：" << file << endl;
+        if ( !disout )  std::cout << "无法打开文件：" << file << endl;
 		disout << "四面体体积分布" << endl;
 		disout << "最小体积：" << min_max_vl[0] << endl;
 		disout << "最大体积：" << min_max_vl[1] << endl;
@@ -5796,8 +5796,8 @@ void Mesher::tet_quality( string str, int n, int mod )
 		rou=3*ir/R;
 		if(rou<0.0-ZERO||rou>1.0+ZERO)
 		{
-			hout << "在计算第" << i << "个单元时,比值rou=" << rou <<" 小于0.0或大于1.0,出错！" <<endl;
-			hout << "ir=" << ir << "  " << "R=" << R << endl;
+            std::cout << "在计算第" << i << "个单元时,比值rou=" << rou <<" 小于0.0或大于1.0,出错！" <<endl;
+            std::cout << "ir=" << ir << "  " << "R=" << R << endl;
 		}
 		else
 		{
@@ -5810,7 +5810,7 @@ void Mesher::tet_quality( string str, int n, int mod )
 	{
 		string file="tet_quality"+str+".dat";
 		ofstream disout( file.c_str() ) ;
-		if ( !disout )  hout << "无法打开文件：" << file << endl;
+        if ( !disout )  std::cout << "无法打开文件：" << file << endl;
 		disout << "四面体质量系数分布" << endl;
 		m=(int)eles_vec.size();
 		disout << "总四面体个数" << m << endl;
@@ -5927,13 +5927,13 @@ int Mesher::smoothing_3d(int mod)
 	double min_min_volume_ori=min_volume_of_cell(min_vol_en);  //光顺前最小体积
 	for( int i=0; i<(int)nodes_vec.size(); i++ )
 	{
-		if( debuging_smoothing ) hout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
-		if( debuging_smoothing ) hout	<< "node num: " << i << endl;
-		if( debuging_smoothing ) hout	<< "old location: " << nodes_vec[i].x << " "
+        if( debuging_smoothing ) std::cout	<< "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+        if( debuging_smoothing ) std::cout	<< "node num: " << i << endl;
+        if( debuging_smoothing ) std::cout	<< "old location: " << nodes_vec[i].x << " "
 														<< nodes_vec[i].y << " "
 														<< nodes_vec[i].z << endl;
 		double min_volume_ori = cal_relative_min_volume( i ); //光顺前该节点相关单元的最小体积
-		if( debuging_smoothing ) hout << " min_volume_ori: " << min_volume_ori << endl;
+        if( debuging_smoothing ) std::cout << " min_volume_ori: " << min_volume_ori << endl;
 		double sum_x=0, sum_y=0, sum_z=0; //将此节点的邻节点坐标求和
 		int num_node=0;                   //将多少节点坐标求和
 		//对于边界上的节点，只有在同样边界上的节点，才能对其求平均
@@ -5943,15 +5943,15 @@ int Mesher::smoothing_3d(int mod)
 		vector<int> ioe_nodes; //和当前节点在同一边界线上的节点集
 		double x_min=1.0e200,x_max=-1.0e200,y_min=1.0e200,y_max=-1.0e200,z_min=1.0e200,z_max=-1.0e200;
 
-		if( debuging_smoothing ) hout << "ioe: " << ioe << " iof: " << iof << endl;
-		if( debuging_smoothing ) hout << " neigh_nodes: " << endl;
+        if( debuging_smoothing ) std::cout << "ioe: " << ioe << " iof: " << iof << endl;
+        if( debuging_smoothing ) std::cout << " neigh_nodes: " << endl;
 
 		vector<int> nei_nodes;
 		for( int j=0; j<(int)nodes_vec[i].neigh_nodes_vec.size(); j++ )
 		{
 			if( debuging_smoothing )
 			{
-				hout << "No. " << j << " neighbor node: " << nodes_vec[i].neigh_nodes_vec[j] << endl;
+                std::cout << "No. " << j << " neighbor node: " << nodes_vec[i].neigh_nodes_vec[j] << endl;
 			}
 			if( ioe != 0 )
 			{
@@ -5978,7 +5978,7 @@ int Mesher::smoothing_3d(int mod)
 			nei_nodes.push_back(nodes_vec[i].neigh_nodes_vec[j]);
 			if( debuging_smoothing )
 			{
-				hout	<< nodes_vec[i].neigh_nodes_vec[j] << " " 
+                std::cout	<< nodes_vec[i].neigh_nodes_vec[j] << " "
 						<< nodes_vec[nodes_vec[i].neigh_nodes_vec[j]].x << " "
 						<< nodes_vec[nodes_vec[i].neigh_nodes_vec[j]].y << " "
 						<< nodes_vec[nodes_vec[i].neigh_nodes_vec[j]].z << endl;
@@ -5986,9 +5986,9 @@ int Mesher::smoothing_3d(int mod)
 		}
 		if( num_node > 1 )
 		{
-			if( debuging_smoothing ) hout	<< "mod: " << mod << endl;
-			if( debuging_smoothing ) hout	<< "num_node: " << num_node << endl;
-			if( debuging_smoothing ) hout	<< "xyz_min_max: " << x_min << " " << x_max << " "
+            if( debuging_smoothing ) std::cout	<< "mod: " << mod << endl;
+            if( debuging_smoothing ) std::cout	<< "num_node: " << num_node << endl;
+            if( debuging_smoothing ) std::cout	<< "xyz_min_max: " << x_min << " " << x_max << " "
 															<< y_min << " " << y_max << " "
 															<< z_min << " " << z_max << endl;
 			Point the_p = { sum_x / num_node, sum_y / num_node, sum_z / num_node };
@@ -6000,13 +6000,13 @@ int Mesher::smoothing_3d(int mod)
 			}
 			if( debuging_smoothing )
 			{
-				hout << "Before projection the point: " << the_p.x << " " << the_p.y << " " << the_p.z << endl;
+                std::cout << "Before projection the point: " << the_p.x << " " << the_p.y << " " << the_p.z << endl;
 			}
 
 			Node old_position = nodes_vec[i];	//保留副本，以便出现错误时恢复
 			if( ioe != 0 )
 			{
-				if( debuging_smoothing ) hout << " on the edge! " << endl;
+                if( debuging_smoothing ) std::cout << " on the edge! " << endl;
 				if( num_node > 2 ) continue;			//角点
 				//找出与此节点相邻的两个同边界线上的节点连线的中垂线与椭球表面的交点
 				Node *node1 = &nodes_vec[ioe_nodes[0]];
@@ -6014,9 +6014,9 @@ int Mesher::smoothing_3d(int mod)
 				Node *node3 = &nodes_vec[i];
 				if( debuging_smoothing )
 				{
-					hout << "node1: " << node1->x << " " << node1->y << " " << node1->z << endl;
-					hout << "node2: " << node2->x << " " << node2->y << " " << node2->z << endl;
-					hout << "node3: " << node3->x << " " << node3->y << " " << node3->z << endl;
+                    std::cout << "node1: " << node1->x << " " << node1->y << " " << node1->z << endl;
+                    std::cout << "node2: " << node2->x << " " << node2->y << " " << node2->z << endl;
+                    std::cout << "node3: " << node3->x << " " << node3->y << " " << node3->z << endl;
 				}
 				int w1 = where_is_nodes[i];
 				int is_on1 = is_on_nodes[i];
@@ -6050,14 +6050,14 @@ int Mesher::smoothing_3d(int mod)
 				Point rp ;
 				if( thecell->surfaces_vec[w1]->intersect( p1, p2, rp ) == 1 )
 				{
-					if( debuging_smoothing ) hout	<< "new location0: " 
+                    if( debuging_smoothing ) std::cout	<< "new location0: "
 						<< rp.x << " "<< rp.y << " "<< rp.z << endl;
 					node3->move_to( &rp );
 				}
 			}
 			else if( iof > 0 )
 			{
-				if( debuging_smoothing ) hout << " on the face No. " << iof << endl;
+                if( debuging_smoothing ) std::cout << " on the face No. " << iof << endl;
 				if( num_node > 2 )
 				{
 					//如果邻节点超过3个（可用来光滑的节点，比如，如果节点在面上
@@ -6093,9 +6093,9 @@ int Mesher::smoothing_3d(int mod)
 
 							if( debuging_smoothing )
 							{
-								hout << " angle: " << vec33.angle_between(&vecs[k-1]) << endl;
-								hout << "       " << vec33.x << " " << vec33.y << " " << vec33.z << endl;
-								hout << "       " << vecs[k-1].x << " " << vecs[k-1].y << " " << vecs[k-1].z << endl;
+                                std::cout << " angle: " << vec33.angle_between(&vecs[k-1]) << endl;
+                                std::cout << "       " << vec33.x << " " << vec33.y << " " << vec33.z << endl;
+                                std::cout << "       " << vecs[k-1].x << " " << vecs[k-1].y << " " << vecs[k-1].z << endl;
 							}
 
 							if(vec33.angle_between(&vecs[k-1])>PI/2.0)
@@ -6117,10 +6117,10 @@ int Mesher::smoothing_3d(int mod)
 					}
 					if( debuging_smoothing )
 					{
-						hout << " project_vec: " ;
-						hout << project_vec.x << " " ;
-						hout << project_vec.y << " " ;
-						hout << project_vec.z << endl;
+                        std::cout << " project_vec: " ;
+                        std::cout << project_vec.x << " " ;
+                        std::cout << project_vec.y << " " ;
+                        std::cout << project_vec.z << endl;
 					}
 					Point pp = thecell->surfaces_vec[iof-1]->project( &the_p, &project_vec );
 					nodes_vec[i].move_to( &pp );
@@ -6133,30 +6133,30 @@ int Mesher::smoothing_3d(int mod)
 			}
 			else
 			{
-				if( debuging_smoothing ) hout << " neither on the edge nor on the face! " << endl;
+                if( debuging_smoothing ) std::cout << " neither on the edge nor on the face! " << endl;
 				nodes_vec[i].move_to( &the_p );
 			}
-			if( debuging_smoothing ) hout << "new location: " 
+            if( debuging_smoothing ) std::cout << "new location: "
 				<< nodes_vec[i].x << " "<< nodes_vec[i].y << " "<< nodes_vec[i].z << endl;
 
 			double min_volume_new = cal_relative_min_volume( i );
 			if( min_volume_new < min_volume_ori )	//相关单元最小体积减小，恢复
 			{
 				nodes_vec[i].move_to( &old_position );
-				if( debuging_smoothing ) hout << " re_min_volume: oled: " << min_volume_ori
+                if( debuging_smoothing ) std::cout << " re_min_volume: oled: " << min_volume_ori
 					<< " new: " << min_volume_new << endl ;
-				if( debuging_smoothing ) hout << " smoothing failed at node " << i << endl;
+                if( debuging_smoothing ) std::cout << " smoothing failed at node " << i << endl;
 			}
 		}
 		if( debuging_smoothing )
 		{
 			double min_volume_new = cal_relative_min_volume( i );
-			hout << " min_volume_new: " << min_volume_new << endl;
+            std::cout << " min_volume_new: " << min_volume_new << endl;
 		}
 	}       
 	double min_min_volume_new=min_volume_of_cell(min_vol_en);  //光顺后最小体积
 
-	if( debuging_smoothing ) hout << " min_min_volume_ori: " << min_min_volume_ori << " min_min_volume_new: " << min_min_volume_new << endl;
+    if( debuging_smoothing ) std::cout << " min_min_volume_ori: " << min_min_volume_ori << " min_min_volume_new: " << min_min_volume_new << endl;
 	if( min_min_volume_new - min_min_volume_ori > fabs(min_min_volume_ori) * 0.01 ) return 1;
 
 	return 0;
@@ -6334,39 +6334,39 @@ int Mesher::gen_coating_mesh(double thick_ratio, int layer_num)
 					}
 					else
 					{
-						hout << "i= " << i << "  mat= " <<  eles_vec[i].materialId<<endl;
-						hout << "nodesId：";
+                        std::cout << "i= " << i << "  mat= " <<  eles_vec[i].materialId<<endl;
+                        std::cout << "nodesId：";
 						for(int k=0 ; k<4; k++)
 						{
-							hout << eles_vec[i].nodesId[k]+1 <<"  ";
+                            std::cout << eles_vec[i].nodesId[k]+1 <<"  ";
 						}
-						hout << endl;
-						hout << "where_is_nodes：";
+                        std::cout << endl;
+                        std::cout << "where_is_nodes：";
 						for(int j=0 ; j<4; j++)
 						{
-							hout << where_is_nodes[eles_vec[i].nodesId[j]] <<"  ";
+                            std::cout << where_is_nodes[eles_vec[i].nodesId[j]] <<"  ";
 						}
-						hout << endl;
-						hout << "is_on_nodes：";
+                        std::cout << endl;
+                        std::cout << "is_on_nodes：";
 						for(int j=0 ; j<4; j++)
 						{
-							hout << is_on_nodes[eles_vec[i].nodesId[j]] <<"  ";
+                            std::cout << is_on_nodes[eles_vec[i].nodesId[j]] <<"  ";
 						}
-						hout << endl;
-						hout << "where_is：";
+                        std::cout << endl;
+                        std::cout << "where_is：";
 						for(int j=0 ; j<4; j++)
 						{
 							int is_on=0;
-							hout << where_is(&nodes_vec[eles_vec[i].nodesId[j]], is_on) << "/" << is_on <<"  ";
+                            std::cout << where_is(&nodes_vec[eles_vec[i].nodesId[j]], is_on) << "/" << is_on <<"  ";
 						}
-						hout << endl;
-						hout << "错误！有个四面体不属于任何椭球。" << endl;
+                        std::cout << endl;
+                        std::cout << "错误！有个四面体不属于任何椭球。" << endl;
 						return 0;
 					}
 				}
 				else if(count>1)
 				{
-					hout << "错误！有个四面体同时属于几个椭球。" << endl;
+                    std::cout << "错误！有个四面体同时属于几个椭球。" << endl;
 					return 0;
 				}
 			}
@@ -6494,7 +6494,7 @@ label_prism:			if(rel_tet.empty())		//此三角形面片没有找到其他相关
 			}
 			else if(num_tri!=0)
 			{
-				hout << "错误！四面体的四个三角形面片全是椭球表面三角形面片。" << endl;
+                std::cout << "错误！四面体的四个三角形面片全是椭球表面三角形面片。" << endl;
 				return 0;
 			}
 
@@ -6615,7 +6615,7 @@ label_prism:			if(rel_tet.empty())		//此三角形面片没有找到其他相关
 			}
 			if(!poi_vec.empty())
 			{
-				hout << "错误！椭球外表面三角形不封闭！（要考虑和单胞外表面相交的情况）" << endl;
+                std::cout << "错误！椭球外表面三角形不封闭！（要考虑和单胞外表面相交的情况）" << endl;
 				return 0;
 			}
 		}
@@ -6692,8 +6692,8 @@ label_prism:			if(rel_tet.empty())		//此三角形面片没有找到其他相关
 
 			if (thecell->surfaces_vec[i]->change_coor(&node_poi, &point, ratio)==0)
 			{
-				hout << i << "点在坐标变换时出错！" << endl;
-				hout << "*******************************************" << endl;
+                std::cout << i << "点在坐标变换时出错！" << endl;
+                std::cout << "*******************************************" << endl;
 				return 0;
 			}
 
@@ -6729,8 +6729,8 @@ label_prism:			if(rel_tet.empty())		//此三角形面片没有找到其他相关
 				
 				if (thecell -> surfaces_vec[i] -> change_coor(&node_poi, &point, ratio) == 0)
 				{
-					hout << i << "点在坐标变换时出错！" << endl;
-					hout << "*******************************************" << endl;
+                    std::cout << i << "点在坐标变换时出错！" << endl;
+                    std::cout << "*******************************************" << endl;
 					return 0;
 				}
 
@@ -6869,7 +6869,7 @@ int Mesher::export_tecplot_data()
 		case 0: count[0]++; break; //基体单元
 		case 1: count[1]++; break; //椭球单元
 		case 2: count[2]++; break; //边界层单元
-		default: hout << " error!! " << endl; break;
+        default: std::cout << " error!! " << endl; break;
 		}
 	}
 	otec << "ZONE N=" << (int)nodes_vec.size() << ", E=" << count[1] << ", F=FEPOINT, ET=TETRAHEDRON" << endl;
@@ -7112,7 +7112,7 @@ int Mesher::export_tecplot_data_before_coating()
 		case 0: count[0]++; break; //基体单元
 		case 1: count[1]++; break; //椭球单元
 		case -1: count[2]++; break;
-		default: hout << " error!! " << endl; break;
+        default: std::cout << " error!! " << endl; break;
 		}
 	}
 	//基体
@@ -7162,10 +7162,10 @@ void Mesher::Reincrese_vol_raito()
 		istringstream in(Get_Line(in_refile));
 		double re_ratio;
 		in >> re_ratio;
-		hout << "re_ratio: " << re_ratio << endl;
+        std::cout << "re_ratio: " << re_ratio << endl;
 		if(re_ratio<=0.0||re_ratio>0.1)
 		{
-			hout << "      需要增加的体积比分小于等于0%并且大于10%"<<endl;
+            std::cout << "      需要增加的体积比分小于等于0%并且大于10%"<<endl;
 		}
 		else
 		{
@@ -7220,7 +7220,7 @@ eles_vec_mat: ;
 				
 				if((int)matrix_ele.size()==0)
 				{
-					hout << "matrix_ele.size()==0, 出错！" << endl;
+                    std::cout << "matrix_ele.size()==0, 出错！" << endl;
 					exit(0);
 				}
 
@@ -7239,12 +7239,12 @@ eles_vec_mat: ;
 					if(increase_ratio>=re_ratio) break;
 				}
 			}
-			hout << "      人为增加体积分数为：" << increase_ratio <<endl;
+            std::cout << "      人为增加体积分数为：" << increase_ratio <<endl;
 		}
 	}
 	else
 	{
-		hout << "      Reincrease_vol_ratio.dat文件不存在或打不开，检查是否需要做额外增加颗粒体分比的操作！"<<endl;
+        std::cout << "      Reincrease_vol_ratio.dat文件不存在或打不开，检查是否需要做额外增加颗粒体分比的操作！"<<endl;
 	}
 	in_refile.close();
 }

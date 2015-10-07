@@ -6,7 +6,7 @@
 namespace Ui {
 class SetCellDialog;
 }
-
+class PMCell_Info;
 class SetCellDialog : public QDialog
 {
     Q_OBJECT
@@ -14,6 +14,8 @@ class SetCellDialog : public QDialog
 public:
     explicit SetCellDialog(QWidget *parent = 0);
     ~SetCellDialog();
+    /// 读取单胞几何参数
+    void get_cell_info(PMCell_Info*);
 
 private slots:
     void on_rb_cd_uiniform_clicked();
@@ -26,7 +28,7 @@ private slots:
 
 private:
     void set_default_value();
-    void get_cell_info();
+
     Ui::SetCellDialog *ui;
 };
 

@@ -150,7 +150,7 @@ int EllipseGen::uniell_generation(string input_file, string out_file, string dat
 	else*/
 	if(no_uniform(distribution_sign2,input_stream,out_file, data_file)==0)
 	{
-		hout << "可能是体积分数不够！" << endl;
+        std::cout << "可能是体积分数不够！" << endl;
 		return 0;
 	}
 	
@@ -1494,7 +1494,7 @@ label1: ;
         
         if(k1==1)
 		{
-			hout << "最大比率：" << rate << endl;
+            std::cout << "最大比率：" << rate << endl;
     		if(neededrate<=rate)
                printf("The needed rate can be reached.\n");
             else 

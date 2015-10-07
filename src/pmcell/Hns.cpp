@@ -11,12 +11,12 @@ SetWP hns::setwp;
 //---------------------------------------------------------------------------
 void hns::open_deffo_stream(char* file,int mod)
 {
-	hout.open_deffo_stream(file,mod);
+    hout.open_deffo_stream(file,mod);
 }
 //---------------------------------------------------------------------------
 void hns::close_deffo_stream( )
 {
-	hout.close_deffo_stream( );
+    hout.close_deffo_stream( );
 }                                                                       
 //---------------------------------------------------------------------------
 foutstream& hns::endl(foutstream& os)
@@ -29,7 +29,7 @@ foutstream& hns::endl(foutstream& os)
 foutstream::foutstream()
 {          
 	is_open_file = false;
-	out_stream   = &cout;
+    out_stream   = &cout;
 }
 //---------------------------------------------------------------------------
 void foutstream::open_deffo_stream(char* file,int mod)

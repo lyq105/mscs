@@ -58,7 +58,7 @@ int PCMCell::Cell_generate(ifstream &infile,string data_file)
     }
     else
     {
-        hout << string("错误！产生椭球分布的模式不在考虑的情况内。(mod>2)") << endl;
+        std::cout << string("错误！产生椭球分布的模式不在考虑的情况内。(mod>2)") << endl;
     }
 
     //利用椭球文件生成椭球
@@ -81,7 +81,7 @@ int PCMCell::import_ellipsoids(string file)
     input_stream.open( file.c_str(), ios::in );
     if( !input_stream )
     {
-        hout << "Can not open the file: " << file << endl;
+        std::cout << "Can not open the file: " << file << endl;
         return 0;
     };
 

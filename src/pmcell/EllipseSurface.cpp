@@ -109,7 +109,7 @@ int EllipseSurface::is_contain_usually( Point* thepoint, int mod )
 			  zx_c*zz*xx+x_c*xx+y_c*yy+z_c*zz+c_c;
 	if( mod == 1)
 	{
-		hout << " ff: " << ff << endl;
+        std::cout << " ff: " << ff << endl;
 	}   
     if( ff > ZERO ) return 1;
 	else if( ff < -ZERO ) return -1;
@@ -200,8 +200,8 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 
 	if( debuging )
 	{
-		hout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
-		hout << "The point: " << xx << " " << yy << " " << zz << endl;
+        std::cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+        std::cout << "The point: " << xx << " " << yy << " " << zz << endl;
 	}
 
 	//采用梯度法求解，BB方法
@@ -226,16 +226,16 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 
 	if( debuging )
 	{
-		hout << "xv0: " <<  "     " << xv0.x
+        std::cout << "xv0: " <<  "     " << xv0.x
 								<<  "     " << xv0.y
 								<<   "     "  << xv0.z << endl;
-		hout << "fv0: " <<  "     " << fv0.x
+        std::cout << "fv0: " <<  "     " << fv0.x
 								<<   "     " << fv0.y
 								<<  "     " << fv0.z << endl;
-		hout << "xv1: " <<  "     " << xv1.x
+        std::cout << "xv1: " <<  "     " << xv1.x
 								<<  "     " << xv1.y
 								<<  "     " << xv1.z << endl;
-		hout << "fv1: " <<  "     " << fv1.x
+        std::cout << "fv1: " <<  "     " << fv1.x
 								<<  "     " << fv1.y
 								<<  "     " << fv1.z << endl;
 	}
@@ -249,8 +249,8 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 	TDVector dxv = xv1-xv0;
 	while( (cl_num == 0 || dxv.length() > ZERO) && cl_num++ < 1500 )
 	{
-		if( debuging ) hout << "----------------------------------------------------" << endl;
-		if( debuging ) hout << "cl_num : " << cl_num << endl;
+        if( debuging ) std::cout << "----------------------------------------------------" << endl;
+        if( debuging ) std::cout << "cl_num : " << cl_num << endl;
 
 		TDVector yk = fv1 - fv0;
 		TDVector sk = xv1 - xv0;
@@ -279,27 +279,27 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 		else if( dxv_len > dis_min*1000 )
 		{
 			//发散了，不幸啊
-			if( debuging ) hout << "Failed. dis: " <<dxv_len <<" dis_min:" <<dis_min << endl << endl;
+            if( debuging ) std::cout << "Failed. dis: " <<dxv_len <<" dis_min:" <<dis_min << endl << endl;
 			is_failed = 1;
 			break;
 		}
 
 		if( debuging )
 		{
-			hout << "alpha: " <<  "     " << alpha << endl;
-			hout << "xv0: " <<  "     " << xv0.x
+            std::cout << "alpha: " <<  "     " << alpha << endl;
+            std::cout << "xv0: " <<  "     " << xv0.x
 									<<  "     " << xv0.y
 									<<  "     " << xv0.z << endl;
-			hout << "fv0: " <<  "     " << fv0.x
+            std::cout << "fv0: " <<  "     " << fv0.x
 									<<  "     " << fv0.y
 									<<  "     " << fv0.z << endl;
-			hout << "xv1: " <<  "     " << xv1.x
+            std::cout << "xv1: " <<  "     " << xv1.x
 									<<  "     " << xv1.y
 									<<  "     " << xv1.z << endl;
-			hout << "fv1: " <<  "     " << fv1.x
+            std::cout << "fv1: " <<  "     " << fv1.x
 									<<  "     " << fv1.y
 									<<  "     " << fv1.z << endl;
-			hout << "dis: " <<  "     " << dxv.length() << " dis_min: " << dis_min << endl;
+            std::cout << "dis: " <<  "     " << dxv.length() << " dis_min: " << dis_min << endl;
 		}
 	}
 	if( is_failed == 0 )
@@ -311,10 +311,10 @@ Point EllipseSurface::project_normal( Point* thepoint, int *error )
 
 		if( debuging )
 		{
-			hout << "Before project: " <<  "        " << xx << " " <<  "        " << yy << " " <<  "        " << zz << endl;
-			hout << "Middle point  : " <<  "        " << rp.x << " " <<  "        " << rp.y << " " <<  "        " << rp.z
+            std::cout << "Before project: " <<  "        " << xx << " " <<  "        " << yy << " " <<  "        " << zz << endl;
+            std::cout << "Middle point  : " <<  "        " << rp.x << " " <<  "        " << rp.y << " " <<  "        " << rp.z
 				 << " fvalue: " << fvalue(rp.x,rp.y,rp.z) << endl;
-			hout << "Return point  : " <<  "        " << rp1.x << " " <<  "        " << rp1.y << " " <<  "        " << rp1.z
+            std::cout << "Return point  : " <<  "        " << rp1.x << " " <<  "        " << rp1.y << " " <<  "        " << rp1.z
 				 << " fvalue: " << fvalue(rp1.x,rp1.y,rp1.z) << endl;
 
 		}
@@ -521,12 +521,12 @@ void EllipseSurface::print( int mod )
 {
 	if( mod == 0 )
 	{
-		hout << "coes: " << coe1 << " " << coe2 << " " << coe3 << " "
+        std::cout << "coes: " << coe1 << " " << coe2 << " " << coe3 << " "
 			 << coe4 << " " << coe5 << " " << coe6 << " " << rhs << endl;
 	}
 	else
 	{
-		hout << "10参数:"	<< xx_c << " " << yy_c << " " << zz_c << endl
+        std::cout << "10参数:"	<< xx_c << " " << yy_c << " " << zz_c << endl
 							<< xy_c << " " << yz_c << " " << zx_c << endl
 							<< x_c  << " " << y_c  << " " << z_c  << endl
 							<< c_c  << endl;
@@ -539,7 +539,7 @@ int EllipseSurface::change_coor(Point *opoint, Point *point, double ratio)
 {
 	if (ratio>1.0)
 	{
-		hout << "      椭球收缩比例竟然比1.0还大，错误！" << endl;
+        std::cout << "      椭球收缩比例竟然比1.0还大，错误！" << endl;
 		return 0;
 	}
 

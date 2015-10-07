@@ -72,7 +72,7 @@ private:
 //---------------------------------------------------------------------------
 namespace hns
 {
-	extern foutstream hout;
+    extern foutstream hout;
 //	void open_deffo_stream(char* file,int mod=ios::app);	//app表示续写
 	void open_deffo_stream(char* file,int mod=ios::out);		//out是表示重新写
 

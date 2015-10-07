@@ -57,7 +57,7 @@ double Element::Quality( vector<Node> &nodes_vec)const{
 		s = (a*a+b*b+c*c+d*d+2*e*e+2*f*f)/(6*(area1+area2))/2.0;
 	}
 	else{
-		hout<<"There is a error in Quality()"<<endl;
+        std::cout<<"There is a error in Quality()"<<endl;
 	}
 	return s;
 }//---------------------------------------------------------------------------

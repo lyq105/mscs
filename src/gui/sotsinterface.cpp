@@ -30,7 +30,7 @@ void SOTSinterface::write_homo_solution(std::string filename)
 }
 void SOTSinterface::set_pmcell_info(PMCell_Info& mycell_info)
 {
-    cell_info.coating = mycell_info.coating;
+    //cell_info.coating = mycell_info.coating;
 
 }
 vtkSmartPointer<vtkUnstructuredGrid> SOTSinterface::get_cell_data()

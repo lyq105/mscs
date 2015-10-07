@@ -13,6 +13,7 @@ class vtkActor;
 class vtkPolyData;
 class vtkAppendPolyData;
 class QTextEdit;
+class vtkOrientationMarkerWidget;
 
 
 class MainWindow : public QMainWindow
@@ -44,6 +45,7 @@ private slots:
     void import_cell_mesh();
     void import_cell_geo();
     void set_cell();
+    void show_pcmcell();
 
 private:
     void createSlots();
@@ -57,6 +59,7 @@ private:
     void meshSTL(QString stl_filename);
     void import_bdf(QString bdf_filename);
     //    void openVtu(QString vtu_filename);
+    void plot_cell();
 
 
     SOTSinterface sots;
@@ -64,6 +67,7 @@ private:
     QTextEdit* message_content;
     QVTKWidget* qvtkWidget;
     vtkRenderer* renderer;
+    vtkOrientationMarkerWidget* widget;
 };
 
 #endif // MAINWINDOW_H

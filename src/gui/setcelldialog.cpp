@@ -1,5 +1,6 @@
 #include "setcelldialog.h"
 #include "ui_setcelldialog.h"
+#include "sotsinterface.h"
 
 SetCellDialog::SetCellDialog(QWidget *parent) :
     QDialog(parent),
@@ -46,8 +47,15 @@ void SetCellDialog::set_default_value()
 
 }
 
-void SetCellDialog::get_cell_info()
+void SetCellDialog::get_cell_info(PMCell_Info* cell_info)
 {
+    cell_info->amax[0] = ui->dsb_ellipsoid_amax->value();
+    cell_info->amax[1] = ui->dsb_amin->value();
+    cell_info->amax[2] = ui->dsb_ellipsoid_amax->value();
+    cell_info->amax[0] = ui->dsb_ellipsoid_amax->value();
+    cell_info->amax[0] = ui->dsb_ellipsoid_amax->value();
+    cell_info->amax[0] = ui->dsb_ellipsoid_amax->value();
+ //   cell_info->amax[0] =
     ui->lE_P1x->setText("0");
     ui->lE_P1y->setText("0");
     ui->lE_P1z->setText("0");

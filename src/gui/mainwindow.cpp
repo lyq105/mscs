@@ -57,6 +57,7 @@
 #include <QScrollBar>
 #include <vtkCellData.h>
 #include "setcelldialog.h"
+#include <vtkBorderWidget.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -97,44 +98,27 @@ void MainWindow::createVTKview()
     setCentralWidget(qvtkWidget);
     renderer = vtkRenderer::New();
     // Setup VTK window
-    vtkSmartPointer<vtkRenderWindow> renderWindow =
-            vtkSmartPointer<vtkRenderWindow>::New();
-    renderer->ResetCamera();
-    //qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-    // qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
-    qvtkWidget->SetRenderWindow(renderWindow);
-    renderer->SetBackground(169/255., 169./255, 169./255);
-    renderer->SetBackground(1, 1, 1);
+    //renderer->SetBackground(169/255., 169./255, 169./255);
+    renderer->SetBackground(0.5, 0.5, 1);
+    renderer->SetBackground2(1,1,1);
+    renderer->SetGradientBackground(1);
+    qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
 
-    //renderer->SetBackground2(1,1,1);
-    //renderer->SetGradientBackground(1);
-    vtkSmartPointer<vtkAxesActor> axes =
-            vtkSmartPointer<vtkAxesActor>::New();
+    vtkAxesActor* axes = vtkAxesActor::New();
     //renderer->AddActor(axes);
     //renderer->RemoveAllViewProps();
 
-    vtkSmartPointer<vtkOrientationMarkerWidget> widget =
-            vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-    widget->SetOutlineColor( 0, 0, 0 );
+    widget = vtkOrientationMarkerWidget::New();
+    widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
     widget->SetOrientationMarker( axes );
     widget->SetInteractor( qvtkWidget->GetInteractor() );
-    widget->SetViewport( 0.0, 0.0, 1, 1 );
-    widget->SetEnabled( 1 );
-    widget->InteractiveOn();
-    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-
-//    vtkSmartPointer<vtkRenderer> ren = vtkSmartPointer<vtkRenderer>::New();
-//    ren->SetViewport(0,0,0.2,0.2);
-//    ren->AddActor(axes);
-//    ren->SetBackground(1,1,1);
-//    qvtkWidget->GetRenderWindow()->AddRenderer(ren);
+   // widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
+    widget->On();
+    //widget->InteractiveOn();
+    widget->SetDefaultRenderer(renderer);
 
     renderer->ResetCamera();
-    qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     qvtkWidget->GetRenderWindow()->Render();
-    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
-    //    QCoreApplication::processEvents();
 }
 
 
@@ -173,6 +157,12 @@ void MainWindow::createSlots()
 
 }
 
+
+
+void MainWindow::show_pcmcell()
+{
+
+}
 
 // slots
 void MainWindow::set_cell()
@@ -230,7 +220,7 @@ void MainWindow::new_project()
     }
     QString logfile = anatype.get_prj_folder() + QString("/") + anatype.get_prj_name() +".log";
     cout << logfile.toStdString().c_str() << endl;
-    freopen(logfile.toStdString().c_str(),"w",stdout);
+//    freopen(logfile.toStdString().c_str(),"w",stdout);
     cout << "这是一个分析文件" << endl;
     //freopen("CON", "w", stdout);
 }
@@ -298,7 +288,7 @@ void MainWindow::import_geo()
 {
     //QString homeName = getHomePath();
     QString sDefaultName = tr("");
-    QString selectedFilter = tr(";;STL Files(*.stl)");
+    QString selectedFilter = tr("STL Files(*.stl)");
     //    QDir defaultDir = QFSFileEngine::homePath();
     QString filter = tr(";;STL Files(*.stl)");
     QString sFileName = QFileDialog::getOpenFileName(
@@ -631,4 +621,8 @@ void MainWindow::read_neutral_format(QString filename )
     //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
 }
 
+void MainWindow::plot_cell()
+{
+
+}
 

@@ -53,7 +53,7 @@ public:
 
 
     vtkSmartPointer<vtkUnstructuredGrid> get_cell_data();
-    PMCell_Info& get_pmcell_info(){return cell_info;}
+    PMCell_Info* get_pmcell_info(){return cell_info;}
     void get_material(int mat_index);
 
     void write_cell_solution(std::string filename);
@@ -64,7 +64,7 @@ private:
     std::string analysis_type;
     std::string prj_folder;
     std::string prj_name;
-    PMCell_Info cell_info;
+    PMCell_Info* cell_info;
 };
 
 
