@@ -65,23 +65,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
-
-
     ui->menu_mesh->setEnabled(0);
-
-    /// 设置输出窗口
-    message_content = new QTextEdit;
-    message_content->setReadOnly(1);
-    ui->message_box->hide();
-    ui->message_box->setWidget(message_content);
-    QScrollBar *pScroll = message_content->verticalScrollBar();
-    pScroll->setSliderPosition(pScroll->maximum());
-    message_content->setText("kai shi le xie xie");
-    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
-
+    createMessageBox();
     createStatusBar();
-    createSlots();
     createVTKview();
+    createSlots();
 }
 
 MainWindow::~MainWindow()
@@ -92,37 +80,47 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/// 设置输出窗口
+void MainWindow::createMessageBox()
+{
+    message_content = new QTextEdit;
+    message_content->setReadOnly(1);
+    ui->message_box->hide();
+    ui->message_box->setWidget(message_content);
+    QScrollBar *pScroll = message_content->verticalScrollBar();
+    pScroll->setSliderPosition(pScroll->maximum());
+    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
+    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
+}
+
+/// 设置vtk显示窗口
 void MainWindow::createVTKview()
 {
     qvtkWidget = new QVTKWidget(this);
     setCentralWidget(qvtkWidget);
     renderer = vtkRenderer::New();
     // Setup VTK window
-    //renderer->SetBackground(169/255., 169./255, 169./255);
+
     renderer->SetBackground(0.5, 0.5, 1);
     renderer->SetBackground2(1,1,1);
     renderer->SetGradientBackground(1);
     qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
 
     vtkAxesActor* axes = vtkAxesActor::New();
-    //renderer->AddActor(axes);
-    //renderer->RemoveAllViewProps();
-
     widget = vtkOrientationMarkerWidget::New();
     widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
     widget->SetOrientationMarker( axes );
     widget->SetInteractor( qvtkWidget->GetInteractor() );
-   // widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
+    widget->SetViewport( 0.0, 0.0, 0.3, 0.3 );
     widget->On();
-    //widget->InteractiveOn();
-    widget->SetDefaultRenderer(renderer);
+    widget->InteractiveOn();
 
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
 }
 
 
-////================================================================================================
+/// 设置状态栏
 void MainWindow::createStatusBar()
 {
     QLabel* _pQLabel = new QLabel;
@@ -131,14 +129,17 @@ void MainWindow::createStatusBar()
     ui->statusBar->showMessage("Initializing...",1000);
 }
 
+/// 设置信号和槽
 void MainWindow::createSlots()
 {
     // about
     connect(ui->action_Mscs, SIGNAL(triggered()), this, SLOT(about()));
 
     // view menu
-    connect(ui->action_show_massage_box, SIGNAL(triggered()), this, SLOT(show_message_box()));
+    connect(ui->action_show_cell, SIGNAL(triggered()), this, SLOT(show_pcmcell()));
     connect(ui->action_show_massage_box, SIGNAL(triggered(bool)), this, SLOT(show_message_box(bool)));
+    connect(ui->action_show_axes, SIGNAL(triggered(bool)), this, SLOT(show_axes(bool)));
+    ui->action_show_axes->setChecked(1);
     // model menu
     connect(ui->action_import_mesh, SIGNAL(triggered()), this, SLOT(import_mesh()));
     connect(ui->action_import_geo, SIGNAL(triggered()), this, SLOT(import_geo()));
@@ -157,14 +158,42 @@ void MainWindow::createSlots()
 
 }
 
-
-
-void MainWindow::show_pcmcell()
+// slots ====================================================================================
+/// 显示坐标轴
+void MainWindow::show_axes(bool flags)
 {
-
+    if(flags){
+        widget->On();
+        qvtkWidget->GetRenderWindow()->Render();
+    }
+    else{
+        widget->Off();
+        qvtkWidget->GetRenderWindow()->Render();
+    }
 }
 
-// slots
+/// 显示颗粒增强单胞
+void MainWindow::show_pcmcell()
+{
+    if (sots.celldata == NULL)return;
+    vtkSmartPointer<vtkDataSetMapper> mapper =
+            vtkSmartPointer<vtkDataSetMapper>::New();
+    mapper->SetInput(sots.celldata);
+    cout << sots.celldata;
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetRepresentationToSurface();
+    actor->GetProperty()->SetRepresentationToWireframe();
+    actor->GetProperty()->SetColor(0,1,1);
+    actor->GetProperty()->SetEdgeColor(0,0,0);
+    actor->GetProperty()->EdgeVisibilityOn();
+    renderer->RemoveAllViewProps();
+    renderer->AddActor(actor);
+    renderer->ResetCamera();
+    qvtkWidget->GetRenderWindow()->Render();
+}
+
+/// 设置单胞
 void MainWindow::set_cell()
 {
     SetCellDialog setcell(this);
@@ -172,12 +201,13 @@ void MainWindow::set_cell()
 }
 
 
-
+/// 导入单胞几何并剖分
 void MainWindow::import_cell_geo()
 {
 
 }
 
+/// 直接导入单胞网格
 void MainWindow::import_cell_mesh()
 {
     QString sDefaultName = tr("");
@@ -188,14 +218,22 @@ void MainWindow::import_cell_mesh()
                 this, QString::fromLocal8Bit("导入单胞网格文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
-    if(!sFileName.isNull())import_bdf(sFileName);
+    cout << sots.celldata<< endl;
+    if(!sFileName.isNull())
+    {
+        sots.celldata = import_bdf(sFileName);
+        cout << sots.celldata << endl;
+    }
 }
+
+/// 创建材料
 void MainWindow::new_material()
 {
     materiel mat(this);
     mat.exec();
 }
 
+/// 直接导入计算文件
 void MainWindow::import_inp()
 {
     QString sDefaultName = tr("");
@@ -209,6 +247,7 @@ void MainWindow::import_inp()
     return;
 }
 
+/// 新建工程
 void MainWindow::new_project()
 {
     AnalysisType anatype(this);
@@ -220,10 +259,12 @@ void MainWindow::new_project()
     }
     QString logfile = anatype.get_prj_folder() + QString("/") + anatype.get_prj_name() +".log";
     cout << logfile.toStdString().c_str() << endl;
-//    freopen(logfile.toStdString().c_str(),"w",stdout);
+    //    freopen(logfile.toStdString().c_str(),"w",stdout);
     cout << "这是一个分析文件" << endl;
     //freopen("CON", "w", stdout);
 }
+
+/// 关于对话框
 void MainWindow::about()
 {
     AboutDialog aboutdialog(this);
@@ -239,33 +280,28 @@ void MainWindow::show_message_box(bool checked)
 {
     if (checked)
     {
-//        fflush(stdout);
-//        if (_pReadStream->atEnd())
-//        {
-//            return;
-//        }
+        //        fflush(stdout);
+        //        if (_pReadStream->atEnd())
+        //        {
+        //            return;
+        //        }
 
-//        QChar aChar;
-//        while (!_pReadStream->atEnd())
-//        {
-//            _pReadStream->operator >>(aChar);
-//            _messageTextEdit.insertPlainText(aChar);
-//        }
+        //        QChar aChar;
+        //        while (!_pReadStream->atEnd())
+        //        {
+        //            _pReadStream->operator >>(aChar);
+        //            _messageTextEdit.insertPlainText(aChar);
+        //        }
 
-//        QScrollBar *pScroll = _messageTextEdit.verticalScrollBar();
-//        pScroll->setSliderPosition(pScroll->maximum());
+        //        QScrollBar *pScroll = _messageTextEdit.verticalScrollBar();
+        //        pScroll->setSliderPosition(pScroll->maximum());
         ui->message_box->show();
     }
     else
         ui->message_box->hide();
 }
 
-//void MainWindow::on_action_3_triggered()
-//{
-//    MeshPara meshpara(this);
-//    meshpara.exec();
-//}
-
+/// 读入网格
 void MainWindow::import_mesh()
 {
     //QString homeName = getHomePath();
@@ -284,6 +320,8 @@ void MainWindow::import_mesh()
         read_neutral_format(sFileName);
     }
 }
+
+
 void MainWindow::import_geo()
 {
     //QString homeName = getHomePath();
@@ -333,7 +371,7 @@ void MainWindow::openSTL(QString stl_filename)
 
 }
 
-void MainWindow::import_bdf(QString bdf_filename)
+vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
 {
 
     vtkIdType number_of_points = 0, number_of_tetra = 0;
@@ -342,18 +380,6 @@ void MainWindow::import_bdf(QString bdf_filename)
     vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
     intValue->SetNumberOfComponents(1);
     intValue->SetName("subdomainid");
-    //     intValue->InsertNextValue(5);
-    //    vtkSmartPointer<vtkDoubleArray> mat =
-    //        vtkSmartPointer<vtkDoubleArray>::New();
-
-    //      // Create the data to store (here we just use (0,0,0))
-    //      double locationValue[3] = {0,0,0};
-
-    //      location->SetNumberOfComponents(3);
-    //      location->SetName("MyDoubleArray");
-    //      location->InsertNextTuple(locationValue);
-    // The data is added to FIELD data (rather than POINT data as usual)
-    //      polydata->GetFieldData()->AddArray(location);
 
     std::ifstream infile(bdf_filename.toStdString().c_str());
     std::string s,l;
@@ -368,8 +394,8 @@ void MainWindow::import_bdf(QString bdf_filename)
         if (l == "CTETRA" )number_of_tetra++;
     }
     points->SetNumberOfPoints(number_of_points);
-    std::cout << number_of_points << std::endl;
-    std::cout << number_of_tetra << std::endl;
+    //   std::cout << number_of_points << std::endl;
+    //   std::cout << number_of_tetra << std::endl;
     infile.close();
     {
         std::ifstream infile(bdf_filename.toStdString().c_str());
@@ -393,7 +419,7 @@ void MainWindow::import_bdf(QString bdf_filename)
                 vtkIdType a, b, c, d;
                 vtkIdType n,subdomainId;
                 ss >> n >> subdomainId >>  a >> b >> c >> d;
-                if(subdomainId == 1) continue;
+                //if(subdomainId == 1) continue;
                 //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
@@ -409,8 +435,8 @@ void MainWindow::import_bdf(QString bdf_filename)
         }
 
     }
-    vtkSmartPointer<vtkUnstructuredGrid> unstructuredGrid =
-            vtkSmartPointer<vtkUnstructuredGrid>::New();
+    vtkUnstructuredGrid* unstructuredGrid = vtkUnstructuredGrid::New();
+    cout << unstructuredGrid << endl;
     unstructuredGrid->SetPoints(points);
     unstructuredGrid->SetCells(VTK_TETRA, cellArray);
     unstructuredGrid->GetCellData()->AddArray(intValue);
@@ -422,37 +448,32 @@ void MainWindow::import_bdf(QString bdf_filename)
 #if VTK_MAJOR_VERSION <= 5
     writer->SetInput(unstructuredGrid);
 #else
-    writer->SetInputData(unstructuredGrid);
+    writer->SetInputData(*unstructuredGrid);
 #endif
     writer->Write();
-
+    return unstructuredGrid;
     // Read and display file for verification that it was written correclty
-    vtkSmartPointer<vtkUnstructuredGridReader> reader =
-            vtkSmartPointer<vtkUnstructuredGridReader>::New();
-    reader->SetFileName((bdf_filename+".vtu").toStdString().c_str());
-    reader->Update();
+//    vtkSmartPointer<vtkUnstructuredGridReader> reader =
+//            vtkSmartPointer<vtkUnstructuredGridReader>::New();
+//    reader->SetFileName((bdf_filename+".vtu").toStdString().c_str());
+//    reader->Update();
 
-    vtkSmartPointer<vtkDataSetMapper> mapper =
-            vtkSmartPointer<vtkDataSetMapper>::New();
-    mapper->SetInputConnection(reader->GetOutputPort());
+//    vtkSmartPointer<vtkDataSetMapper> mapper =
+//            vtkSmartPointer<vtkDataSetMapper>::New();
+//    mapper->SetInputConnection(reader->GetOutputPort());
 
-    vtkSmartPointer<vtkActor> actor =
-            vtkSmartPointer<vtkActor>::New();
-    actor->SetMapper(mapper);
-    actor->GetProperty()->SetRepresentationToSurface();
-    //       actor->GetProperty()->SetRepresentationToWireframe();
-    actor->GetProperty()->SetColor(0,1,1);
-    actor->GetProperty()->SetEdgeColor(0,0,0);
-    actor->GetProperty()->EdgeVisibilityOn();
-    renderer->RemoveAllViewProps();
-    renderer->AddActor(actor);
-
-    //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
-    renderer->ResetCamera();
-    qvtkWidget->GetRenderWindow()->Render();
-    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
-
+//    vtkSmartPointer<vtkActor> actor =
+//            vtkSmartPointer<vtkActor>::New();
+//    actor->SetMapper(mapper);
+//    actor->GetProperty()->SetRepresentationToSurface();
+//    //       actor->GetProperty()->SetRepresentationToWireframe();
+//    actor->GetProperty()->SetColor(0,1,1);
+//    actor->GetProperty()->SetEdgeColor(0,0,0);
+//    actor->GetProperty()->EdgeVisibilityOn();
+ //   renderer->RemoveAllViewProps();
+ //   renderer->AddActor(actor);
+ //   renderer->ResetCamera();
+ //   qvtkWidget->GetRenderWindow()->Render();
 }
 
 void MainWindow::meshSTL(QString stl_filename)
@@ -601,8 +622,8 @@ void MainWindow::read_neutral_format(QString filename )
 
     vtkSmartPointer<vtkDataSetMapper> mapper =
             vtkSmartPointer<vtkDataSetMapper>::New();
-    mapper->SetInputConnection(reader->GetOutputPort());
-
+    //mapper->SetInputConnection(reader->GetOutputPort());
+    mapper->SetInput(unstructuredGrid);
     vtkSmartPointer<vtkActor> actor =
             vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
@@ -613,12 +634,8 @@ void MainWindow::read_neutral_format(QString filename )
     actor->GetProperty()->EdgeVisibilityOn();
     renderer->RemoveAllViewProps();
     renderer->AddActor(actor);
-
-    //      qvtkWidget->GetRenderWindow()->AddRenderer(renderer);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
-    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Initialize();
-    //    qvtkWidget->GetRenderWindow()->GetInteractor()->Start();
 }
 
 void MainWindow::plot_cell()

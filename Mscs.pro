@@ -41,7 +41,8 @@ HEADERS += src/gui/aboutdialog.h \
            src/pmcell/PCMCell.h \
            src/pmcell/Vector2D.h \
            src/pmcell/Vector3D.h \
-    src/mylogger.h
+    src/mylogger.h \
+    src/gui/vtkviewer.h
 FORMS += forms/aboutdialog.ui \
          forms/analysistype.ui \
          forms/cellmodel.ui \
@@ -70,5 +71,6 @@ SOURCES += src/mscs_main.cpp \
            src/pmcell/PCMCell.cpp \
            src/pmcell/Vector2D.cpp \
            src/pmcell/Vector3D.cpp \
-    src/mylogger.cpp
+    src/mylogger.cpp \
+    src/gui/vtkviewer.cpp
 RESOURCES += resources/Mscs.qrc

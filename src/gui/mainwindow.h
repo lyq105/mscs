@@ -46,18 +46,20 @@ private slots:
     void import_cell_geo();
     void set_cell();
     void show_pcmcell();
+    void show_axes(bool flags);
 
 private:
     void createSlots();
     void createStatusBar();
     void createToolbar();
     void createVTKview();
+    void createMessageBox();
 
 
     void openSTL(QString stl_filename);
     void read_neutral_format(QString filename );
     void meshSTL(QString stl_filename);
-    void import_bdf(QString bdf_filename);
+    vtkUnstructuredGrid* import_bdf(QString bdf_filename);
     //    void openVtu(QString vtu_filename);
     void plot_cell();
 
@@ -68,6 +70,10 @@ private:
     QVTKWidget* qvtkWidget;
     vtkRenderer* renderer;
     vtkOrientationMarkerWidget* widget;
+
+    vtkActor* cell_mesh_actor;
+    vtkActor* cell_geo_actor;
+    vtkActor* cell_actor;
 };
 
 #endif // MAINWINDOW_H

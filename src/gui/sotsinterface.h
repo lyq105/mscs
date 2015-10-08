@@ -58,9 +58,12 @@ public:
 
     void write_cell_solution(std::string filename);
     void write_homo_solution(std::string filename);
+//    void add_cell_data();
+//    void add_point_data();
+
+    vtkUnstructuredGrid* celldata;
+    vtkUnstructuredGrid* homodata;
 private:
-    vtkSmartPointer<vtkUnstructuredGrid> celldata;
-    vtkSmartPointer<vtkUnstructuredGrid> homodata;
     std::string analysis_type;
     std::string prj_folder;
     std::string prj_name;

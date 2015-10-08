@@ -2,6 +2,8 @@
 
 SOTSinterface::SOTSinterface()
 {
+    celldata = NULL;
+    homodata = NULL;
 }
 
 SOTSinterface::~SOTSinterface()

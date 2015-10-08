@@ -49,6 +49,7 @@
     <addaction name="action_show_cell"/>
     <addaction name="action_show_homogeo"/>
     <addaction name="action_show_massage_box"/>
+    <addaction name="action_show_axes"/>
    </widget>
    <widget class="QMenu" name="menu_model">
     <property name="title">
@@ -136,6 +137,7 @@
    <addaction name="action_new_mat"/>
    <addaction name="action_gen_cell"/>
    <addaction name="action_Mscs"/>
+   <addaction name="action_show_cell"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="message_box">
@@ -182,6 +184,13 @@
    </property>
   </action>
   <action name="action_show_cell">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/games-config-tiles.png</normaloff>:/icons/icons/games-config-tiles.png</iconset>
+   </property>
    <property name="text">
     <string>显示单胞</string>
    </property>
@@ -287,6 +296,14 @@
    </property>
    <property name="text">
     <string>设置单胞参数</string>
+   </property>
+  </action>
+  <action name="action_show_axes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示坐标轴</string>
    </property>
   </action>
  </widget>

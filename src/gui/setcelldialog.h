@@ -21,9 +21,7 @@ private slots:
     void on_rb_cd_uiniform_clicked();
     void on_rb_cd_power_clicked();
     void on_rb_cd_normal_clicked();
-
     void on_rb_d_uniform_clicked();
-
     void on_rb_d_normal_clicked();
 
 private:
