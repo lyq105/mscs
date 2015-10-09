@@ -226,7 +226,7 @@ void MainWindow::show_pcmcell()
 
     vtkSmartPointer<vtkAssignAttribute> mat =
         vtkSmartPointer<vtkAssignAttribute>::New();
-      mat->SetInputConnection(sots.celldata->GetOutputPort());
+      mat->SetInput(sots.celldata);
       mat->Assign("SubdomainID", vtkDataSetAttributes::SCALARS,
                       vtkAssignAttribute::CELL_DATA);
     // Create a lookup table to map cell data to colors
