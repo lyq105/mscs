@@ -59,6 +59,52 @@
 #include "setcelldialog.h"
 #include <vtkBorderWidget.h>
 
+#include <vtkSmartPointer.h>
+#include <vtkCamera.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkTextMapper.h>
+#include <vtkActor.h>
+#include <vtkActor2D.h>
+#include <vtkProperty.h>
+#include <vtkTextProperty.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkParametricFunctionSource.h>
+#include <vtkMath.h>
+#include <vtkPoints.h>
+#include <vtkParametricEllipsoid.h>
+#include <vtkVersion.h>
+#include <vtkSmartPointer.h>
+
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkActor.h>
+#include <vtkCamera.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkDataSetMapper.h>
+#include <vtkPolyData.h>
+#include <vtkStripper.h>
+#include <vtkFeatureEdges.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkClipPolyData.h>
+#include <vtkPlane.h>
+#include <vtkXMLPolyDataReader.h>
+
+#include <vtkSphereSource.h>
+#include <vtkBox.h>
+#include <vtkCamera.h>
+#include <vtkCellData.h>
+#include <vtkClipPolyData.h>
+#include <vtkCubeSource.h>
+#include <vtkLookupTable.h>
+#include <vtkAssignAttribute.h>
+
+
+/// 构造和析构函数
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -176,19 +222,145 @@ void MainWindow::show_axes(bool flags)
 void MainWindow::show_pcmcell()
 {
     if (sots.celldata == NULL)return;
+
+
+    vtkSmartPointer<vtkAssignAttribute> mat =
+        vtkSmartPointer<vtkAssignAttribute>::New();
+      mat->SetInputConnection(sots.celldata->GetOutputPort());
+      mat->Assign("SubdomainID", vtkDataSetAttributes::SCALARS,
+                      vtkAssignAttribute::CELL_DATA);
+    // Create a lookup table to map cell data to colors
+    vtkSmartPointer<vtkLookupTable> lut =
+            vtkSmartPointer<vtkLookupTable>::New();
+//    int tableSize = std::max(resolution*resolution + 1, 10);
+    lut->SetNumberOfTableValues(2);
+    lut->Build();
+
+    // Fill in a few known colors, the rest will be generated if needed
+    lut->SetTableValue(0, 1, 0, 0, 1);
+    lut->SetTableValue(1, 0, 0, 1, 1);
+//    lut->SetTableValue(2, 1.0000, 0.3882, 0.2784, 1); // Tomato
+//    lut->SetTableValue(3, 0.9608, 0.8706, 0.7020, 1); // Wheat
+//    lut->SetTableValue(4, 0.9020, 0.9020, 0.9804, 1); // Lavender
+//    lut->SetTableValue(5, 1.0000, 0.4900, 0.2500, 1); // Flesh
+//    lut->SetTableValue(6, 0.5300, 0.1500, 0.3400, 1); // Raspberry
+//    lut->SetTableValue(7, 0.9804, 0.5020, 0.4471, 1); // Salmon
+//    lut->SetTableValue(8, 0.7400, 0.9900, 0.7900, 1); // Mint
+//    lut->SetTableValue(9, 0.2000, 0.6300, 0.7900, 1); // Peacock
     vtkSmartPointer<vtkDataSetMapper> mapper =
             vtkSmartPointer<vtkDataSetMapper>::New();
     mapper->SetInput(sots.celldata);
-    cout << sots.celldata;
+    mapper->SetLookupTable(lut);
+    mapper->SetScalarRange(1, 2);
+    mapper->ScalarVisibilityOn();
+ //   cout << sots.celldata;
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    actor->GetProperty()->SetRepresentationToSurface();
-    actor->GetProperty()->SetRepresentationToWireframe();
+ //   actor->GetProperty()->SetRepresentationToSurface();
+    //actor->GetProperty()->SetRepresentationToWireframe();
+//    actor->GetProperty()->SetColor(0,1,1);
+//    actor->GetProperty()->SetEdgeColor(0,0,0);
+//    actor->GetProperty()->EdgeVisibilityOn();
+    /*
+    vtkSmartPointer<vtkParametricEllipsoid> ellip = vtkSmartPointer<vtkParametricEllipsoid>::New();
+    ellip->SetXRadius(1.0);
+    ellip->SetYRadius(2.0);
+    ellip->SetZRadius(1.0);
+
+    //vtkSmartPointer<vtkSphereSource> ellipSource =
+    //vtkSmartPointer<vtkSphereSource>::New();
+    //ellipSource->SetCenter(.5, 0.5, 0);
+    //ellipSource->SetThetaResolution(600);
+    //ellipSource->SetPhiResolution(600);
+    //ellipSource->Update();
+
+    vtkSmartPointer<vtkPolyData> polyData;
+
+    vtkSmartPointer<vtkCubeSource> cubeSource =
+            vtkSmartPointer<vtkCubeSource>::New();
+    cubeSource->SetCenter(.5, 0.5, 0.5);
+    cubeSource->Update();
+
+    vtkSmartPointer<vtkBox> implicitCube =
+            vtkSmartPointer<vtkBox>::New();
+    implicitCube->SetBounds(cubeSource->GetOutput()->GetBounds());
+
+
+    vtkSmartPointer<vtkParametricFunctionSource> ellipSource =
+            vtkSmartPointer<vtkParametricFunctionSource>::New();
+    ellipSource->SetParametricFunction(ellip);
+
+    vtkSmartPointer<vtkClipPolyData> clipper =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper->SetInputConnection(ellipSource->GetOutputPort());
+    clipper->SetClipFunction(implicitCube);
+    //clipper->SetValue(0);
+    clipper->InsideOutOn();
+    clipper->Update();
+
+
+    polyData = clipper->GetOutput();
+
+
+    vtkSmartPointer<vtkFeatureEdges> boundaryEdges =
+            vtkSmartPointer<vtkFeatureEdges>::New();
+#if VTK_MAJOR_VERSION <= 5
+    boundaryEdges->SetInput(polyData);
+#else
+    boundaryEdges->SetInputData(polyData);
+#endif
+    boundaryEdges->BoundaryEdgesOn();
+    boundaryEdges->FeatureEdgesOff();
+    boundaryEdges->NonManifoldEdgesOff();
+    boundaryEdges->ManifoldEdgesOff();
+
+    vtkSmartPointer<vtkStripper> boundaryStrips =
+            vtkSmartPointer<vtkStripper>::New();
+    boundaryStrips->SetInputConnection(boundaryEdges->GetOutputPort());
+    boundaryStrips->Update();
+
+    // Change the polylines into polygons
+    vtkSmartPointer<vtkPolyData> boundaryPoly =
+            vtkSmartPointer<vtkPolyData>::New();
+    boundaryPoly->SetPoints(boundaryStrips->GetOutput()->GetPoints());
+    boundaryPoly->SetPolys(boundaryStrips->GetOutput()->GetLines());
+
+
+    vtkSmartPointer<vtkPolyDataMapper> boundaryMapper =
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+#if VTK_MAJOR_VERSION <= 5
+    boundaryMapper->SetInput(boundaryPoly);
+#else
+    boundaryMapper->SetInputData(boundaryPoly);
+#endif
+
+    vtkSmartPointer<vtkActor> boundaryActor =
+            vtkSmartPointer<vtkActor>::New();
+    boundaryActor->SetMapper(boundaryMapper);
+    boundaryActor->GetProperty()->SetColor(0.,1,1);
+    boundaryActor->GetProperty()->SetEdgeColor(0,0,0);
+    //boundaryActor->GetProperty()->EdgeVisibilityOn();
+    //boundaryActor->GetProperty()->SetRepresentationToWireframe();
+
+
+    vtkSmartPointer<vtkPolyDataMapper>  mapper =
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    //mapper->SetInputConnection(ellipSource->GetOutputPort());
+    mapper->SetInput(polyData);
+
+    vtkSmartPointer<vtkActor>  actor =
+            vtkSmartPointer<vtkActor>::New() ;
+    actor->SetMapper(mapper);
+
+    //actor->GetProperty()->SetRepresentationToWireframe();
     actor->GetProperty()->SetColor(0,1,1);
-    actor->GetProperty()->SetEdgeColor(0,0,0);
-    actor->GetProperty()->EdgeVisibilityOn();
+    //actor->GetProperty()->SetEdgeColor(0,0,0);
+    //actor->GetProperty()->EdgeVisibilityOn();
+  */
     renderer->RemoveAllViewProps();
+
     renderer->AddActor(actor);
+    //   renderer->AddActor(boundaryActor);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
 }
@@ -423,7 +595,8 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
                 //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
-                intValue->InsertNextValue(subdomainId);
+//                intValue->InsertNextValue(subdomainId);
+                intValue->InsertNextValue(a);
 
                 tetra->GetPointIds()->SetId(0, a-1);
                 tetra->GetPointIds()->SetId(1, b-1);
@@ -453,27 +626,27 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
     writer->Write();
     return unstructuredGrid;
     // Read and display file for verification that it was written correclty
-//    vtkSmartPointer<vtkUnstructuredGridReader> reader =
-//            vtkSmartPointer<vtkUnstructuredGridReader>::New();
-//    reader->SetFileName((bdf_filename+".vtu").toStdString().c_str());
-//    reader->Update();
+    //    vtkSmartPointer<vtkUnstructuredGridReader> reader =
+    //            vtkSmartPointer<vtkUnstructuredGridReader>::New();
+    //    reader->SetFileName((bdf_filename+".vtu").toStdString().c_str());
+    //    reader->Update();
 
-//    vtkSmartPointer<vtkDataSetMapper> mapper =
-//            vtkSmartPointer<vtkDataSetMapper>::New();
-//    mapper->SetInputConnection(reader->GetOutputPort());
+    //    vtkSmartPointer<vtkDataSetMapper> mapper =
+    //            vtkSmartPointer<vtkDataSetMapper>::New();
+    //    mapper->SetInputConnection(reader->GetOutputPort());
 
-//    vtkSmartPointer<vtkActor> actor =
-//            vtkSmartPointer<vtkActor>::New();
-//    actor->SetMapper(mapper);
-//    actor->GetProperty()->SetRepresentationToSurface();
-//    //       actor->GetProperty()->SetRepresentationToWireframe();
-//    actor->GetProperty()->SetColor(0,1,1);
-//    actor->GetProperty()->SetEdgeColor(0,0,0);
-//    actor->GetProperty()->EdgeVisibilityOn();
- //   renderer->RemoveAllViewProps();
- //   renderer->AddActor(actor);
- //   renderer->ResetCamera();
- //   qvtkWidget->GetRenderWindow()->Render();
+    //    vtkSmartPointer<vtkActor> actor =
+    //            vtkSmartPointer<vtkActor>::New();
+    //    actor->SetMapper(mapper);
+    //    actor->GetProperty()->SetRepresentationToSurface();
+    //    //       actor->GetProperty()->SetRepresentationToWireframe();
+    //    actor->GetProperty()->SetColor(0,1,1);
+    //    actor->GetProperty()->SetEdgeColor(0,0,0);
+    //    actor->GetProperty()->EdgeVisibilityOn();
+    //   renderer->RemoveAllViewProps();
+    //   renderer->AddActor(actor);
+    //   renderer->ResetCamera();
+    //   qvtkWidget->GetRenderWindow()->Render();
 }
 
 void MainWindow::meshSTL(QString stl_filename)

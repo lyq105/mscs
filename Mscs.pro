@@ -7,7 +7,7 @@ TARGET =
 DEPENDPATH += . forms resources src src/gui
 INCLUDEPATH += . src/gui src/pmcell
 unix:INCLUDEPATH +=/usr/include/vtk-5.8/
-unix:LIBS = -lQVTK -lvtkRendering -lvtkCommon -lvtkWidgets -lvtkHybrid -lvtkIO -lvtkFiltering
+unix:LIBS = -lQVTK -lvtkRendering -lvtkCommon -lvtkWidgets -lvtkHybrid -lvtkIO -lvtkFiltering -lvtkGraphics
 unix:QMAKE_CXXFLAGS += -Wno-deprecated -Wno-unused-parameter
 
 win32:INCLUDEPATH += "C:/Program Files/VTK_vs2008/include/vtk-5.10/"
@@ -19,7 +19,6 @@ win32:LIBS +=  "C:/Program Files/VTK_vs2008/lib/vtk-5.10/QVTK.lib" \
         "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkFiltering.lib" \
         "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkCommon.lib"
 
-# Input
 # Input
 HEADERS += src/gui/aboutdialog.h \
            src/gui/analysistype.h \
