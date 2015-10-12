@@ -51,6 +51,8 @@
     <addaction name="action_show_massage_box"/>
     <addaction name="action_show_axes"/>
     <addaction name="action_show_XY"/>
+    <addaction name="action_show_XZ"/>
+    <addaction name="action_show_YZ"/>
    </widget>
    <widget class="QMenu" name="menu_model">
     <property name="title">
@@ -315,6 +317,16 @@
    </property>
    <property name="text">
     <string>显示XY平面</string>
+   </property>
+  </action>
+  <action name="action_show_XZ">
+   <property name="text">
+    <string>显示XZ平面</string>
+   </property>
+  </action>
+  <action name="action_show_YZ">
+   <property name="text">
+    <string>显示YZ平面</string>
    </property>
   </action>
  </widget>

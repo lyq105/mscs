@@ -189,6 +189,9 @@ void MainWindow::createSlots()
     connect(ui->action_show_axes, SIGNAL(triggered(bool)), this, SLOT(show_axes(bool)));
     ui->action_show_axes->setChecked(1);
     connect(ui->action_show_XY,SIGNAL(triggered()), this, SLOT(show_XY()));
+    connect(ui->action_show_XZ,SIGNAL(triggered()), this, SLOT(show_XZ()));
+    connect(ui->action_show_YZ,SIGNAL(triggered()), this, SLOT(show_YZ()));
+
     // model menu
     connect(ui->action_import_mesh, SIGNAL(triggered()), this, SLOT(import_mesh()));
     connect(ui->action_import_geo, SIGNAL(triggered()), this, SLOT(import_geo()));
@@ -221,22 +224,24 @@ void MainWindow::show_XY()
     qvtkWidget->GetRenderWindow()->Render();
 }
 
+/// 显示XZ平面
 void MainWindow::show_XZ()
 {
     vtkSmartPointer<vtkCamera> camera =  renderer->GetActiveCamera();
-    camera->SetPosition(0,0,1);
+    camera->SetPosition(0,1,0);
     camera->SetFocalPoint(0,0,0);
-    camera->SetViewUp(0,1,0);
+    camera->SetViewUp(0,0,1);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
 }
 
+/// 显示YZ平面
 void MainWindow::show_YZ()
 {
     vtkSmartPointer<vtkCamera> camera =  renderer->GetActiveCamera();
-    camera->SetPosition(0,0,1);
+    camera->SetPosition(1,0,0);
     camera->SetFocalPoint(0,0,0);
-    camera->SetViewUp(0,1,0);
+    camera->SetViewUp(0,0,1);
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
 }
@@ -262,42 +267,42 @@ void MainWindow::show_pcmcell()
 
 
     vtkSmartPointer<vtkAssignAttribute> mat =
-        vtkSmartPointer<vtkAssignAttribute>::New();
-      mat->SetInput(sots.celldata);
-      mat->Assign("SubdomainID", vtkDataSetAttributes::SCALARS,
-                      vtkAssignAttribute::CELL_DATA);
+            vtkSmartPointer<vtkAssignAttribute>::New();
+    mat->SetInput(sots.celldata);
+    mat->Assign("SubdomainID", vtkDataSetAttributes::SCALARS,
+                vtkAssignAttribute::CELL_DATA);
     // Create a lookup table to map cell data to colors
     vtkSmartPointer<vtkLookupTable> lut =
             vtkSmartPointer<vtkLookupTable>::New();
-//    int tableSize = std::max(resolution*resolution + 1, 10);
+    //    int tableSize = std::max(resolution*resolution + 1, 10);
     lut->SetNumberOfTableValues(2);
     lut->Build();
 
     // Fill in a few known colors, the rest will be generated if needed
     lut->SetTableValue(0, 1, 0, 0, 1);
     lut->SetTableValue(1, 0, 0, 1, 1);
-//    lut->SetTableValue(2, 1.0000, 0.3882, 0.2784, 1); // Tomato
-//    lut->SetTableValue(3, 0.9608, 0.8706, 0.7020, 1); // Wheat
-//    lut->SetTableValue(4, 0.9020, 0.9020, 0.9804, 1); // Lavender
-//    lut->SetTableValue(5, 1.0000, 0.4900, 0.2500, 1); // Flesh
-//    lut->SetTableValue(6, 0.5300, 0.1500, 0.3400, 1); // Raspberry
-//    lut->SetTableValue(7, 0.9804, 0.5020, 0.4471, 1); // Salmon
-//    lut->SetTableValue(8, 0.7400, 0.9900, 0.7900, 1); // Mint
-//    lut->SetTableValue(9, 0.2000, 0.6300, 0.7900, 1); // Peacock
+    //    lut->SetTableValue(2, 1.0000, 0.3882, 0.2784, 1); // Tomato
+    //    lut->SetTableValue(3, 0.9608, 0.8706, 0.7020, 1); // Wheat
+    //    lut->SetTableValue(4, 0.9020, 0.9020, 0.9804, 1); // Lavender
+    //    lut->SetTableValue(5, 1.0000, 0.4900, 0.2500, 1); // Flesh
+    //    lut->SetTableValue(6, 0.5300, 0.1500, 0.3400, 1); // Raspberry
+    //    lut->SetTableValue(7, 0.9804, 0.5020, 0.4471, 1); // Salmon
+    //    lut->SetTableValue(8, 0.7400, 0.9900, 0.7900, 1); // Mint
+    //    lut->SetTableValue(9, 0.2000, 0.6300, 0.7900, 1); // Peacock
     vtkSmartPointer<vtkDataSetMapper> mapper =
             vtkSmartPointer<vtkDataSetMapper>::New();
     mapper->SetInput(sots.celldata);
     mapper->SetLookupTable(lut);
     mapper->SetScalarRange(1, 2);
     mapper->ScalarVisibilityOn();
- //   cout << sots.celldata;
+    //   cout << sots.celldata;
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
     actor->GetProperty()->SetRepresentationToSurface();
     //actor->GetProperty()->SetRepresentationToWireframe();
- //   actor->GetProperty()->SetColor(0,1,1);
- //   actor->GetProperty()->SetEdgeColor(0,0,0);
- //   actor->GetProperty()->EdgeVisibilityOn();
+    actor->GetProperty()->SetColor(0,1,1);
+    actor->GetProperty()->SetEdgeColor(0,0,0);
+    actor->GetProperty()->EdgeVisibilityOn();
     /*
     vtkSmartPointer<vtkParametricEllipsoid> ellip = vtkSmartPointer<vtkParametricEllipsoid>::New();
     ellip->SetXRadius(1.0);
@@ -489,21 +494,6 @@ void MainWindow::show_message_box(bool checked)
 {
     if (checked)
     {
-        //        fflush(stdout);
-        //        if (_pReadStream->atEnd())
-        //        {
-        //            return;
-        //        }
-
-        //        QChar aChar;
-        //        while (!_pReadStream->atEnd())
-        //        {
-        //            _pReadStream->operator >>(aChar);
-        //            _messageTextEdit.insertPlainText(aChar);
-        //        }
-
-        //        QScrollBar *pScroll = _messageTextEdit.verticalScrollBar();
-        //        pScroll->setSliderPosition(pScroll->maximum());
         ui->message_box->show();
     }
     else
@@ -632,7 +622,7 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
                 //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
-//                intValue->InsertNextValue(subdomainId);
+                //                intValue->InsertNextValue(subdomainId);
                 intValue->InsertNextValue(a);
 
                 tetra->GetPointIds()->SetId(0, a-1);
