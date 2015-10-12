@@ -4,6 +4,7 @@
 
 VTKviewer::VTKviewer()
 {
+    qvtk = new QVTKWidget;
 }
 
 void VTKviewer::render()

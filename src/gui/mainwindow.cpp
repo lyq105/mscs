@@ -133,10 +133,10 @@ void MainWindow::createMessageBox()
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
-    QScrollBar *pScroll = message_content->verticalScrollBar();
-    pScroll->setSliderPosition(pScroll->maximum());
     message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
     message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
+    QScrollBar *pScroll = message_content->verticalScrollBar();
+    pScroll->setSliderPosition(pScroll->maximum());
 }
 
 /// 设置vtk显示窗口
@@ -162,6 +162,8 @@ void MainWindow::createVTKview()
     widget->InteractiveOn();
 
     renderer->ResetCamera();
+    vtkSmartPointer<vtkCamera> camera =  renderer->GetActiveCamera();
+    camera->SetPosition(1,1,1);
     qvtkWidget->GetRenderWindow()->Render();
 }
 
@@ -186,6 +188,7 @@ void MainWindow::createSlots()
     connect(ui->action_show_massage_box, SIGNAL(triggered(bool)), this, SLOT(show_message_box(bool)));
     connect(ui->action_show_axes, SIGNAL(triggered(bool)), this, SLOT(show_axes(bool)));
     ui->action_show_axes->setChecked(1);
+    connect(ui->action_show_XY,SIGNAL(triggered()), this, SLOT(show_XY()));
     // model menu
     connect(ui->action_import_mesh, SIGNAL(triggered()), this, SLOT(import_mesh()));
     connect(ui->action_import_geo, SIGNAL(triggered()), this, SLOT(import_geo()));
@@ -205,6 +208,22 @@ void MainWindow::createSlots()
 }
 
 // slots ====================================================================================
+
+/// 显示XY平面
+
+void MainWindow::show_XY()
+{
+    vtkSmartPointer<vtkCamera> camera =  renderer->GetActiveCamera();
+    camera->SetPosition(0,0,1);
+    camera->SetFocalPoint(0,0,0);
+    camera->SetViewUp(0,1,0);
+    renderer->ResetCamera();
+    qvtkWidget->GetRenderWindow()->Render();
+}
+
+
+
+
 /// 显示坐标轴
 void MainWindow::show_axes(bool flags)
 {
@@ -256,11 +275,11 @@ void MainWindow::show_pcmcell()
  //   cout << sots.celldata;
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
- //   actor->GetProperty()->SetRepresentationToSurface();
+    actor->GetProperty()->SetRepresentationToSurface();
     //actor->GetProperty()->SetRepresentationToWireframe();
-//    actor->GetProperty()->SetColor(0,1,1);
-//    actor->GetProperty()->SetEdgeColor(0,0,0);
-//    actor->GetProperty()->EdgeVisibilityOn();
+    actor->GetProperty()->SetColor(0,1,1);
+    actor->GetProperty()->SetEdgeColor(0,0,0);
+    actor->GetProperty()->EdgeVisibilityOn();
     /*
     vtkSmartPointer<vtkParametricEllipsoid> ellip = vtkSmartPointer<vtkParametricEllipsoid>::New();
     ellip->SetXRadius(1.0);

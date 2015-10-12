@@ -9,7 +9,10 @@ class VTKviewer
 {
 public:
     VTKviewer();
+    ~VTKviewer();
+
     void render();
+    QVTKWidget* getVTKWidget(){return qvtk;}
 
 private:
     QVTKWidget* qvtk;

@@ -50,6 +50,7 @@
     <addaction name="action_show_homogeo"/>
     <addaction name="action_show_massage_box"/>
     <addaction name="action_show_axes"/>
+    <addaction name="action_show_XY"/>
    </widget>
    <widget class="QMenu" name="menu_model">
     <property name="title">
@@ -138,6 +139,7 @@
    <addaction name="action_gen_cell"/>
    <addaction name="action_Mscs"/>
    <addaction name="action_show_cell"/>
+   <addaction name="action_show_XY"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="message_box">
@@ -304,6 +306,15 @@
    </property>
    <property name="text">
     <string>显示坐标轴</string>
+   </property>
+  </action>
+  <action name="action_show_XY">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/flag-red.png</normaloff>:/icons/icons/flag-red.png</iconset>
+   </property>
+   <property name="text">
+    <string>显示XY平面</string>
    </property>
   </action>
  </widget>

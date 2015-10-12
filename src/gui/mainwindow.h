@@ -47,6 +47,7 @@ private slots:
     void set_cell();
     void show_pcmcell();
     void show_axes(bool flags);
+    void show_XY();
 
 private:
     void createSlots();

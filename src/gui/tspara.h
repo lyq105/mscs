@@ -13,8 +13,8 @@ void* mat_base;
 void* homo_solver;
 
 // parm
-void setup_env(){};
-void write_to_file(){}; // write specified data file to homogenization solver.
+//void setup_env(){};
+//void write_to_file(){}; // write specified data file to homogenization solver.
 
 };
 
