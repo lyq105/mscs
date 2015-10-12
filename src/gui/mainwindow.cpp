@@ -112,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
     ui->menu_mesh->setEnabled(0);
+    ui->menu_mesh->hide();
     createMessageBox();
     createStatusBar();
     createVTKview();
@@ -432,11 +433,11 @@ void MainWindow::import_cell_mesh()
                 this, QString::fromLocal8Bit("导入单胞网格文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
-    cout << sots.celldata<< endl;
+ //   cout << sots.celldata<< endl;
     if(!sFileName.isNull())
     {
         sots.celldata = import_bdf(sFileName);
-        cout << sots.celldata << endl;
+ //       cout << sots.celldata << endl;
     }
 }
 
@@ -618,7 +619,7 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
                 vtkIdType a, b, c, d;
                 vtkIdType n,subdomainId;
                 ss >> n >> subdomainId >>  a >> b >> c >> d;
-                //if(subdomainId == 1) continue;
+                if(subdomainId == 1) continue;
                 //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
@@ -636,7 +637,7 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
 
     }
     vtkUnstructuredGrid* unstructuredGrid = vtkUnstructuredGrid::New();
-    cout << unstructuredGrid << endl;
+//    cout << unstructuredGrid << endl;
     unstructuredGrid->SetPoints(points);
     unstructuredGrid->SetCells(VTK_TETRA, cellArray);
     unstructuredGrid->GetCellData()->AddArray(intValue);
@@ -648,32 +649,10 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
 #if VTK_MAJOR_VERSION <= 5
     writer->SetInput(unstructuredGrid);
 #else
-    writer->SetInputData(*unstructuredGrid);
+    writer->SetInputData(unstructuredGrid);
 #endif
     writer->Write();
     return unstructuredGrid;
-    // Read and display file for verification that it was written correclty
-    //    vtkSmartPointer<vtkUnstructuredGridReader> reader =
-    //            vtkSmartPointer<vtkUnstructuredGridReader>::New();
-    //    reader->SetFileName((bdf_filename+".vtu").toStdString().c_str());
-    //    reader->Update();
-
-    //    vtkSmartPointer<vtkDataSetMapper> mapper =
-    //            vtkSmartPointer<vtkDataSetMapper>::New();
-    //    mapper->SetInputConnection(reader->GetOutputPort());
-
-    //    vtkSmartPointer<vtkActor> actor =
-    //            vtkSmartPointer<vtkActor>::New();
-    //    actor->SetMapper(mapper);
-    //    actor->GetProperty()->SetRepresentationToSurface();
-    //    //       actor->GetProperty()->SetRepresentationToWireframe();
-    //    actor->GetProperty()->SetColor(0,1,1);
-    //    actor->GetProperty()->SetEdgeColor(0,0,0);
-    //    actor->GetProperty()->EdgeVisibilityOn();
-    //   renderer->RemoveAllViewProps();
-    //   renderer->AddActor(actor);
-    //   renderer->ResetCamera();
-    //   qvtkWidget->GetRenderWindow()->Render();
 }
 
 void MainWindow::meshSTL(QString stl_filename)

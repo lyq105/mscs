@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -14,7 +17,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Mscs</string>
+   <string>多尺度计算软件 (Multi-Scale Computational Software)</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -56,7 +59,7 @@
    </widget>
    <widget class="QMenu" name="menu_model">
     <property name="title">
-     <string>模型</string>
+     <string>建模</string>
     </property>
     <widget class="QMenu" name="menu_set_cell">
      <property name="title">
@@ -89,7 +92,7 @@
      <bool>true</bool>
     </property>
     <property name="title">
-     <string>网格剖分</string>
+     <string>剖分</string>
     </property>
     <addaction name="action_mesh_cell"/>
     <addaction name="action_mesh_homo"/>
@@ -196,12 +199,12 @@
      <normaloff>:/icons/icons/games-config-tiles.png</normaloff>:/icons/icons/games-config-tiles.png</iconset>
    </property>
    <property name="text">
-    <string>显示单胞</string>
+    <string>显示单胞结构</string>
    </property>
   </action>
   <action name="action_show_homogeo">
    <property name="text">
-    <string>显示网格</string>
+    <string>显示均匀化结构</string>
    </property>
   </action>
   <action name="action_openfile">
