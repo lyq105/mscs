@@ -221,7 +221,25 @@ void MainWindow::show_XY()
     qvtkWidget->GetRenderWindow()->Render();
 }
 
+void MainWindow::show_XZ()
+{
+    vtkSmartPointer<vtkCamera> camera =  renderer->GetActiveCamera();
+    camera->SetPosition(0,0,1);
+    camera->SetFocalPoint(0,0,0);
+    camera->SetViewUp(0,1,0);
+    renderer->ResetCamera();
+    qvtkWidget->GetRenderWindow()->Render();
+}
 
+void MainWindow::show_YZ()
+{
+    vtkSmartPointer<vtkCamera> camera =  renderer->GetActiveCamera();
+    camera->SetPosition(0,0,1);
+    camera->SetFocalPoint(0,0,0);
+    camera->SetViewUp(0,1,0);
+    renderer->ResetCamera();
+    qvtkWidget->GetRenderWindow()->Render();
+}
 
 
 /// 显示坐标轴
@@ -277,9 +295,9 @@ void MainWindow::show_pcmcell()
     actor->SetMapper(mapper);
     actor->GetProperty()->SetRepresentationToSurface();
     //actor->GetProperty()->SetRepresentationToWireframe();
-    actor->GetProperty()->SetColor(0,1,1);
-    actor->GetProperty()->SetEdgeColor(0,0,0);
-    actor->GetProperty()->EdgeVisibilityOn();
+ //   actor->GetProperty()->SetColor(0,1,1);
+ //   actor->GetProperty()->SetEdgeColor(0,0,0);
+ //   actor->GetProperty()->EdgeVisibilityOn();
     /*
     vtkSmartPointer<vtkParametricEllipsoid> ellip = vtkSmartPointer<vtkParametricEllipsoid>::New();
     ellip->SetXRadius(1.0);

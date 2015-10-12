@@ -45,9 +45,14 @@ private slots:
     void import_cell_mesh();
     void import_cell_geo();
     void set_cell();
+
+    /// view controls
     void show_pcmcell();
     void show_axes(bool flags);
     void show_XY();
+    void show_XZ();
+    void show_YZ();
+
 
 private:
     void createSlots();
