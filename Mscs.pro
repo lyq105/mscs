@@ -5,7 +5,7 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += . forms resources src src/gui
-INCLUDEPATH += . src/gui src/pmcell
+INCLUDEPATH += . src/gui src/pmcell src/elastic
 unix:INCLUDEPATH +=/usr/include/vtk-5.8/
 unix:LIBS = -lQVTK -lvtkRendering -lvtkCommon -lvtkWidgets -lvtkHybrid -lvtkIO -lvtkFiltering -lvtkGraphics
 unix:QMAKE_CXXFLAGS += -Wno-deprecated -Wno-unused-parameter
@@ -29,19 +29,41 @@ HEADERS += src/gui/aboutdialog.h \
            src/gui/setcelldialog.h \
            src/gui/sotsinterface.h \
            src/gui/tspara.h \
-           src/pmcell/CMCell.h \
-           src/pmcell/EllipseGen.h \
-           src/pmcell/EllipseMade.h \
-           src/pmcell/EllipseSurface.h \
-           src/pmcell/Fem.h \
-           src/pmcell/Geometry.h \
-           src/pmcell/Hns.h \
-           src/pmcell/Mesher.h \
-           src/pmcell/PCMCell.h \
-           src/pmcell/Vector2D.h \
-           src/pmcell/Vector3D.h \
     src/mylogger.h \
-    src/gui/vtkviewer.h
+    src/gui/vtkviewer.h \
+    src/elastic/AnalyticalSolution.h \
+    src/elastic/analyzer.h \
+    src/elastic/BeamSecShape.h \
+    src/elastic/CanXBeamConZMomAnaSol.h \
+    src/elastic/CanYBeamConXMomAnaSol.h \
+    src/elastic/CanZBeamConYMomAnaSol.h \
+    src/elastic/CMCell.h \
+    src/elastic/EllipseGen.h \
+    src/elastic/EllipseMade.h \
+    src/elastic/EllipseSurface.h \
+    src/elastic/Fem.h \
+    src/elastic/FixRodXTenAnaSol.h \
+    src/elastic/FixRodXTwistAnaSol.h \
+    src/elastic/FixRodYTenAnaSol.h \
+    src/elastic/FixRodYTwistAnaSol.h \
+    src/elastic/FixRodZTenAnaSol.h \
+    src/elastic/FixRodZTwistAnaSol.h \
+    src/elastic/Gauss.h \
+    src/elastic/Geometry.h \
+    src/elastic/Gloloaded_vector.h \
+    src/elastic/GloStiffMatrix.h \
+    src/elastic/Hns.h \
+    src/elastic/HomoPara.h \
+    src/elastic/HomoSolver.h \
+    src/elastic/Matbase.h \
+    src/elastic/MathMatrix.h \
+    src/elastic/MatPro.h \
+    src/elastic/Mesher.h \
+    src/elastic/Mscm.h \
+    src/elastic/PCMCell.h \
+    src/elastic/SolveEqu.h \
+    src/elastic/Vector2D.h \
+    src/elastic/Vector3D.h
 FORMS += forms/aboutdialog.ui \
          forms/analysistype.ui \
          forms/cellmodel.ui \
@@ -59,17 +81,39 @@ SOURCES += src/mscs_main.cpp \
            src/gui/setcelldialog.cpp \
            src/gui/sotsinterface.cpp \
            src/gui/tspara.cpp \
-           src/pmcell/CMCell.cpp \
-           src/pmcell/EllipseGen.cpp \
-           src/pmcell/EllipseMade.cpp \
-           src/pmcell/EllipseSurface.cpp \
-           src/pmcell/Fem.cpp \
-           src/pmcell/Geometry.cpp \
-           src/pmcell/Hns.cpp \
-           src/pmcell/Mesher.cpp \
-           src/pmcell/PCMCell.cpp \
-           src/pmcell/Vector2D.cpp \
-           src/pmcell/Vector3D.cpp \
     src/mylogger.cpp \
-    src/gui/vtkviewer.cpp
+    src/gui/vtkviewer.cpp \
+    src/elastic/AnalyticalSolution.cpp \
+    src/elastic/analyzer.cpp \
+    src/elastic/BeamSecShape.cpp \
+    src/elastic/CanXBeamConZMomAnaSol.cpp \
+    src/elastic/CanYBeamConXMomAnaSol.cpp \
+    src/elastic/CanZBeamConYMomAnaSol.cpp \
+    src/elastic/CMCell.cpp \
+    src/elastic/EllipseGen.cpp \
+    src/elastic/EllipseMade.cpp \
+    src/elastic/EllipseSurface.cpp \
+    src/elastic/Fem.cpp \
+    src/elastic/FixRodXTenAnaSol.cpp \
+    src/elastic/FixRodXTwistAnaSol.cpp \
+    src/elastic/FixRodYTenAnaSol.cpp \
+    src/elastic/FixRodYTwistAnaSol.cpp \
+    src/elastic/FixRodZTenAnaSol.cpp \
+    src/elastic/FixRodZTwistAnaSol.cpp \
+    src/elastic/Gauss.cpp \
+    src/elastic/Geometry.cpp \
+    src/elastic/Gloloaded_vector.cpp \
+    src/elastic/GloStiffMatrix.cpp \
+    src/elastic/Hns.cpp \
+    src/elastic/HomoPara.cpp \
+    src/elastic/HomoSolver.cpp \
+    src/elastic/Matbase.cpp \
+    src/elastic/MathMatrix.cpp \
+    src/elastic/MatPro.cpp \
+    src/elastic/Mesher.cpp \
+    src/elastic/Mscm.cpp \
+    src/elastic/PCMCell.cpp \
+    src/elastic/SolveEqu.cpp \
+    src/elastic/Vector2D.cpp \
+    src/elastic/Vector3D.cpp
 RESOURCES += resources/Mscs.qrc

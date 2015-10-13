@@ -1,0 +1,28 @@
+% 长方体区域六条边
+% leftbar,rightbar,backbar,formbar,leftbar,rightbar
+0 1 0 1 0 1
+%长度以及倾角的分布
+%distribution_sign1 -- 0表示倾角服从均匀分布; 1表示倾角服从正态分布
+0
+%椭球的形状
+%shape1 shape2 shape3 -- shape1取1表示存在短纤维颗粒，否则不存在;shape2,shape3取1代表椭球颗粒以及薄钱币颗粒存在，否则不存在
+0 0 1
+%椭球长轴a服从(amin,amax)的均匀分布,中轴b服从(bmin,a)的均匀分布,短轴c服从(cmin,b)的均匀分布
+% amin amax bmin cmin
+0.1 0.1 0.075 0.001
+% 若distribution_sign1=0，则长轴a与z轴的夹角服从(gamamin,gamamax)的均匀分布,a在xoy面上投影与
+% x轴的夹角服从(miumin,miumax)的均匀分布；若distribution_sign1=1，则长轴a与z轴的夹角服从参数
+% 为sitagama miugama的正态分布，a在xoy面上投影与x轴的夹角服从参数为sitamiu miumiu的正态分布
+% sitagama miugama sitamiu miumiu/gamamin gamamax miumin miumax
+0 1.57 0 3.14
+%纤维，椭球，薄钱币颗粒的个数比
+%fm em cm
+1 0 1
+%中心坐标的分布
+%distribution_sign2--0 均匀分布; 1 正态分布; 2 指数分布
+%0 无需输入参数
+%1 仍需输入sitax,miux,sitay,miuy,sitaz,miuz
+%2 仍需输入arx,ary,arz
+0
+% 体积百分比
+0.001

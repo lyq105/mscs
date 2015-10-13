@@ -58,6 +58,9 @@ public:
 
     void write_cell_solution(std::string filename);
     void write_homo_solution(std::string filename);
+    int Begin(std::string in_file, std::ifstream &infile, std::string data_file, int CNum=1);
+    std::string Get_Line(std::ifstream &infile)const;
+    int solve(std::string in_file,std::string out_file,std::string data_file);
 //    void add_cell_data();
 //    void add_point_data();
 

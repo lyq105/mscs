@@ -82,7 +82,7 @@ int EllipseGen::uniell_generation(string input_file, string out_file, string dat
 
 	if(!input_stream)
 	{
-        cout << "Can not open the file: "  << "\n";
+        cout << "Can not open the file: "  << input_file<<"\n";
         return 0 ;          
      };
 

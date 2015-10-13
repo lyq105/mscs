@@ -455,10 +455,13 @@ void MainWindow::import_inp()
     QString selectedFilter = tr(";;MSH Files(*.inp)");
     //    QDir defaultDir = QFSFileEngine::homePath();
     QString filter = tr("");
-    QString sFileName = QFileDialog::getOpenFileName(
+    QString infile = QFileDialog::getOpenFileName(
                 this, QString::fromLocal8Bit("直接导入计算文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
+    QString outfile= "/home/yzh/out.dat";
+    QString datafile= "/home/yzh/data.dat";
+    sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     return;
 }
 
