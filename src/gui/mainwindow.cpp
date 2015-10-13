@@ -461,7 +461,8 @@ void MainWindow::import_inp()
                 QFileDialog::DontUseNativeDialog);
     QString outfile= "/home/yzh/out.dat";
     QString datafile= "/home/yzh/data.dat";
-    sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
+    //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
+    sots.build_pmcell(infile.toStdString(),datafile.toStdString());
     return;
 }
 
@@ -476,9 +477,9 @@ void MainWindow::new_project()
         sots.set_prj_name(anatype.get_prj_name().toStdString());
     }
     QString logfile = anatype.get_prj_folder() + QString("/") + anatype.get_prj_name() +".log";
-    cout << logfile.toStdString().c_str() << endl;
+//    cout << logfile.toStdString().c_str() << endl;
     //    freopen(logfile.toStdString().c_str(),"w",stdout);
-    cout << "这是一个分析文件" << endl;
+//    cout << "这是一个分析文件" << endl;
     //freopen("CON", "w", stdout);
 }
 
@@ -626,8 +627,8 @@ vtkUnstructuredGrid* MainWindow::import_bdf(QString bdf_filename)
                 //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
-                //                intValue->InsertNextValue(subdomainId);
-                intValue->InsertNextValue(a);
+                intValue->InsertNextValue(subdomainId);
+                //intValue->InsertNextValue(a);
 
                 tetra->GetPointIds()->SetId(0, a-1);
                 tetra->GetPointIds()->SetId(1, b-1);

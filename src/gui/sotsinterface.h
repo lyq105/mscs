@@ -6,6 +6,8 @@
 #include <string>
 
 
+class Mesher;
+
 struct PMCell_Info
 {
     /// 单胞类型
@@ -58,11 +60,13 @@ public:
 
     void write_cell_solution(std::string filename);
     void write_homo_solution(std::string filename);
-    int Begin(std::string in_file, std::ifstream &infile, std::string data_file, int CNum=1);
+    /// 生成颗粒增强单胞
+    int build_pmcell(std::string in_file, std::string data_file, int CNum=1);
     std::string Get_Line(std::ifstream &infile)const;
+
+    /// 直接求解问题
     int solve(std::string in_file,std::string out_file,std::string data_file);
-//    void add_cell_data();
-//    void add_point_data();
+    int process_pmcell(const Mesher& mesh);
 
     vtkUnstructuredGrid* celldata;
     vtkUnstructuredGrid* homodata;

@@ -1,5 +1,103 @@
 #include "sotsinterface.h"
 
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkActor.h>
+#include <vtkPoints.h>
+#include <vtkTriangle.h>
+#include <vtkDataSetMapper.h>
+#include <vtkPolyDataNormals.h>
+#include <vtkFeatureEdges.h>
+#include <vtkProperty.h>
+#include <vtkPropPicker.h>
+#include <vtkCallbackCommand.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkAppendPolyData.h>
+#include <vtkFloatArray.h>
+#include <vtkCleanPolyData.h>
+#include <vtkAxesActor.h>
+#include <vtkSmartPointer.h>
+#include <vtkOrientationMarkerWidget.h>
+#include <vtkTransform.h>
+#include <meshpara.h>
+#include <vtkPolyData.h>
+#include <vtkSTLReader.h>
+#include <vtkSmartPointer.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkVersion.h>
+#include <vtkSmartPointer.h>
+#include <vtkTetra.h>
+#include <vtkCellArray.h>
+#include <vtkXMLUnstructuredGridWriter.h>
+#include <vtkDataSetMapper.h>
+#include <vtkActor.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkXMLUnstructuredGridWriter.h>
+#include <vtkUnstructuredGridWriter.h>
+#include <vtkUnstructuredGridReader.h>
+#include <vtkUnstructuredGrid.h>
+#include <vtkPointData.h>
+#include <vtkVertexGlyphFilter.h>
+#include <vtkGenericDataObjectReader.h>
+#include <vtkUnstructuredGridVolumeRayCastMapper.h>
+#include <QTextEdit>
+#include "analysistype.h"
+#include "materiel.h"
+#include <sstream>
+#include <QScrollBar>
+#include <vtkCellData.h>
+#include "setcelldialog.h"
+#include <vtkBorderWidget.h>
+
+#include <vtkSmartPointer.h>
+#include <vtkCamera.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkTextMapper.h>
+#include <vtkActor.h>
+#include <vtkActor2D.h>
+#include <vtkProperty.h>
+#include <vtkTextProperty.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkParametricFunctionSource.h>
+#include <vtkMath.h>
+#include <vtkPoints.h>
+#include <vtkParametricEllipsoid.h>
+#include <vtkVersion.h>
+#include <vtkSmartPointer.h>
+
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkActor.h>
+#include <vtkCamera.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkDataSetMapper.h>
+#include <vtkPolyData.h>
+#include <vtkStripper.h>
+#include <vtkFeatureEdges.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkClipPolyData.h>
+#include <vtkPlane.h>
+#include <vtkXMLPolyDataReader.h>
+
+#include <vtkSphereSource.h>
+#include <vtkBox.h>
+#include <vtkCamera.h>
+#include <vtkCellData.h>
+#include <vtkClipPolyData.h>
+#include <vtkCubeSource.h>
+#include <vtkLookupTable.h>
+#include <vtkAssignAttribute.h>
 //namespace elastic{
 #include "Mscm.h"
 //}
@@ -44,12 +142,9 @@ vtkSmartPointer<vtkUnstructuredGrid> SOTSinterface::get_cell_data()
     return celldata;
 }
 
-int SOTSinterface::Begin(string in_file, ifstream &infile, string data_file, int CNum)
+int SOTSinterface::build_pmcell(string in_file, string data_file, int CNum)
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    //将执行过程状况输出在文件
-    //   clock_t ct_begin,ct_end;
-    //   ct_begin = clock();
     cout << endl;
     cout << "*******************************************************************" << endl;
     cout << "-_- 开始计算......"<<endl;
@@ -57,13 +152,19 @@ int SOTSinterface::Begin(string in_file, ifstream &infile, string data_file, int
     cout << endl;
     clock_t ct0,ct1;
 
+    ifstream infile;
+    infile.open(in_file.c_str());
+    //跳过注释行（这样就可以跳过样本数信息）
+    Get_Line(infile);
+
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
     //单胞建模；
 lable_pcm: ct0 = clock();
     cout << "======================================================" << endl;
     cout << "-_- 开始单胞建模......"<<endl;
     PCMCell *PCM = new PCMCell;
-    if(PCM->Cell_generate(infile,data_file)==0)        //参数0：用于艳生成的椭球，1：用韩非生成的椭球，2表示读取数据
+    if(PCM->Cell_generate(infile,data_file)==0)        //若单胞生成失败，则重新读取输入文件
     {
         infile.close();
         infile.open(in_file.c_str());
@@ -110,27 +211,29 @@ lable_pcm: ct0 = clock();
     cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
     cout << "^_^ 网格生成完毕！"<<endl<<endl;
 
+    process_pmcell(*Mesh);
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    //求解Na1和Na1a2
-    ct0=clock();
-    cout << "======================================================" << endl;
-    cout << "-_- 开始均匀化求解......"<<endl<<endl;
-    //求解均匀化系数
-    //读取数据，判断是否进行强度计算
-    istringstream instr(Get_Line(infile));
-    int elas_ana_only;
-    instr >> elas_ana_only;
+//    //求解Na1和Na1a2
+//    ct0=clock();
+//    cout << "======================================================" << endl;
+//    cout << "-_- 开始均匀化求解......"<<endl<<endl;
+//    //求解均匀化系数
+//    //读取数据，判断是否进行强度计算
+//    istringstream instr(Get_Line(infile));
+//    int elas_ana_only;
+//    instr >> elas_ana_only;
 
-    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
-    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
-    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
-    ct1=clock();
-    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+//    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
+//    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
+//    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
+//    ct1=clock();
+//    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+//    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
 
 
 
-    delete Hsolver;
+//    delete Hsolver;
     delete PCM;
     delete Matrial;
     delete Mesh;
@@ -196,5 +299,75 @@ int SOTSinterface::solve(string in_file,string out_file,string data_file)
     }
     //关闭输出文件
     close_deffo_stream();
+    return 1;
+}
+
+int SOTSinterface::process_pmcell(const Mesher &mesh)
+{
+    vtkIdType number_of_points, number_of_tetra;
+    vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
+    intValue->SetNumberOfComponents(1);
+    intValue->SetName("materialId");
+
+ //   infile >> number_of_points;
+    number_of_points = mesh.nodes_vec.size();
+
+    vtkSmartPointer<vtkPoints> points
+            = vtkSmartPointer<vtkPoints>::New();
+    points->SetNumberOfPoints(number_of_points);
+    for (vtkIdType i = 0; i < number_of_points; i++)
+    {
+        mesh.nodes_vec[i].x;
+        double x, y, z;
+        x = mesh.nodes_vec[i].x;
+        y = mesh.nodes_vec[i].y;
+        z = mesh.nodes_vec[i].z;
+        points->SetPoint(i, x, y, z);
+    }
+
+    number_of_tetra = mesh.eles_vec.size();
+    vtkSmartPointer<vtkCellArray> cellArray
+            = vtkSmartPointer<vtkCellArray>::New();
+    for (vtkIdType i = 0; i < number_of_tetra; i++)
+    {
+        vtkIdType a, b, c, d;
+//        vtkIdType subdomainId;
+//        infile >> subdomainId >> a >> b >> c >> d;
+        //       std::cout << a << b << c << d << std::endl;
+
+        a = mesh.eles_vec[i].nodesId[0];
+        b = mesh.eles_vec[i].nodesId[1];
+        c = mesh.eles_vec[i].nodesId[2];
+        d = mesh.eles_vec[i].nodesId[3];
+        vtkSmartPointer<vtkTetra> tetra =
+                vtkSmartPointer<vtkTetra>::New();
+        if(mesh.eles_vec[i].materialId == 0) continue;
+        tetra->GetPointIds()->SetId(0, a);
+        tetra->GetPointIds()->SetId(1, b);
+        tetra->GetPointIds()->SetId(2, c);
+        tetra->GetPointIds()->SetId(3, d);
+        intValue->InsertNextValue(mesh.eles_vec[i].materialId);
+        cellArray->InsertNextCell(tetra);
+    }
+    vtkSmartPointer<vtkUnstructuredGrid> unstructuredGrid =
+            vtkSmartPointer<vtkUnstructuredGrid>::New();
+    unstructuredGrid->SetPoints(points);
+    unstructuredGrid->SetCells(VTK_TETRA, cellArray);
+    unstructuredGrid->GetCellData()->AddArray(intValue);
+    celldata = vtkUnstructuredGrid::New();
+    celldata->SetPoints(points);
+    celldata->SetCells(VTK_TETRA, cellArray);
+    celldata->GetCellData()->AddArray(intValue);
+
+    // Write file
+    vtkSmartPointer<vtkUnstructuredGridWriter> writer =
+            vtkSmartPointer<vtkUnstructuredGridWriter>::New();
+    writer->SetFileName("/home/yzh/mesher.vtu");
+#if VTK_MAJOR_VERSION <= 5
+    writer->SetInput(unstructuredGrid);
+#else
+    writer->SetInputData(unstructuredGrid);
+#endif
+    writer->Write();
     return 1;
 }
