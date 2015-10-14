@@ -287,5 +287,14 @@
         <file>icons/Mesh3D.ico</file>
         <file>icons/COPYING</file>
         <file>elisa_128px_540496_easyicon.net.png</file>
+        <file>icons/pqScalarBar32.png</file>
+        <file>icons/pqShowOrientationAxes32.png</file>
+        <file>icons/pqUnstructuredGrid16.png</file>
+        <file>icons/pqXMinus32.png</file>
+        <file>icons/pqXPlus32.png</file>
+        <file>icons/pqYMinus32.png</file>
+        <file>icons/pqYPlus32.png</file>
+        <file>icons/pqZMinus32.png</file>
+        <file>icons/pqZPlus32.png</file>
     </qresource>
 </RCC>

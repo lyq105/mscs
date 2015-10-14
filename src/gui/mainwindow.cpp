@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
     ui->menu_mesh->setEnabled(0);
     ui->menu_mesh->hide();
+    ui->sidebar->hide();
     createMessageBox();
     createStatusBar();
     createVTKview();
@@ -281,7 +282,7 @@ void MainWindow::import_geo()
     if (!sFileName.isNull())
     {
         std::cout << sFileName.toStdString() << std::endl;
-//        viewer->show_ug_mesh(viewer->load_stl(sFileName.toStdString()));
+        viewer->show_stl(sFileName.toStdString());
     }
 }
 
