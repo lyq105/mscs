@@ -12,9 +12,9 @@ class vtkRenderer;
 class vtkActor;
 class vtkPolyData;
 class vtkAppendPolyData;
-class QTextEdit;
 class vtkOrientationMarkerWidget;
 
+class QTextEdit;
 
 class MainWindow : public QMainWindow
 {
@@ -40,8 +40,14 @@ private slots:
     void import_mesh();
     void import_geo();
     void new_project();
+
+    /// 直接导入计算文件计算
     void import_inp();
+
+    /// 新建材料
     void new_material();
+
+    /// 导入单胞网格
     void import_cell_mesh();
     void import_cell_geo();
     void set_cell();

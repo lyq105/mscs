@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QLabel>
 #include "QVTKWidget.h"
+#include <QFile>
+#include <QFileInfo>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkActor.h>
@@ -438,6 +440,7 @@ void MainWindow::import_cell_mesh()
     {
         sots.celldata = import_bdf(sFileName);
  //       cout << sots.celldata << endl;
+        show_pcmcell();
     }
 }
 
@@ -452,15 +455,17 @@ void MainWindow::new_material()
 void MainWindow::import_inp()
 {
     QString sDefaultName = tr("");
-    QString selectedFilter = tr(";;MSH Files(*.inp)");
+    QString selectedFilter = tr(";;MSCS Input Files(*.inp)");
     //    QDir defaultDir = QFSFileEngine::homePath();
-    QString filter = tr("");
+    QString filter = tr(";;MSCS Input Files(*.inp)");
     QString infile = QFileDialog::getOpenFileName(
                 this, QString::fromLocal8Bit("直接导入计算文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
-    QString outfile= "/home/yzh/out.dat";
-    QString datafile= "/home/yzh/data.dat";
+    if(infile.isNull()) return;
+    QFileInfo temp(infile);
+    QString outfile= temp.absolutePath()+"/out.dat";
+    QString datafile= temp.absolutePath()+"/data.dat";
     //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     sots.build_pmcell(infile.toStdString(),datafile.toStdString());
     return;
