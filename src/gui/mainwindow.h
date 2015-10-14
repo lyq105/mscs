@@ -8,12 +8,7 @@ namespace Ui {
 class MainWindow;
 }
 class QVTKWidget;
-class vtkRenderer;
-class vtkActor;
-class vtkPolyData;
-class vtkAppendPolyData;
-class vtkOrientationMarkerWidget;
-
+class VTKviewer;
 class QTextEdit;
 
 class MainWindow : public QMainWindow
@@ -66,26 +61,14 @@ private:
     void createToolbar();
     void createVTKview();
     void createMessageBox();
-
-
-    void openSTL(QString stl_filename);
-    void read_neutral_format(QString filename );
-    void meshSTL(QString stl_filename);
-    vtkUnstructuredGrid* import_bdf(QString bdf_filename);
-    //    void openVtu(QString vtu_filename);
     void plot_cell();
 
-
-    SOTSinterface sots;
     Ui::MainWindow *ui;
     QTextEdit* message_content;
-    QVTKWidget* qvtkWidget;
-    vtkRenderer* renderer;
-    vtkOrientationMarkerWidget* widget;
+    VTKviewer* viewer;
 
-    vtkActor* cell_mesh_actor;
-    vtkActor* cell_geo_actor;
-    vtkActor* cell_actor;
+    SOTSinterface sots;
+
 };
 
 #endif // MAINWINDOW_H
