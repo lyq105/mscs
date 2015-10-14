@@ -1,4 +1,4 @@
-#include "sotsinterface.h"
+﻿#include "sotsinterface.h"
 
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -174,8 +174,8 @@ lable_pcm: ct0 = clock();
         goto lable_pcm;
     }
     ct1 = clock();
-    cout << "    建模总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-    cout << "^_^ 单胞建模完毕！"<<endl<<endl;
+//    cout << "    建模总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+//    cout << "^_^ 单胞建模完毕！"<<endl<<endl;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
     //生成材料库信息
@@ -186,14 +186,14 @@ lable_pcm: ct0 = clock();
     Matrial->Generate_matbase(infile);
     //	Matrial->mats_vec[0].print();
     ct1 = clock();
-    cout << "    读取材料信息总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-    cout << "^_^ 读取材料信息完毕！"<<endl<<endl;
+//    cout << "    读取材料信息总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+//    cout << "^_^ 读取材料信息完毕！"<<endl<<endl;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
     //建模并生成网格信息
     ct0 = clock();
-    cout << "======================================================" << endl;
-    cout << "-_- 开始生成网格......"<<endl<<endl;
+//    cout << "======================================================" << endl;
+//    cout << "-_- 开始生成网格......"<<endl<<endl;
     Mesher *Mesh = new Mesher(PCM);
     if( Mesh->Mesh_generate(infile) == 0)
     {
@@ -208,8 +208,8 @@ lable_pcm: ct0 = clock();
     //	Mesh->Mesh_BinaryData(0,data_file, CNum);
     //	Mesh->Mesh_data(0);
     ct1 = clock();
-    cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-    cout << "^_^ 网格生成完毕！"<<endl<<endl;
+//    cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+//    cout << "^_^ 网格生成完毕！"<<endl<<endl;
 
     process_pmcell(*Mesh);
 
@@ -359,15 +359,15 @@ int SOTSinterface::process_pmcell(const Mesher &mesh)
     celldata->SetCells(VTK_TETRA, cellArray);
     celldata->GetCellData()->AddArray(intValue);
 
-    // Write file
-    vtkSmartPointer<vtkUnstructuredGridWriter> writer =
-            vtkSmartPointer<vtkUnstructuredGridWriter>::New();
-    writer->SetFileName("/home/yzh/mesher.vtu");
-#if VTK_MAJOR_VERSION <= 5
-    writer->SetInput(unstructuredGrid);
-#else
-    writer->SetInputData(unstructuredGrid);
-#endif
-    writer->Write();
+//    // Write file
+//    vtkSmartPointer<vtkUnstructuredGridWriter> writer =
+//            vtkSmartPointer<vtkUnstructuredGridWriter>::New();
+//    writer->SetFileName("/home/yzh/mesher.vtu");
+//#if VTK_MAJOR_VERSION <= 5
+//    writer->SetInput(unstructuredGrid);
+//#else
+//    writer->SetInputData(unstructuredGrid);
+//#endif
+//    writer->Write();
     return 1;
 }

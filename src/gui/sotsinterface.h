@@ -1,10 +1,10 @@
-#ifndef SOTSINTERFACE_H
+﻿#ifndef SOTSINTERFACE_H
 #define SOTSINTERFACE_H
 
 #include <vtkSmartPointer.h>
 #include <vtkUnstructuredGrid.h>
 #include <string>
-
+#include <QThread>
 
 class Mesher;
 
@@ -76,7 +76,6 @@ private:
     std::string prj_name;
     PMCell_Info* cell_info;
 };
-
 
 //class SOTSSolver
 //{

@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    SOTSinterface sots;
 
 
 private slots:
@@ -66,9 +67,6 @@ private:
     Ui::MainWindow *ui;
     QTextEdit* message_content;
     VTKviewer* viewer;
-
-    SOTSinterface sots;
-
 };
 
 #endif // MAINWINDOW_H

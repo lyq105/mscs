@@ -17,7 +17,8 @@ win32:LIBS +=  "C:/Program Files/VTK_vs2008/lib/vtk-5.10/QVTK.lib" \
         "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkHybrid.lib" \
         "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkIO.lib" \
         "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkFiltering.lib" \
-        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkCommon.lib"
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkCommon.lib" \
+        "C:/Program Files/VTK_vs2008/lib/vtk-5.10/vtkGraphics.lib"
 
 # Input
 HEADERS += src/gui/aboutdialog.h \

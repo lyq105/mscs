@@ -12,6 +12,8 @@
 #include "materiel.h"
 #include <sstream>
 #include <QScrollBar>
+#include <QtCore>
+#include <QFuture>
 #include "setcelldialog.h"
 #include "vtkviewer.h"
 
@@ -48,8 +50,8 @@ void MainWindow::createMessageBox()
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
-    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
-    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
+//    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
+//    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
     QScrollBar *pScroll = message_content->verticalScrollBar();
     pScroll->setSliderPosition(pScroll->maximum());
 }
@@ -187,6 +189,11 @@ void MainWindow::new_material()
     mat.exec();
 }
 
+extern int build_cell(MainWindow* qw,std::string infile,std::string datafile )
+{
+    qw->sots.build_pmcell(infile,datafile);
+    return 0;
+}
 /// 直接导入计算文件
 void MainWindow::import_inp()
 {
@@ -203,7 +210,10 @@ void MainWindow::import_inp()
     QString outfile= temp.absolutePath()+"/out.dat";
     QString datafile= temp.absolutePath()+"/data.dat";
     //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
-    sots.build_pmcell(infile.toStdString(),datafile.toStdString());
+   // sots.build_pmcell(infile.toStdString(),datafile.toStdString());
+    QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
+    sumf.waitForFinished();
+
     return;
 }
 
@@ -290,4 +300,6 @@ void MainWindow::plot_cell()
 {
 
 }
+
+
 
