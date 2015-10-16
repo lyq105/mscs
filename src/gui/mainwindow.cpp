@@ -16,7 +16,7 @@
 #include <QFuture>
 #include "setcelldialog.h"
 #include "vtkviewer.h"
-
+#include "mylogger.h"
 
 
 /// 构造和析构函数
@@ -26,9 +26,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
-    ui->menu_mesh->setEnabled(0);
-    ui->menu_mesh->hide();
-    ui->sidebar->hide();
+//    ui->menu_mesh->setEnabled(0);
+//   ui->menu_mesh->hide();
+//    ui->sidebar->hide();
+//    ui->sidebar->setWidget();
     createMessageBox();
     createStatusBar();
     createVTKview();
@@ -50,6 +51,8 @@ void MainWindow::createMessageBox()
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
+//    QDebugStream qcout(std::cout,message_content);
+
 //    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
 //    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
     QScrollBar *pScroll = message_content->verticalScrollBar();
@@ -88,6 +91,12 @@ void MainWindow::createSlots()
     connect(ui->action_show_XY,SIGNAL(triggered()), this, SLOT(show_XY()));
     connect(ui->action_show_XZ,SIGNAL(triggered()), this, SLOT(show_XZ()));
     connect(ui->action_show_YZ,SIGNAL(triggered()), this, SLOT(show_YZ()));
+    connect(ui->action_show_sidebar,SIGNAL(triggered(bool)), this, SLOT(show_sidebar(bool)));
+    ui->action_show_sidebar->setChecked(1);
+    connect(ui->action_show_reinforcement,SIGNAL(triggered()), this, SLOT(show_reinforcement()));
+    connect(ui->action_show_matrix,SIGNAL(triggered()), this, SLOT(show_matrix()));
+    ui->action_show_matrix->setEnabled(false);
+    ui->action_show_reinforcement->setEnabled(false);
 
     // model menu
     connect(ui->action_import_mesh, SIGNAL(triggered()), this, SLOT(import_mesh()));
@@ -108,6 +117,28 @@ void MainWindow::createSlots()
 }
 
 // slots ====================================================================================
+
+
+
+
+void MainWindow::show_matrix()
+{
+    viewer->show_matrix();
+}
+void MainWindow::show_reinforcement()
+{
+    viewer->show_reinforcement();
+}
+
+/// 设置显示侧边栏
+
+void MainWindow::show_sidebar(bool checked)
+{
+//    if (checked) ui->sidebar->show();
+//    else ui->sidebar->hide();
+}
+
+
 
 /// 显示XY平面
 
@@ -178,7 +209,9 @@ void MainWindow::import_cell_mesh()
         sots.celldata = viewer->load_bdf(sFileName.toStdString());
  //       cout << sots.celldata << endl;
         //show_pcmcell();
-        viewer->show_ug_mesh(sots.celldata);
+       // viewer->show_ug_mesh(sots.celldata);
+      //  ui->action_show_matrix->setEnabled(true);
+      //  ui->action_show_reinforcement->setEnabled(true);
     }
 }
 
@@ -210,9 +243,9 @@ void MainWindow::import_inp()
     QString outfile= temp.absolutePath()+"/out.dat";
     QString datafile= temp.absolutePath()+"/data.dat";
     //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
-   // sots.build_pmcell(infile.toStdString(),datafile.toStdString());
-    QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
-    sumf.waitForFinished();
+    sots.build_pmcell(infile.toStdString(),datafile.toStdString());
+    //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
+    //sumf.waitForFinished();
 
     return;
 }
@@ -296,10 +329,6 @@ void MainWindow::import_geo()
     }
 }
 
-void MainWindow::plot_cell()
-{
-
-}
 
 
 

@@ -142,12 +142,18 @@
    <addaction name="action_show_massage_box"/>
    <addaction name="action_new_mat"/>
    <addaction name="action_gen_cell"/>
-   <addaction name="action_Mscs"/>
-   <addaction name="action_show_cell"/>
+   <addaction name="separator"/>
    <addaction name="action_show_XY"/>
    <addaction name="action_show_XZ"/>
    <addaction name="action_show_YZ"/>
    <addaction name="action_show_axes"/>
+   <addaction name="action_show_sidebar"/>
+   <addaction name="separator"/>
+   <addaction name="action_show_cell"/>
+   <addaction name="action_show_matrix"/>
+   <addaction name="action_show_reinforcement"/>
+   <addaction name="separator"/>
+   <addaction name="action_Mscs"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="message_box">
@@ -165,15 +171,11 @@
    </attribute>
    <widget class="QWidget" name="message_contents"/>
   </widget>
-  <widget class="QDockWidget" name="sidebar">
+  <widget class="QDockWidget" name="tool_box">
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-   </widget>
+   <widget class="QWidget" name="dockWidgetContents_3"/>
   </widget>
   <action name="action_Mscs">
    <property name="icon">
@@ -355,6 +357,39 @@
    </property>
    <property name="text">
     <string>显示YZ平面</string>
+   </property>
+  </action>
+  <action name="action_show_sidebar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/view-close.png</normaloff>:/icons/icons/view-close.png</iconset>
+   </property>
+   <property name="text">
+    <string>显示侧边栏</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F10</string>
+   </property>
+  </action>
+  <action name="action_show_matrix">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/get-hot-new-stuff.png</normaloff>:/icons/icons/get-hot-new-stuff.png</iconset>
+   </property>
+   <property name="text">
+    <string>显示基体</string>
+   </property>
+  </action>
+  <action name="action_show_reinforcement">
+   <property name="icon">
+    <iconset resource="../resources/Mscs.qrc">
+     <normaloff>:/icons/icons/games-hint.png</normaloff>:/icons/icons/games-hint.png</iconset>
+   </property>
+   <property name="text">
+    <string>显示增强相</string>
    </property>
   </action>
  </widget>

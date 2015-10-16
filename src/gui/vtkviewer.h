@@ -40,8 +40,15 @@ public:
 
     /// 显示
     void show_ug_mesh(vtkUnstructuredGrid* ug);
+    void show_cell();
+    void show_reinforcement();
+    void show_matrix();
     void show_surface(vtkUnstructuredGrid* ug);
     void show_stl(std::string stl_file);
+
+    void cls();
+
+
     void write_ug(vtkUnstructuredGrid *ug, std::string ug_file);
 
 
@@ -54,7 +61,13 @@ private:
 
     vtkActor* cell_mesh_actor;
     vtkActor* cell_geo_actor;
-    vtkActor* cell_actor;
+
+    vtkActor* cell_reinforcement;
+    vtkActor* cell_matrix;
+
+    vtkUnstructuredGrid* matrix;
+    vtkUnstructuredGrid* reinforcement;
+
 };
 
 #endif // VTKVIEWER_H

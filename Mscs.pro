@@ -30,7 +30,7 @@ HEADERS += src/gui/aboutdialog.h \
            src/gui/setcelldialog.h \
            src/gui/sotsinterface.h \
            src/gui/tspara.h \
-    src/mylogger.h \
+           src/gui/mylogger.h \
     src/gui/vtkviewer.h \
     src/elastic/AnalyticalSolution.h \
     src/elastic/analyzer.h \
@@ -64,7 +64,7 @@ HEADERS += src/gui/aboutdialog.h \
     src/elastic/PCMCell.h \
     src/elastic/SolveEqu.h \
     src/elastic/Vector2D.h \
-    src/elastic/Vector3D.h
+    src/elastic/Vector3D.h \
 FORMS += forms/aboutdialog.ui \
          forms/analysistype.ui \
          forms/cellmodel.ui \
@@ -82,7 +82,6 @@ SOURCES += src/mscs_main.cpp \
            src/gui/setcelldialog.cpp \
            src/gui/sotsinterface.cpp \
            src/gui/tspara.cpp \
-    src/mylogger.cpp \
     src/gui/vtkviewer.cpp \
     src/elastic/AnalyticalSolution.cpp \
     src/elastic/analyzer.cpp \

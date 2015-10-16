@@ -235,6 +235,9 @@ VTKviewer::load_bdf(std::string bdf_file)
     vtkIdType number_of_points = 0, number_of_tetra = 0;
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
+    vtkSmartPointer<vtkCellArray> matArray = vtkSmartPointer<vtkCellArray>::New();
+    vtkSmartPointer<vtkCellArray> reinArray = vtkSmartPointer<vtkCellArray>::New();
+
     vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
     intValue->SetNumberOfComponents(1);
     intValue->SetName("subdomainid");
@@ -277,7 +280,7 @@ VTKviewer::load_bdf(std::string bdf_file)
                 vtkIdType a, b, c, d;
                 vtkIdType n,subdomainId;
                 ss >> n >> subdomainId >>  a >> b >> c >> d;
-                if(subdomainId == 1) continue;
+                //if(subdomainId == 2) continue;
                 //                std::cout << n << subdomainId << a << b << c <<d << std::endl;
                 vtkSmartPointer<vtkTetra> tetra =
                         vtkSmartPointer<vtkTetra>::New();
@@ -290,6 +293,8 @@ VTKviewer::load_bdf(std::string bdf_file)
                 tetra->GetPointIds()->SetId(3, d-1);
                 //                std::cout << n << std::endl;
                 cellArray->InsertNextCell(tetra);
+                if(subdomainId == 1) matArray->InsertNextCell(tetra);
+                else reinArray->InsertNextCell(tetra);
             }
         }
 
@@ -300,6 +305,13 @@ VTKviewer::load_bdf(std::string bdf_file)
     unstructuredGrid->SetCells(VTK_TETRA, cellArray);
     unstructuredGrid->GetCellData()->AddArray(intValue);
 
+    matrix = vtkUnstructuredGrid::New();
+    matrix->SetPoints(points);
+    matrix->SetCells(VTK_TETRA, matArray);
+
+    reinforcement = vtkUnstructuredGrid::New();
+    reinforcement->SetPoints(points);
+    reinforcement->SetCells(VTK_TETRA, reinArray);
 
     return unstructuredGrid;
 }
@@ -381,4 +393,62 @@ void VTKviewer::show_stl(std::string stl_file)
     renderer->ResetCamera();
     qvtkWidget->GetRenderWindow()->Render();
 }
+
+
+void VTKviewer::show_matrix()
+{
+   // ug->GetCellData()->GetArray("MaterialID");
+    vtkSmartPointer<vtkDataSetMapper> mapper =
+            vtkSmartPointer<vtkDataSetMapper>::New();
+
+#if VTK_MAJOR_VERSION <= 5
+    mapper->SetInput(matrix);
+#else
+    mapper->SetInputData(matrix);
+#endif
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetRepresentationToSurface();
+    //actor->GetProperty()->SetRepresentationToWireframe();
+    actor->GetProperty()->SetColor(0,1,1);
+    actor->GetProperty()->SetEdgeColor(0,0,0);
+    actor->GetProperty()->EdgeVisibilityOn();
+
+    renderer->RemoveAllViewProps();
+
+    renderer->AddActor(actor);
+    renderer->ResetCamera();
+    render();
+}
+
+void VTKviewer::show_reinforcement()
+{
+   // ug->GetCellData()->GetArray("MaterialID");
+    vtkSmartPointer<vtkDataSetMapper> mapper =
+            vtkSmartPointer<vtkDataSetMapper>::New();
+
+#if VTK_MAJOR_VERSION <= 5
+    mapper->SetInput(reinforcement);
+#else
+    mapper->SetInputData(reinforcement);
+#endif
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetRepresentationToSurface();
+    //actor->GetProperty()->SetRepresentationToWireframe();
+    actor->GetProperty()->SetColor(0,1,0);
+    actor->GetProperty()->SetEdgeColor(0,0,0);
+    actor->GetProperty()->EdgeVisibilityOn();
+
+    renderer->RemoveAllViewProps();
+
+    renderer->AddActor(actor);
+    renderer->ResetCamera();
+    render();
+}
+
+ void VTKviewer::show_cell()
+ {
+
+ }
 

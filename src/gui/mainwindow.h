@@ -25,6 +25,7 @@ private slots:
     void about();
     void show_message_box();
     void show_message_box(bool checked);
+    void show_sidebar(bool checked);
 //    void show_cell();
 //    void show_mesh();
 
@@ -55,6 +56,8 @@ private slots:
     void show_XZ();
     void show_YZ();
 
+    void show_matrix();
+    void show_reinforcement();
 
 private:
     void createSlots();
@@ -62,7 +65,6 @@ private:
     void createToolbar();
     void createVTKview();
     void createMessageBox();
-    void plot_cell();
 
     Ui::MainWindow *ui;
     QTextEdit* message_content;
