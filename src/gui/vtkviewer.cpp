@@ -300,10 +300,10 @@ VTKviewer::load_bdf(std::string bdf_file)
 
     }
     vtkUnstructuredGrid* unstructuredGrid = vtkUnstructuredGrid::New();
-//    cout << unstructuredGrid << endl;
+    //    cout << unstructuredGrid << endl;
     unstructuredGrid->SetPoints(points);
     unstructuredGrid->SetCells(VTK_TETRA, cellArray);
-    unstructuredGrid->GetCellData()->AddArray(intValue);
+    unstructuredGrid->GetCellData()->SetScalars(intValue);
 
     matrix = vtkUnstructuredGrid::New();
     matrix->SetPoints(points);
@@ -359,6 +359,60 @@ VTKviewer::show_ug_mesh(vtkUnstructuredGrid* ug)
     render();
 }
 
+void
+VTKviewer::show_ug_scalar(vtkUnstructuredGrid* ug,std::string scalar)
+{
+    //    vtkSmartPointer<vtkAssignAttribute> mat =
+    //                vtkSmartPointer<vtkAssignAttribute>::New();
+    //        mat->SetInput(sots.celldata);
+    //       // mat->Assign("subdomainid", vtkDataSetAttributes::SCALARS,
+    //       //             vtkAssignAttribute::CELL_DATA);
+    //        // Create a lookup table to map cell data to colors
+    vtkSmartPointer<vtkLookupTable> lut =
+            vtkSmartPointer<vtkLookupTable>::New();
+    //    int tableSize = std::max(resolution*resolution + 1, 10);
+    lut->SetNumberOfTableValues(2);
+    lut->Build();
+
+    // Fill in a few known colors, the rest will be generated if needed
+    lut->SetTableValue(0, 1, 0, 0, 1);
+    lut->SetTableValue(1, 0, 0, 1, 1);
+    //    lut->SetTableValue(2, 1.0000, 0.3882, 0.2784, 1); // Tomato
+    //    lut->SetTableValue(3, 0.9608, 0.8706, 0.7020, 1); // Wheat
+    //    lut->SetTableValue(4, 0.9020, 0.9020, 0.9804, 1); // Lavender
+    //    lut->SetTableValue(5, 1.0000, 0.4900, 0.2500, 1); // Flesh
+    //    lut->SetTableValue(6, 0.5300, 0.1500, 0.3400, 1); // Raspberry
+    //    lut->SetTableValue(7, 0.9804, 0.5020, 0.4471, 1); // Salmon
+    //    lut->SetTableValue(8, 0.7400, 0.9900, 0.7900, 1); // Mint
+    //    lut->SetTableValue(9, 0.2000, 0.6300, 0.7900, 1); // Peacock
+    double subrange[2];
+    ug->GetCellData()->GetArray(scalar.c_str())->GetRange(subrange);
+    vtkSmartPointer<vtkDataSetMapper> mapper =
+            vtkSmartPointer<vtkDataSetMapper>::New();
+    // mapper->SetLookupTable(lut);
+
+#if VTK_MAJOR_VERSION <= 5
+    mapper->SetInput(ug);
+#else
+    mapper->SetInputData(ug);
+#endif
+    mapper->SelectColorArray(scalar.c_str());
+    mapper->SetScalarRange(subrange);
+
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetRepresentationToSurface();
+    //actor->GetProperty()->SetRepresentationToWireframe();
+    actor->GetProperty()->SetColor(0,1,1);
+    actor->GetProperty()->SetEdgeColor(0,0,0);
+    actor->GetProperty()->EdgeVisibilityOn();
+
+    renderer->RemoveAllViewProps();
+
+    renderer->AddActor(actor);
+    renderer->ResetCamera();
+    render();
+}
 
 
 void
@@ -397,7 +451,7 @@ void VTKviewer::show_stl(std::string stl_file)
 
 void VTKviewer::show_matrix()
 {
-   // ug->GetCellData()->GetArray("MaterialID");
+    // ug->GetCellData()->GetArray("MaterialID");
     vtkSmartPointer<vtkDataSetMapper> mapper =
             vtkSmartPointer<vtkDataSetMapper>::New();
 
@@ -423,7 +477,7 @@ void VTKviewer::show_matrix()
 
 void VTKviewer::show_reinforcement()
 {
-   // ug->GetCellData()->GetArray("MaterialID");
+    // ug->GetCellData()->GetArray("MaterialID");
     vtkSmartPointer<vtkDataSetMapper> mapper =
             vtkSmartPointer<vtkDataSetMapper>::New();
 
@@ -447,8 +501,8 @@ void VTKviewer::show_reinforcement()
     render();
 }
 
- void VTKviewer::show_cell()
- {
+void VTKviewer::show_cell()
+{
 
- }
+}
 

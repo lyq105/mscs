@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
 //    ui->menu_mesh->setEnabled(0);
 //   ui->menu_mesh->hide();
-//    ui->sidebar->hide();
+    ui->tool_box->hide();
 //    ui->sidebar->setWidget();
     createMessageBox();
     createStatusBar();
@@ -175,7 +175,7 @@ void MainWindow::show_axes(bool flags)
 void MainWindow::show_pcmcell()
 {
     if (sots.celldata == NULL)return;
-    viewer->show_ug_mesh(sots.celldata);
+    viewer->show_ug_scalar(sots.celldata,std::string("subdomainid"));
 }
 
 /// 设置单胞
@@ -209,9 +209,9 @@ void MainWindow::import_cell_mesh()
         sots.celldata = viewer->load_bdf(sFileName.toStdString());
  //       cout << sots.celldata << endl;
         //show_pcmcell();
-       // viewer->show_ug_mesh(sots.celldata);
-      //  ui->action_show_matrix->setEnabled(true);
-      //  ui->action_show_reinforcement->setEnabled(true);
+        viewer->show_ug_mesh(sots.celldata);
+        ui->action_show_matrix->setEnabled(true);
+        ui->action_show_reinforcement->setEnabled(true);
     }
 }
 

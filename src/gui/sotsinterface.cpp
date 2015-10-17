@@ -357,7 +357,7 @@ int SOTSinterface::process_pmcell(const Mesher &mesh)
     celldata = vtkUnstructuredGrid::New();
     celldata->SetPoints(points);
     celldata->SetCells(VTK_TETRA, cellArray);
-    celldata->GetCellData()->AddArray(intValue);
+    celldata->GetCellData()->SetScalars(intValue);
 
 //    // Write file
 //    vtkSmartPointer<vtkUnstructuredGridWriter> writer =
