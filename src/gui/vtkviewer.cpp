@@ -92,6 +92,8 @@
 #include <vtkCubeSource.h>
 #include <vtkLookupTable.h>
 #include <vtkAssignAttribute.h>
+#include <vtkParametricFunctionSource.h>
+#include <vtkParametricEllipsoid.h>
 
 #include <sstream>
 
@@ -503,6 +505,26 @@ void VTKviewer::show_reinforcement()
 
 void VTKviewer::show_cell()
 {
+
+    vtkSmartPointer<vtkParametricEllipsoid> parametricObject = vtkSmartPointer<vtkParametricEllipsoid>::New();
+    vtkSmartPointer<vtkParametricFunctionSource> parametricFunctionSource =
+            vtkSmartPointer<vtkParametricFunctionSource>::New();
+    parametricFunctionSource->SetParametricFunction(parametricObject);
+    parametricFunctionSource->Update();
+
+    // Visualize
+    vtkSmartPointer<vtkPolyDataMapper> mapper =
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(parametricFunctionSource->GetOutputPort());
+
+    // Create an actor for the contours
+    vtkSmartPointer<vtkActor> actor =
+            vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    renderer->AddActor(actor);
+    renderer->SetBackground(1,1,1); // Background color white
+
+    render();
 
 }
 

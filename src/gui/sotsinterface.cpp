@@ -137,7 +137,7 @@ void SOTSinterface::set_pmcell_info(PMCell_Info& mycell_info)
     //cell_info.coating = mycell_info.coating;
 
 }
-vtkSmartPointer<vtkUnstructuredGrid> SOTSinterface::get_cell_data()
+vtkUnstructuredGrid *SOTSinterface::get_cell_data()
 {
     return celldata;
 }
@@ -241,6 +241,75 @@ lable_pcm: ct0 = clock();
 
     return 1;
 }
+
+
+int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string data_file)
+{
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //单胞建模；
+    cout << "======================================================" << endl;
+    cout << "-_- 开始颗粒增强单胞建模......"<<endl;
+
+
+    EllipseGen *ellip = new EllipseGen;
+    while(ellip->uniell_generation(ellips_para,ellips_file,data_file)==0)
+    {
+     //   cout << "======================================================" << endl;
+    //    cout << "-_- 单胞建模结束......"<<endl;
+    //    return 0;
+    }
+    delete ellip;
+    cout << "======================================================" << endl;
+    cout << "-_- 颗粒增强单胞建模成功......"<<endl;
+    return 1;
+
+//    PCMCell *PCM = new PCMCell();
+//    if(PCM->Cell_generate(infile,data_file)==0)        //若单胞生成失败，则重新读取输入文件
+//    {
+//        infile.close();
+//        infile.open(in_file.c_str());
+//        //跳过注释行（这样就可以跳过样本数信息）
+//        Get_Line(infile);
+//        delete PCM;
+//        goto lable_pcm;
+//    }
+//    ct1 = clock();
+
+//    process_pmcell(*Mesh);
+
+//-----------------------------------------------------------------------------------------------------------------------------------------
+//    //求解Na1和Na1a2
+//    ct0=clock();
+//    cout << "======================================================" << endl;
+//    cout << "-_- 开始均匀化求解......"<<endl<<endl;
+//    //求解均匀化系数
+//    //读取数据，判断是否进行强度计算
+//    istringstream instr(Get_Line(infile));
+//    int elas_ana_only;
+//    instr >> elas_ana_only;
+
+//    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
+//    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
+//    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
+//    ct1=clock();
+//    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+//    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+
+
+
+//    delete Hsolver;
+//    delete PCM;
+//    delete Matrial;
+//    delete Mesh;
+    //	delete Npara;
+
+    return 1;
+}
+
+
+
+
+
 //读入一行信息，并跳过注释行（以"%"开头）；
 string SOTSinterface::Get_Line(ifstream &infile)const
 {
@@ -253,6 +322,7 @@ string SOTSinterface::Get_Line(ifstream &infile)const
     return s;
 }
 
+/// 从输入文件直接计算
 int SOTSinterface::solve(string in_file,string out_file,string data_file)
 {
     ofstream datafile(data_file.c_str());

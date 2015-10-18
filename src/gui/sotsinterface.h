@@ -45,16 +45,16 @@ class SOTSinterface
 public:
     SOTSinterface();
     ~SOTSinterface();
+
     void set_cell_mesh();
     void set_material(int mat_index);
-
     void set_prj_name(std::string name){ prj_name = name;}
     void set_prj_folder(std::string folder){ prj_folder = folder;}
     void set_analysis_type(std::string type){ analysis_type = type;}
     void set_pmcell_info(PMCell_Info& cell_info);
 
 
-    vtkSmartPointer<vtkUnstructuredGrid> get_cell_data();
+    vtkUnstructuredGrid* get_cell_data();
     PMCell_Info* get_pmcell_info(){return cell_info;}
     void get_material(int mat_index);
 
@@ -62,9 +62,10 @@ public:
     void write_homo_solution(std::string filename);
     /// 生成颗粒增强单胞
     int build_pmcell(std::string in_file, std::string data_file, int CNum=1);
+    int build_pmcell(std::string ellips_para, std::string ellips_file,std::string data_file);
     std::string Get_Line(std::ifstream &infile)const;
 
-    /// 直接求解问题
+    /// 直接求解单胞问题
     int solve(std::string in_file,std::string out_file,std::string data_file);
     int process_pmcell(const Mesher& mesh);
 

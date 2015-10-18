@@ -56,6 +56,8 @@
     <addaction name="action_show_XY"/>
     <addaction name="action_show_XZ"/>
     <addaction name="action_show_YZ"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_model">
     <property name="title">
@@ -68,6 +70,7 @@
      <addaction name="action_gen_cell"/>
      <addaction name="action_import_cell_geo"/>
      <addaction name="action_import_cell_mesh"/>
+     <addaction name="action_view_cellinfo"/>
     </widget>
     <widget class="QMenu" name="menu">
      <property name="title">
@@ -83,21 +86,10 @@
      <addaction name="action_new_mat"/>
      <addaction name="action_view_mat"/>
     </widget>
+    <addaction name="action_anatype"/>
     <addaction name="menu_2"/>
     <addaction name="menu_set_cell"/>
     <addaction name="menu"/>
-   </widget>
-   <widget class="QMenu" name="menu_mesh">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string>剖分</string>
-    </property>
-    <addaction name="action_mesh_cell"/>
-    <addaction name="action_mesh_homo"/>
-    <addaction name="separator"/>
-    <addaction name="action_set_mesh"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -110,13 +102,19 @@
     <property name="title">
      <string>求解</string>
     </property>
-    <addaction name="action_cell_solve"/>
+    <widget class="QMenu" name="menu_3">
+     <property name="title">
+      <string>单胞问题求解</string>
+     </property>
+     <addaction name="action_cell_solver_option"/>
+     <addaction name="action_solve"/>
+    </widget>
+    <addaction name="menu_3"/>
     <addaction name="action_homo_solve"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_view"/>
    <addaction name="menu_model"/>
-   <addaction name="menu_mesh"/>
    <addaction name="menu_solve"/>
    <addaction name="menu_help"/>
   </widget>
@@ -183,7 +181,7 @@
      <normaloff>:/images/elisa_128px_540496_easyicon.net.png</normaloff>:/images/elisa_128px_540496_easyicon.net.png</iconset>
    </property>
    <property name="text">
-    <string>关于Mscs</string>
+    <string>关于MSCS</string>
    </property>
   </action>
   <action name="action_mesh_cell">
@@ -233,17 +231,12 @@
   </action>
   <action name="action_import_cell_mesh">
    <property name="text">
-    <string>导入单胞网格</string>
+    <string>从网格导入单胞</string>
    </property>
   </action>
   <action name="action_stl">
    <property name="text">
     <string>打开stl文件</string>
-   </property>
-  </action>
-  <action name="action_cell_solve">
-   <property name="text">
-    <string>单胞问题求解</string>
    </property>
   </action>
   <action name="action_homo_solve">
@@ -274,7 +267,7 @@
      <normaloff>:/icons/icons/document-new.png</normaloff>:/icons/icons/document-new.png</iconset>
    </property>
    <property name="text">
-    <string>新建分析</string>
+    <string>设置工作目录</string>
    </property>
   </action>
   <action name="action_save">
@@ -390,6 +383,26 @@
    </property>
    <property name="text">
     <string>显示增强相</string>
+   </property>
+  </action>
+  <action name="action_anatype">
+   <property name="text">
+    <string>设置分析类型</string>
+   </property>
+  </action>
+  <action name="action_view_cellinfo">
+   <property name="text">
+    <string>单胞信息</string>
+   </property>
+  </action>
+  <action name="action_cell_solver_option">
+   <property name="text">
+    <string>求解设置</string>
+   </property>
+  </action>
+  <action name="action_solve">
+   <property name="text">
+    <string>求解</string>
    </property>
   </action>
  </widget>

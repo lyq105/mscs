@@ -243,7 +243,8 @@ void MainWindow::import_inp()
     QString outfile= temp.absolutePath()+"/out.dat";
     QString datafile= temp.absolutePath()+"/data.dat";
     //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
-    sots.build_pmcell(infile.toStdString(),datafile.toStdString());
+    //sots.build_pmcell(infile.toStdString(),datafile.toStdString());
+    sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
     //sumf.waitForFinished();
 
