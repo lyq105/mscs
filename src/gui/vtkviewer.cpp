@@ -95,6 +95,7 @@
 #include <vtkParametricFunctionSource.h>
 #include <vtkParametricEllipsoid.h>
 #include <vtkTransformFilter.h>
+#include <vtkFillHolesFilter.h>
 
 #include <sstream>
 
@@ -506,46 +507,260 @@ void VTKviewer::show_reinforcement()
 
 void VTKviewer::show_cell()
 {
+    int ellipsoid_count;
+    double ellip_ratio;
+    std::ifstream infile("/home/yzh/mscs/sample/dataOutEllipDat.dat");
+    std::string s,l;
+    getline(infile,s);
+    //跳过注释行
+    while(!infile.eof() && s.substr(0,1)=="%")
+        getline(infile,s);
+    std::istringstream ss1(s);
+    ss1 >> ellipsoid_count >> ellip_ratio;
 
-    vtkSmartPointer<vtkSphereSource> sphereSource =
-            vtkSmartPointer<vtkSphereSource>::New();
-    sphereSource->SetCenter(0,0,0);
-    sphereSource->SetRadius(1);
-    sphereSource->SetPhiResolution(500);
-    sphereSource->SetThetaResolution(500);
+    double origin_x , origin_y , origin_z;
+    getline(infile,s);
+    //跳过注释行
+    while(!infile.eof() && s.substr(0,1)=="%")
+        getline(infile,s);
+    std::istringstream ss2(s);
+    ss2 >> origin_x >> origin_y >> origin_z;
+
+    double clength , cwidth , cheight;
+    getline(infile,s);
+    //跳过注释行
+    while(!infile.eof() && s.substr(0,1)=="%")
+        getline(infile,s);
+    std::istringstream ss3(s);
+    ss3 >> clength >> cwidth >> cheight;
+    cout << clength << cwidth << cheight << endl;
 
 
-    // Visualize
+    //Append the two meshes
+    vtkSmartPointer<vtkAppendPolyData> appendFilter =
+            vtkSmartPointer<vtkAppendPolyData>::New();
+    int id =0;
+    while (getline(infile,s))
+    {
+        //跳过注释行
+        double x,y,z,a,b,c,angle[16];
+        for (int i=0;i<16;i++) angle[i]=0;
+        angle[15]=1;
+        if(s.substr(0,1)=="%")getline(infile,s);
+        std::istringstream ss(s);
+        ss >> x >> y >> z
+           >> a >> b >> c
+           >> angle[0] >> angle[1] >> angle[2]
+           >> angle[4] >> angle[5] >> angle[6]
+           >> angle[8] >> angle[9] >> angle[10];
+        //cout << a << " " << b << endl;
+        for (int i=0;i<16;i++)
+        {
+            cout << angle[i] << "\t";
+            if((i+1)%4==0)cout << endl;
+        }
+
+        //        vtkSmartPointer<vtkSphereSource> sphereSource =
+        //                vtkSmartPointer<vtkSphereSource>::New();
+        //        sphereSource->SetCenter(0,0,0);
+        //        sphereSource->SetRadius(1);
+        //        sphereSource->SetPhiResolution(10);
+        //        sphereSource->SetThetaResolution(10);
+
+        vtkSmartPointer<vtkParametricEllipsoid> ellip
+                = vtkSmartPointer<vtkParametricEllipsoid>::New();
+        ellip->SetXRadius(a);
+        ellip->SetYRadius(b);
+        ellip->SetZRadius(c);
+
+        vtkSmartPointer<vtkParametricFunctionSource> ellipSource =
+                vtkSmartPointer<vtkParametricFunctionSource>::New();
+        ellipSource->SetParametricFunction(ellip);
+        ellipSource->SetUResolution(40);
+        ellipSource->SetVResolution(40);
+        ellipSource->SetWResolution(40);
+
+        ellipSource->Update();
+        //ellipSource->setx
+
+        vtkSmartPointer<vtkTransform> transform =
+                vtkSmartPointer<vtkTransform>::New();
+        transform->PostMultiply();
+        //transform->Scale(a,b,c);
+        transform->SetMatrix(angle);
+        transform->Translate(x,y,z);
+
+        vtkSmartPointer<vtkTransformFilter> transformFilter =
+                vtkSmartPointer<vtkTransformFilter>::New();
+        transformFilter->SetInputConnection(ellipSource->GetOutputPort());
+        transformFilter->SetTransform(transform);
+#if VTK_MAJOR_VERSION <= 5
+        appendFilter->AddInputConnection(transformFilter->GetOutputPort());
+#else
+        appendFilter->AddInputData(transformFilter);
+#endif
+
+        //if (id == 0) break;
+        id ++;
+    }
+
+    appendFilter->Update();
+    // Remove any duplicate points.
+    vtkSmartPointer<vtkCleanPolyData> cleanFilter =
+            vtkSmartPointer<vtkCleanPolyData>::New();
+    cleanFilter->SetInputConnection(appendFilter->GetOutputPort());
+    cleanFilter->Update();
+
+    vtkSmartPointer<vtkCubeSource> cubeSource =
+            vtkSmartPointer<vtkCubeSource>::New();
+    cubeSource->SetCenter(origin_x + 0.5*clength,
+                          origin_y + 0.5*cwidth,
+                          origin_z + 0.5*cheight);
+    cubeSource->SetXLength(clength);
+    cubeSource->SetYLength(cwidth);
+    cubeSource->SetZLength(cheight);
+
+    vtkSmartPointer<vtkBox> implicitCube =
+            vtkSmartPointer<vtkBox>::New();
+    implicitCube->SetBounds(cubeSource->GetOutput()->GetBounds());
+
+    //     vtkSmartPointer<vtkClipPolyData> clipper =
+    //         vtkSmartPointer<vtkClipPolyData>::New();
+    //     clipper->SetClipFunction(implicitCube);
+
+
+    vtkSmartPointer<vtkPlane> plane =
+            vtkSmartPointer<vtkPlane>::New();
+    plane->SetNormal(0,-1,0);
+    plane->SetOrigin(0,0,0);
+    vtkSmartPointer<vtkClipPolyData> clipper =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper->SetClipFunction(plane);
+#if VTK_MAJOR_VERSION <= 5
+    clipper->SetInputConnection(cleanFilter->GetOutputPort());
+#else
+    clipper->SetInputData(cleanFilter->GetOutputPort());
+#endif
+    clipper->InsideOutOn();
+    clipper->Update();
+
+
+    vtkSmartPointer<vtkPlane> plane2 =
+            vtkSmartPointer<vtkPlane>::New();
+    plane2->SetNormal(0,0,-1);
+    plane2->SetOrigin(0,0,0);
+    vtkSmartPointer<vtkClipPolyData> clipper2 =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper2->SetClipFunction(plane2);
+#if VTK_MAJOR_VERSION <= 5
+    clipper2->SetInputConnection(clipper->GetOutputPort());
+#else
+    clipper2->SetInputData(clipper->GetOutputPort());
+#endif
+    clipper2->InsideOutOn();
+    clipper2->Update();
+
+
+    vtkSmartPointer<vtkPlane> plane3 =
+            vtkSmartPointer<vtkPlane>::New();
+    plane3->SetNormal(-1,0,0);
+    plane3->SetOrigin(0,0,0);
+    vtkSmartPointer<vtkClipPolyData> clipper3 =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper3->SetClipFunction(plane3);
+#if VTK_MAJOR_VERSION <= 5
+    clipper3->SetInputConnection(clipper2->GetOutputPort());
+#else
+    clipper3->SetInputData(clipper2->GetOutputPort());
+#endif
+    clipper3->InsideOutOn();
+    clipper3->Update();
+
+    vtkSmartPointer<vtkPlane> plane4 =
+            vtkSmartPointer<vtkPlane>::New();
+    plane4->SetNormal(0,0,1);
+    plane4->SetOrigin(1,1,1);
+    vtkSmartPointer<vtkClipPolyData> clipper4 =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper4->SetClipFunction(plane4);
+#if VTK_MAJOR_VERSION <= 5
+    clipper4->SetInputConnection(clipper3->GetOutputPort());
+#else
+    clipper4->SetInputData(clipper3->GetOutputPort());
+#endif
+    clipper4->InsideOutOn();
+    clipper4->Update();
+
+    vtkSmartPointer<vtkPlane> plane5 =
+            vtkSmartPointer<vtkPlane>::New();
+    plane5->SetNormal(0,1,0);
+    plane5->SetOrigin(1,1,1);
+    vtkSmartPointer<vtkClipPolyData> clipper5 =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper5->SetClipFunction(plane5);
+#if VTK_MAJOR_VERSION <= 5
+    clipper5->SetInputConnection(clipper4->GetOutputPort());
+#else
+    clipper5->SetInputData(clipper4->GetOutputPort());
+#endif
+    clipper5->InsideOutOn();
+    clipper5->Update();
+
+    vtkSmartPointer<vtkPlane> plane6 =
+            vtkSmartPointer<vtkPlane>::New();
+    plane6->SetNormal(1,0,0);
+    plane6->SetOrigin(1,1,1);
+    vtkSmartPointer<vtkClipPolyData> clipper6 =
+            vtkSmartPointer<vtkClipPolyData>::New();
+    clipper6->SetClipFunction(plane6);
+#if VTK_MAJOR_VERSION <= 5
+    clipper6->SetInputConnection(clipper5->GetOutputPort());
+#else
+    clipper6->SetInputData(clipper5->GetOutputPort());
+#endif
+    clipper6->InsideOutOn();
+    clipper6->Update();
+
+    vtkSmartPointer<vtkFillHolesFilter> fillholes =
+            vtkSmartPointer<vtkFillHolesFilter>::New();
+    fillholes->SetInputConnection(clipper6->GetOutputPort());
+
+    vtkSmartPointer<vtkPolyDataNormals> normals =
+            vtkSmartPointer<vtkPolyDataNormals>::New();
+    normals->SetInputConnection(fillholes->GetOutputPort());
+    normals->ConsistencyOn();
+    normals->SplittingOff();
+    normals->Update();
+
+    //Create a mapper and actor
     vtkSmartPointer<vtkPolyDataMapper> mapper =
             vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(sphereSource->GetOutputPort());
+    mapper->SetInputConnection(normals->GetOutputPort());
 
-    // Create an actor for the contours
     vtkSmartPointer<vtkActor> actor =
             vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
+    actor->GetProperty()->SetColor(0,1,1);
+    //actor->GetProperty()->SetRepresentationToWireframe();
+    //actor->GetProperty()->SetOpacity(0.99);
+    actor->GetProperty()->SetEdgeVisibility(0);
 
-    vtkSmartPointer<vtkTransform> transform =
-            vtkSmartPointer<vtkTransform>::New();
-    transform->Scale(5,1,1);
-    transform->Translate(1,2,3);
 
-    vtkSmartPointer<vtkTransformFilter> transformFilter =
-            vtkSmartPointer<vtkTransformFilter>::New();
-    transformFilter->SetInputConnection(sphereSource->GetOutputPort());
-    transformFilter->SetTransform(transform);
 
-    vtkSmartPointer<vtkPolyDataMapper> mapper2 =
+
+    // Create a mapper and actor.
+    vtkSmartPointer<vtkPolyDataMapper> mappercube =
             vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper2->SetInputConnection(transformFilter->GetOutputPort());
+    mappercube->SetInputConnection(cubeSource->GetOutputPort());
 
-    // Create an actor for the contours
-    vtkSmartPointer<vtkActor> actor2 =
+    vtkSmartPointer<vtkActor> actorcube =
             vtkSmartPointer<vtkActor>::New();
-    actor2->SetMapper(mapper2);
-    renderer->AddActor(actor);
-    renderer->AddActor(actor2);
+    actorcube->SetMapper(mappercube);
+    actorcube->GetProperty()->SetOpacity(0.7);
 
+    renderer->RemoveAllViewProps();
+    renderer->AddActor(actor);
+    renderer->AddActor(actorcube);
     renderer->ResetCamera();
     render();
 

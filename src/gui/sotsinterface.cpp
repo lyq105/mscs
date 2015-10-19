@@ -263,7 +263,7 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
     cout << "-_- 颗粒增强单胞建模成功......"<<endl;
     return 1;
 
-//    PCMCell *PCM = new PCMCell();
+//   PCMCell *PCM = new PCMCell();
 //    if(PCM->Cell_generate(infile,data_file)==0)        //若单胞生成失败，则重新读取输入文件
 //    {
 //        infile.close();
