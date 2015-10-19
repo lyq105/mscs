@@ -94,6 +94,7 @@
 #include <vtkAssignAttribute.h>
 #include <vtkParametricFunctionSource.h>
 #include <vtkParametricEllipsoid.h>
+#include <vtkTransformFilter.h>
 
 #include <sstream>
 
@@ -506,24 +507,46 @@ void VTKviewer::show_reinforcement()
 void VTKviewer::show_cell()
 {
 
-    vtkSmartPointer<vtkParametricEllipsoid> parametricObject = vtkSmartPointer<vtkParametricEllipsoid>::New();
-    vtkSmartPointer<vtkParametricFunctionSource> parametricFunctionSource =
-            vtkSmartPointer<vtkParametricFunctionSource>::New();
-    parametricFunctionSource->SetParametricFunction(parametricObject);
-    parametricFunctionSource->Update();
+    vtkSmartPointer<vtkSphereSource> sphereSource =
+            vtkSmartPointer<vtkSphereSource>::New();
+    sphereSource->SetCenter(0,0,0);
+    sphereSource->SetRadius(1);
+    sphereSource->SetPhiResolution(500);
+    sphereSource->SetThetaResolution(500);
+
 
     // Visualize
     vtkSmartPointer<vtkPolyDataMapper> mapper =
             vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(parametricFunctionSource->GetOutputPort());
+    mapper->SetInputConnection(sphereSource->GetOutputPort());
 
     // Create an actor for the contours
     vtkSmartPointer<vtkActor> actor =
             vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    renderer->AddActor(actor);
-    renderer->SetBackground(1,1,1); // Background color white
 
+    vtkSmartPointer<vtkTransform> transform =
+            vtkSmartPointer<vtkTransform>::New();
+    transform->Scale(5,1,1);
+    transform->Translate(1,2,3);
+
+    vtkSmartPointer<vtkTransformFilter> transformFilter =
+            vtkSmartPointer<vtkTransformFilter>::New();
+    transformFilter->SetInputConnection(sphereSource->GetOutputPort());
+    transformFilter->SetTransform(transform);
+
+    vtkSmartPointer<vtkPolyDataMapper> mapper2 =
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper2->SetInputConnection(transformFilter->GetOutputPort());
+
+    // Create an actor for the contours
+    vtkSmartPointer<vtkActor> actor2 =
+            vtkSmartPointer<vtkActor>::New();
+    actor2->SetMapper(mapper2);
+    renderer->AddActor(actor);
+    renderer->AddActor(actor2);
+
+    renderer->ResetCamera();
     render();
 
 }

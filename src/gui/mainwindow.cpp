@@ -134,8 +134,9 @@ void MainWindow::show_reinforcement()
 
 void MainWindow::show_sidebar(bool checked)
 {
-//    if (checked) ui->sidebar->show();
-//    else ui->sidebar->hide();
+    //if (checked) ui->sidebar->show();
+    //else ui->sidebar->hide();
+    viewer->show_cell();
 }
 
 
