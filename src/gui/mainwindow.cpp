@@ -136,7 +136,7 @@ void MainWindow::show_sidebar(bool checked)
 {
     //if (checked) ui->sidebar->show();
     //else ui->sidebar->hide();
-    viewer->show_cell();
+    viewer->show_cell(std::string("/home/yzh/dataOutEllipDat.dat"));
 }
 
 
@@ -246,6 +246,7 @@ void MainWindow::import_inp()
     //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     //sots.build_pmcell(infile.toStdString(),datafile.toStdString());
     sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
+    viewer->show_cell(outfile.toStdString());
     //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
     //sumf.waitForFinished();
 

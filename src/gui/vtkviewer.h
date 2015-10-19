@@ -41,7 +41,7 @@ public:
     /// 显示
     void show_ug_mesh(vtkUnstructuredGrid* ug);
     void show_ug_scalar(vtkUnstructuredGrid* ug, std::string scalar);
-    void show_cell();
+    void show_cell(std::string filename);
     void show_reinforcement();
     void show_matrix();
     void show_surface(vtkUnstructuredGrid* ug);

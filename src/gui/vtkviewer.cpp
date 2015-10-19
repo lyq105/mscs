@@ -117,14 +117,18 @@ VTKviewer::VTKviewer()
     axes_widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
     axes_widget->SetOrientationMarker( axes );
     axes_widget->SetInteractor( qvtkWidget->GetInteractor() );
-    axes_widget->SetViewport( 0.0, 0.0, 0.3, 0.3 );
+    axes_widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
     axes_widget->On();
     axes_widget->InteractiveOn();
+
+    //renderer->SetLightFollowCamera(1);
+    renderer->LightFollowCameraOn();
 
     renderer->ResetCamera();
     vtkSmartPointer<vtkCamera> camera
             =  renderer->GetActiveCamera();
     camera->SetPosition(1,1,1);
+    camera->SetViewUp(0,0,1);
     qvtkWidget->GetRenderWindow()->Render();
 }
 
@@ -132,6 +136,12 @@ void
 VTKviewer::render()
 {
     qvtkWidget->GetRenderWindow()->Render();
+}
+
+void
+VTKviewer::cls()
+{
+    renderer->RemoveAllViewProps();
 }
 
 
@@ -505,11 +515,12 @@ void VTKviewer::show_reinforcement()
     render();
 }
 
-void VTKviewer::show_cell()
+void
+VTKviewer::show_cell(std::string filename)
 {
     int ellipsoid_count;
     double ellip_ratio;
-    std::ifstream infile("/home/yzh/mscs/sample/dataOutEllipDat.dat");
+    std::ifstream infile(filename.c_str());
     std::string s,l;
     getline(infile,s);
     //跳过注释行
@@ -533,7 +544,7 @@ void VTKviewer::show_cell()
         getline(infile,s);
     std::istringstream ss3(s);
     ss3 >> clength >> cwidth >> cheight;
-    cout << clength << cwidth << cheight << endl;
+    //  cout << clength << cwidth << cheight << endl;
 
 
     //Append the two meshes
@@ -554,11 +565,11 @@ void VTKviewer::show_cell()
            >> angle[4] >> angle[5] >> angle[6]
            >> angle[8] >> angle[9] >> angle[10];
         //cout << a << " " << b << endl;
-        for (int i=0;i<16;i++)
-        {
-            cout << angle[i] << "\t";
-            if((i+1)%4==0)cout << endl;
-        }
+        //        for (int i=0;i<16;i++)
+        //        {
+        //            cout << angle[i] << "\t";
+        //            if((i+1)%4==0)cout << endl;
+        //        }
 
         //        vtkSmartPointer<vtkSphereSource> sphereSource =
         //                vtkSmartPointer<vtkSphereSource>::New();
@@ -744,9 +755,7 @@ void VTKviewer::show_cell()
     //actor->GetProperty()->SetRepresentationToWireframe();
     //actor->GetProperty()->SetOpacity(0.99);
     actor->GetProperty()->SetEdgeVisibility(0);
-
-
-
+    actor->GetProperty()->LightingOn();
 
     // Create a mapper and actor.
     vtkSmartPointer<vtkPolyDataMapper> mappercube =
