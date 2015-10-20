@@ -64,7 +64,8 @@ HEADERS += src/gui/aboutdialog.h \
     src/elastic/PCMCell.h \
     src/elastic/SolveEqu.h \
     src/elastic/Vector2D.h \
-    src/elastic/Vector3D.h
+    src/elastic/Vector3D.h \
+    src/gui/pmmesher.h
 FORMS += forms/aboutdialog.ui \
          forms/analysistype.ui \
          forms/cellmodel.ui \
@@ -115,5 +116,6 @@ SOURCES += src/mscs_main.cpp \
     src/elastic/PCMCell.cpp \
     src/elastic/SolveEqu.cpp \
     src/elastic/Vector2D.cpp \
-    src/elastic/Vector3D.cpp
+    src/elastic/Vector3D.cpp \
+    src/gui/pmmesher.cpp
 RESOURCES += resources/Mscs.qrc

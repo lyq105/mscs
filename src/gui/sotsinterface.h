@@ -7,6 +7,7 @@
 #include <QThread>
 
 class Mesher;
+class PMMesher;
 
 struct PMCell_Info
 {
@@ -63,11 +64,12 @@ public:
     /// 生成颗粒增强单胞
     int build_pmcell(std::string in_file, std::string data_file, int CNum=1);
     int build_pmcell(std::string ellips_para, std::string ellips_file,std::string data_file);
+    int mesh_pmcell(std::string meshpara);
     std::string Get_Line(std::ifstream &infile)const;
 
     /// 直接求解单胞问题
     int solve(std::string in_file,std::string out_file,std::string data_file);
-    int process_pmcell(const Mesher& mesh);
+    int process_pmcell(const PMMesher *mesh);
 
     vtkUnstructuredGrid* celldata;
     vtkUnstructuredGrid* homodata;
@@ -77,6 +79,7 @@ private:
     std::string prj_name;
     PMCell_Info* cell_info;
 };
+
 
 //class SOTSSolver
 //{

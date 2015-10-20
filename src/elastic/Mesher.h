@@ -60,7 +60,7 @@ class Mesher
 
 		//在不生成边界层的情况下，将四面体单元类型倒为混合单元类型
 		int change_elements_to_blend();		//韩非20060915增改
-	private:
+    private:
         int material_num ; //材料数
         double x_min,x_max,y_min,y_max,z_min,z_max;
         double attach_length;

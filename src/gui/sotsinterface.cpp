@@ -1,4 +1,5 @@
 ﻿#include "sotsinterface.h"
+#include "pmmesher.h"
 
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -211,7 +212,7 @@ lable_pcm: ct0 = clock();
 //    cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
 //    cout << "^_^ 网格生成完毕！"<<endl<<endl;
 
-    process_pmcell(*Mesh);
+//    process_pmcell(Mesh);
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 //    //求解Na1和Na1a2
@@ -254,8 +255,8 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
     EllipseGen *ellip = new EllipseGen;
     while(ellip->uniell_generation(ellips_para,ellips_file,data_file)==0)
     {
-     //   cout << "======================================================" << endl;
-    //    cout << "-_- 单胞建模结束......"<<endl;
+        cout << "======================================================" << endl;
+        cout << "-_- 单胞建模失败，重新尝试......"<<endl;
     //    return 0;
     }
     delete ellip;
@@ -263,20 +264,8 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
     cout << "-_- 颗粒增强单胞建模成功......"<<endl;
     return 1;
 
-//   PCMCell *PCM = new PCMCell();
-//    if(PCM->Cell_generate(infile,data_file)==0)        //若单胞生成失败，则重新读取输入文件
-//    {
-//        infile.close();
-//        infile.open(in_file.c_str());
-//        //跳过注释行（这样就可以跳过样本数信息）
-//        Get_Line(infile);
-//        delete PCM;
-//        goto lable_pcm;
-//    }
-//    ct1 = clock();
-
 //    process_pmcell(*Mesh);
-
+}
 //-----------------------------------------------------------------------------------------------------------------------------------------
 //    //求解Na1和Na1a2
 //    ct0=clock();
@@ -303,10 +292,25 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
 //    delete Mesh;
     //	delete Npara;
 
+//    return 1;
+//}
+
+
+int SOTSinterface::mesh_pmcell(std::string ellipfile)
+{
+    char* ep = (char*)ellipfile.c_str();
+    PCMCell *PCM = new PCMCell(1,1,1,ep);
+    cout << "-_- 开始生成网格......"<<endl<<endl;
+    PMMesher *Mesh = new PMMesher(0.02,0,4,0,PCM);
+    Mesh->bnodes_vec;
+    while( Mesh->generate_mesh() == 0)
+    {
+        cout << "======================================================" << endl;
+        cout << "-_- 网格生成失败，重新尝试......"<<endl;
+    }
+    process_pmcell(Mesh);
     return 1;
 }
-
-
 
 
 
@@ -372,7 +376,7 @@ int SOTSinterface::solve(string in_file,string out_file,string data_file)
     return 1;
 }
 
-int SOTSinterface::process_pmcell(const Mesher &mesh)
+int SOTSinterface::process_pmcell(const PMMesher *mesh)
 {
     vtkIdType number_of_points, number_of_tetra;
     vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
@@ -380,22 +384,22 @@ int SOTSinterface::process_pmcell(const Mesher &mesh)
     intValue->SetName("materialId");
 
  //   infile >> number_of_points;
-    number_of_points = mesh.nodes_vec.size();
+    number_of_points = mesh->nodes_vec.size();
 
     vtkSmartPointer<vtkPoints> points
             = vtkSmartPointer<vtkPoints>::New();
     points->SetNumberOfPoints(number_of_points);
     for (vtkIdType i = 0; i < number_of_points; i++)
     {
-        mesh.nodes_vec[i].x;
+        mesh->nodes_vec[i].x;
         double x, y, z;
-        x = mesh.nodes_vec[i].x;
-        y = mesh.nodes_vec[i].y;
-        z = mesh.nodes_vec[i].z;
+        x = mesh->nodes_vec[i].x;
+        y = mesh->nodes_vec[i].y;
+        z = mesh->nodes_vec[i].z;
         points->SetPoint(i, x, y, z);
     }
 
-    number_of_tetra = mesh.eles_vec.size();
+    number_of_tetra = mesh->eles_vec.size();
     vtkSmartPointer<vtkCellArray> cellArray
             = vtkSmartPointer<vtkCellArray>::New();
     for (vtkIdType i = 0; i < number_of_tetra; i++)
@@ -405,18 +409,18 @@ int SOTSinterface::process_pmcell(const Mesher &mesh)
 //        infile >> subdomainId >> a >> b >> c >> d;
         //       std::cout << a << b << c << d << std::endl;
 
-        a = mesh.eles_vec[i].nodesId[0];
-        b = mesh.eles_vec[i].nodesId[1];
-        c = mesh.eles_vec[i].nodesId[2];
-        d = mesh.eles_vec[i].nodesId[3];
+        a = mesh->eles_vec[i].nodesId[0];
+        b = mesh->eles_vec[i].nodesId[1];
+        c = mesh->eles_vec[i].nodesId[2];
+        d = mesh->eles_vec[i].nodesId[3];
         vtkSmartPointer<vtkTetra> tetra =
                 vtkSmartPointer<vtkTetra>::New();
-        if(mesh.eles_vec[i].materialId == 0) continue;
+        if(mesh->eles_vec[i].materialId == 0) continue;
         tetra->GetPointIds()->SetId(0, a);
         tetra->GetPointIds()->SetId(1, b);
         tetra->GetPointIds()->SetId(2, c);
         tetra->GetPointIds()->SetId(3, d);
-        intValue->InsertNextValue(mesh.eles_vec[i].materialId);
+        intValue->InsertNextValue(mesh->eles_vec[i].materialId);
         cellArray->InsertNextCell(tetra);
     }
     vtkSmartPointer<vtkUnstructuredGrid> unstructuredGrid =
@@ -439,5 +443,6 @@ int SOTSinterface::process_pmcell(const Mesher &mesh)
 //    writer->SetInputData(unstructuredGrid);
 //#endif
 //    writer->Write();
+
     return 1;
 }
