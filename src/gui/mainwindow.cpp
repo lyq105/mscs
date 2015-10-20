@@ -183,7 +183,11 @@ void MainWindow::show_pcmcell()
 void MainWindow::set_cell()
 {
     SetCellDialog setcell(this);
-    setcell.exec();
+
+    if(setcell.exec() == QDialog::Accepted)
+    {
+       setcell.save_cell_info("/home/yzh/cellinfo.txt");
+    }
 }
 
 

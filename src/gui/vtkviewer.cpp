@@ -478,7 +478,7 @@ void VTKviewer::show_matrix()
     actor->SetMapper(mapper);
     actor->GetProperty()->SetRepresentationToSurface();
     //actor->GetProperty()->SetRepresentationToWireframe();
-    actor->GetProperty()->SetColor(0,1,1);
+    actor->GetProperty()->SetColor(1,0,0);
     actor->GetProperty()->SetEdgeColor(0,0,0);
     actor->GetProperty()->EdgeVisibilityOn();
 
@@ -504,7 +504,7 @@ void VTKviewer::show_reinforcement()
     actor->SetMapper(mapper);
     actor->GetProperty()->SetRepresentationToSurface();
     //actor->GetProperty()->SetRepresentationToWireframe();
-    actor->GetProperty()->SetColor(0,1,0);
+    actor->GetProperty()->SetColor(0,0,1);
     actor->GetProperty()->SetEdgeColor(0,0,0);
     actor->GetProperty()->EdgeVisibilityOn();
 

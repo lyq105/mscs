@@ -16,6 +16,7 @@ public:
     ~SetCellDialog();
     /// 读取单胞几何参数
     void get_cell_info(PMCell_Info*);
+    void save_cell_info(std::string cell_file);
 
 private slots:
     void on_rb_cd_uiniform_clicked();
