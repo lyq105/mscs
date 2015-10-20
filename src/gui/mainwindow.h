@@ -34,6 +34,7 @@ private slots:
 //    void solve_homo_problem();
 //    void load_cell_mesh();
 //    void add_material();
+    void analysis_type();
     void import_mesh();
     void import_geo();
     void new_project();

@@ -67,8 +67,17 @@
      <property name="title">
       <string>设置单胞</string>
      </property>
-     <addaction name="action_gen_cell"/>
-     <addaction name="action_import_cell_geo"/>
+     <widget class="QMenu" name="menu_4">
+      <property name="title">
+       <string>颗粒增强单胞</string>
+      </property>
+      <addaction name="action_gen_cell"/>
+      <addaction name="action_import_cell_geo"/>
+      <addaction name="actionView_cell_geometry"/>
+     </widget>
+     <addaction name="menu_4"/>
+     <addaction name="action_2"/>
+     <addaction name="action_3"/>
      <addaction name="action_import_cell_mesh"/>
      <addaction name="action_view_cellinfo"/>
     </widget>
@@ -231,7 +240,7 @@
   </action>
   <action name="action_import_cell_mesh">
    <property name="text">
-    <string>从网格导入单胞</string>
+    <string>直接从网格导入单胞</string>
    </property>
   </action>
   <action name="action_stl">
@@ -403,6 +412,21 @@
   <action name="action_solve">
    <property name="text">
     <string>求解</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>蜂窝结构单胞</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>编织材料单胞</string>
+   </property>
+  </action>
+  <action name="actionView_cell_geometry">
+   <property name="text">
+    <string>view cell geometry</string>
    </property>
   </action>
  </widget>

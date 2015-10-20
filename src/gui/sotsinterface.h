@@ -64,12 +64,15 @@ public:
     /// 生成颗粒增强单胞
     int build_pmcell(std::string in_file, std::string data_file, int CNum=1);
     int build_pmcell(std::string ellips_para, std::string ellips_file,std::string data_file);
-    int mesh_pmcell(std::string meshpara);
+    int mesh_pmcell(std::string ellipfile,double m_size);
     std::string Get_Line(std::ifstream &infile)const;
 
     /// 直接求解单胞问题
     int solve(std::string in_file,std::string out_file,std::string data_file);
+
+    int solve_cell();
     int process_pmcell(const PMMesher *mesh);
+    int process_cell_solution();
 
     vtkUnstructuredGrid* celldata;
     vtkUnstructuredGrid* homodata;

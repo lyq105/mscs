@@ -296,18 +296,19 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
 //}
 
 
-int SOTSinterface::mesh_pmcell(std::string ellipfile)
+int SOTSinterface::mesh_pmcell(std::string ellipfile,double m_size)
 {
     char* ep = (char*)ellipfile.c_str();
     PCMCell *PCM = new PCMCell(1,1,1,ep);
     cout << "-_- 开始生成网格......"<<endl<<endl;
-    PMMesher *Mesh = new PMMesher(0.02,0,4,0,PCM);
-    Mesh->bnodes_vec;
+    PMMesher *Mesh = new PMMesher(m_size,0,4,0,PCM);
     while( Mesh->generate_mesh() == 0)
     {
         cout << "======================================================" << endl;
         cout << "-_- 网格生成失败，重新尝试......"<<endl;
     }
+    cout << "======================================================" << endl;
+    cout << "^_^ 网格生成成功"<<endl;
     process_pmcell(Mesh);
     return 1;
 }
@@ -381,7 +382,7 @@ int SOTSinterface::process_pmcell(const PMMesher *mesh)
     vtkIdType number_of_points, number_of_tetra;
     vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
     intValue->SetNumberOfComponents(1);
-    intValue->SetName("materialId");
+    intValue->SetName("subdomainid");
 
  //   infile >> number_of_points;
     number_of_points = mesh->nodes_vec.size();
@@ -415,7 +416,7 @@ int SOTSinterface::process_pmcell(const PMMesher *mesh)
         d = mesh->eles_vec[i].nodesId[3];
         vtkSmartPointer<vtkTetra> tetra =
                 vtkSmartPointer<vtkTetra>::New();
-        if(mesh->eles_vec[i].materialId == 0) continue;
+        //if(mesh->eles_vec[i].materialId == 0) continue;
         tetra->GetPointIds()->SetId(0, a);
         tetra->GetPointIds()->SetId(1, b);
         tetra->GetPointIds()->SetId(2, c);
@@ -445,4 +446,35 @@ int SOTSinterface::process_pmcell(const PMMesher *mesh)
 //    writer->Write();
 
     return 1;
+}
+
+int SOTSinterface::solve_cell()
+{
+//    cout << "======================================================" << endl;
+//    cout << "-_- 开始均匀化求解......"<<endl<<endl;
+//    //求解均匀化系数
+//    //读取数据，判断是否进行强度计算
+//    istringstream instr(Get_Line(infile));
+//    int elas_ana_only;
+//    instr >> elas_ana_only;
+
+//    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
+//    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
+//    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
+//    ct1=clock();
+//    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+//    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+    return 0;
+}
+
+int SOTSinterface::process_cell_solution()
+{
+//    HomoSolver *Hsolver;
+
+
+//    int np = celldata->GetNumberOfPoints();
+//    vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
+//    intValue->SetNumberOfComponents(1);
+//    intValue->SetName("subdomainid");
+//    celldata->GetPointData()->SetScalars(intValue);
 }

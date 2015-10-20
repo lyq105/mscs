@@ -26,10 +26,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/images/elisa_128px_540496_easyicon.net.png"));
-//    ui->menu_mesh->setEnabled(0);
-//   ui->menu_mesh->hide();
+
     ui->tool_box->hide();
-//    ui->sidebar->setWidget();
+    //    ui->sidebar->setWidget();
     createMessageBox();
     createStatusBar();
     createVTKview();
@@ -40,7 +39,7 @@ MainWindow::~MainWindow()
 {
     //    delete renderer;
     delete message_content;
-//    delete qvtkWidget;
+    //    delete qvtkWidget;
     delete ui;
 }
 
@@ -51,10 +50,10 @@ void MainWindow::createMessageBox()
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
-//    QDebugStream qcout(std::cout,message_content);
+    //    QDebugStream qcout(std::cout,message_content);
 
-//    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
-//    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
+    //    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
+    //    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
     QScrollBar *pScroll = message_content->verticalScrollBar();
     pScroll->setSliderPosition(pScroll->maximum());
 }
@@ -99,6 +98,8 @@ void MainWindow::createSlots()
     ui->action_show_reinforcement->setEnabled(false);
 
     // model menu
+    connect(ui->action_anatype, SIGNAL(triggered()), this, SLOT(analysis_type()));
+
     connect(ui->action_import_mesh, SIGNAL(triggered()), this, SLOT(import_mesh()));
     connect(ui->action_import_geo, SIGNAL(triggered()), this, SLOT(import_geo()));
 
@@ -110,6 +111,7 @@ void MainWindow::createSlots()
     connect(ui->action_gen_cell, SIGNAL(triggered()), this, SLOT(set_cell()));
 
 
+
     // file menu
     connect(ui->action_new_project,SIGNAL(triggered()),this,SLOT(new_project()));
     connect(ui->action_openfile,SIGNAL(triggered()),this,SLOT(import_inp()));
@@ -118,7 +120,17 @@ void MainWindow::createSlots()
 
 // slots ====================================================================================
 
-
+void MainWindow::analysis_type()
+{
+    AnalysisType anatype(this);
+    if(anatype.exec() == QDialog::Accepted)
+    {
+        sots.set_analysis_type(anatype.get_analysis_type().toStdString());
+        //       sots.set_prj_folder(anatype.get_prj_folder().toStdString());
+        sots.set_prj_name(anatype.get_prj_name().toStdString());
+    }
+    //    QString logfile = anatype.get_prj_folder() + QString("/") + anatype.get_prj_name() +".log";
+}
 
 
 void MainWindow::show_matrix()
@@ -186,7 +198,18 @@ void MainWindow::set_cell()
 
     if(setcell.exec() == QDialog::Accepted)
     {
-       setcell.save_cell_info("/home/yzh/cellinfo.txt");
+        QString cellfile("/home/yzh/cellinfo.txt");
+        setcell.save_cell_info(cellfile.toStdString().c_str());
+        QFileInfo temp(cellfile);
+        QString outfile= temp.absolutePath()+"/out.dat";
+        QString datafile= temp.absolutePath()+"/data.dat";
+        sots.build_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
+        viewer->show_cell(outfile.toStdString());
+        sots.mesh_pmcell(outfile.toStdString(),0.02);
+        //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
+        //sumf.waitForFinished();
+        viewer->show_ug_mesh(sots.celldata);
+        viewer->write_ug(sots.celldata,cellfile.toStdString()+".vtk");
     }
 }
 
@@ -208,11 +231,11 @@ void MainWindow::import_cell_mesh()
                 this, QString::fromLocal8Bit("导入单胞网格文件"),
                 sDefaultName,filter,&selectedFilter,
                 QFileDialog::DontUseNativeDialog);
- //   cout << sots.celldata<< endl;
+    //   cout << sots.celldata<< endl;
     if(!sFileName.isNull())
     {
         sots.celldata = viewer->load_bdf(sFileName.toStdString());
- //       cout << sots.celldata << endl;
+        //       cout << sots.celldata << endl;
         //show_pcmcell();
         viewer->show_ug_mesh(sots.celldata);
         ui->action_show_matrix->setEnabled(true);
@@ -251,8 +274,13 @@ void MainWindow::import_inp()
     //sots.build_pmcell(infile.toStdString(),datafile.toStdString());
     sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     viewer->show_cell(outfile.toStdString());
+    sots.mesh_pmcell(outfile.toStdString(),0.02);
     //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
     //sumf.waitForFinished();
+    viewer->show_ug_mesh(sots.celldata);
+    viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
+    // ui->action_show_matrix->setEnabled(true);
+    // ui->action_show_reinforcement->setEnabled(true);
 
     return;
 }
@@ -260,18 +288,15 @@ void MainWindow::import_inp()
 /// 新建工程
 void MainWindow::new_project()
 {
-    AnalysisType anatype(this);
-    if(anatype.exec() == QDialog::Accepted)
+
+    QFileDialog* openFilePath = new QFileDialog( this, QString::fromLocal8Bit("请选择一个文件夹"), "");
+    openFilePath->setFileMode( QFileDialog::DirectoryOnly);
+    if ( openFilePath->exec() == QDialog::Accepted )
     {
-        sots.set_analysis_type(anatype.get_analysis_type().toStdString());
-        sots.set_prj_folder(anatype.get_prj_folder().toStdString());
-        sots.set_prj_name(anatype.get_prj_name().toStdString());
+        sots.set_prj_folder(openFilePath->selectedFiles()[0].toStdString());
     }
-    QString logfile = anatype.get_prj_folder() + QString("/") + anatype.get_prj_name() +".log";
-//    cout << logfile.toStdString().c_str() << endl;
-    //    freopen(logfile.toStdString().c_str(),"w",stdout);
-//    cout << "这是一个分析文件" << endl;
-    //freopen("CON", "w", stdout);
+    delete openFilePath;
+    return;
 }
 
 /// 关于对话框

@@ -12,13 +12,13 @@ public:
     explicit AnalysisType(QWidget *parent = 0);
     QString get_prj_name();
     QString get_analysis_type();
-    QString get_prj_folder();
+//    QString get_prj_folder();
 
 protected:
     void changeEvent(QEvent *e);
 
 private slots:
-    void open_prj_folder();
+//    void open_prj_folder();
 
 private:
     Ui::AnalysisType ui;
