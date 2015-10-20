@@ -2,14 +2,17 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTextStream>
 #include "sotsinterface.h"
 
 namespace Ui {
 class MainWindow;
 }
-class QVTKWidget;
+
 class VTKviewer;
 class QTextEdit;
+
+
 
 class MainWindow : public QMainWindow
 {
@@ -70,6 +73,8 @@ private:
     Ui::MainWindow *ui;
     QTextEdit* message_content;
     VTKviewer* viewer;
+
+ //   QTextStream cout;
 };
 
 #endif // MAINWINDOW_H

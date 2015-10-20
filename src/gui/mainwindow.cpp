@@ -17,6 +17,7 @@
 #include "setcelldialog.h"
 #include "vtkviewer.h"
 #include "mylogger.h"
+#include "qstream.h"
 
 
 /// 构造和析构函数
@@ -37,9 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    //    delete renderer;
     delete message_content;
-    //    delete qvtkWidget;
     delete ui;
 }
 
@@ -50,8 +49,6 @@ void MainWindow::createMessageBox()
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
-    //    QDebugStream qcout(std::cout,message_content);
-
     //    message_content->setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkai shi le xie xie");
     //    message_content->append(QString::fromLocal8Bit("<font color=red>错误</font>"));
     QScrollBar *pScroll = message_content->verticalScrollBar();
@@ -295,6 +292,10 @@ void MainWindow::new_project()
     {
         sots.set_prj_folder(openFilePath->selectedFiles()[0].toStdString());
     }
+    std::cout << "Choose " << openFilePath->selectedFiles()[0].toStdString()
+                 << "  as work directory" << endl;
+    std::cout << "当前工作目录是 " << openFilePath->selectedFiles()[0].toStdString()
+              << endl;
     delete openFilePath;
     return;
 }
