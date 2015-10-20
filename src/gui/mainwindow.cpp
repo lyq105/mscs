@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <meshpara.h>
 #include <QTextEdit>
+#include <QMessageBox>
 #include "analysistype.h"
 #include "materiel.h"
 #include <sstream>
@@ -18,6 +19,7 @@
 #include "vtkviewer.h"
 #include "mylogger.h"
 #include "qstream.h"
+#include "cellsolveroption.h"
 
 
 /// 构造和析构函数
@@ -46,6 +48,7 @@ MainWindow::~MainWindow()
 void MainWindow::createMessageBox()
 {
     message_content = new QTextEdit;
+//    qcout = new QDebugStream(std::cout,message_content);
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
@@ -107,8 +110,8 @@ void MainWindow::createSlots()
     connect(ui->action_view_mat, SIGNAL(triggered()), this, SLOT(import_geo()));
     connect(ui->action_gen_cell, SIGNAL(triggered()), this, SLOT(set_cell()));
 
-
-
+    // solve menu
+    connect(ui->action_cell_solver_option, SIGNAL(triggered()), this, SLOT(set_cell_solver()));
     // file menu
     connect(ui->action_new_project,SIGNAL(triggered()),this,SLOT(new_project()));
     connect(ui->action_openfile,SIGNAL(triggered()),this,SLOT(import_inp()));
@@ -116,6 +119,15 @@ void MainWindow::createSlots()
 }
 
 // slots ====================================================================================
+
+void MainWindow::set_cell_solver()
+{
+    CellSolverOption csoption;
+    if(csoption.exec() == QDialog::Accepted)
+    {
+        return;
+    }
+}
 
 void MainWindow::analysis_type()
 {
@@ -145,7 +157,7 @@ void MainWindow::show_sidebar(bool checked)
 {
     //if (checked) ui->sidebar->show();
     //else ui->sidebar->hide();
-    viewer->show_cell(std::string("/home/yzh/dataOutEllipDat.dat"));
+    //viewer->show_cell(std::string("/home/yzh/dataOutEllipDat.dat"));
 }
 
 
@@ -195,7 +207,11 @@ void MainWindow::set_cell()
 
     if(setcell.exec() == QDialog::Accepted)
     {
-        QString cellfile("/home/yzh/cellinfo.txt");
+        QString path;
+        QDir dir;
+        path=dir.currentPath();
+        QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);//查看路径
+        QString cellfile(path+"/cellinfo.txt");
         setcell.save_cell_info(cellfile.toStdString().c_str());
         QFileInfo temp(cellfile);
         QString outfile= temp.absolutePath()+"/out.dat";
@@ -214,7 +230,22 @@ void MainWindow::set_cell()
 /// 导入单胞几何并剖分
 void MainWindow::import_cell_geo()
 {
-
+    QString sDefaultName = tr("");
+    QString selectedFilter = tr(";;MSCS Input Files(*.inp)");
+    //    QDir defaultDir = QFSFileEngine::homePath();
+    QString filter = tr(";;MSCS Input Files(*.inp)");
+    QString infile = QFileDialog::getOpenFileName(
+                this, QString::fromLocal8Bit("直接导入计算文件"),
+                sDefaultName,filter,&selectedFilter,
+                QFileDialog::DontUseNativeDialog);
+    if(infile.isNull()) return;
+    QFileInfo temp(infile);
+    QString outfile= temp.absolutePath()+"/out.dat";
+    QString datafile= temp.absolutePath()+"/data.dat";
+    //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
+    //sots.build_pmcell(infile.toStdString(),datafile.toStdString());
+    sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
+    viewer->show_cell(outfile.toStdString());
 }
 
 /// 直接导入单胞网格
@@ -271,11 +302,11 @@ void MainWindow::import_inp()
     //sots.build_pmcell(infile.toStdString(),datafile.toStdString());
     sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     viewer->show_cell(outfile.toStdString());
-    sots.mesh_pmcell(outfile.toStdString(),0.02);
+ //   sots.mesh_pmcell(outfile.toStdString(),0.02);
     //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
     //sumf.waitForFinished();
-    viewer->show_ug_mesh(sots.celldata);
-    viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
+//    viewer->show_ug_mesh(sots.celldata);
+//    viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
     // ui->action_show_matrix->setEnabled(true);
     // ui->action_show_reinforcement->setEnabled(true);
 

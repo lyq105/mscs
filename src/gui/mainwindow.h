@@ -11,6 +11,7 @@ class MainWindow;
 
 class VTKviewer;
 class QTextEdit;
+class QDebugStream;
 
 
 
@@ -37,6 +38,7 @@ private slots:
 //    void solve_homo_problem();
 //    void load_cell_mesh();
 //    void add_material();
+    void set_cell_solver();
     void analysis_type();
     void import_mesh();
     void import_geo();
@@ -73,6 +75,7 @@ private:
     Ui::MainWindow *ui;
     QTextEdit* message_content;
     VTKviewer* viewer;
+    QDebugStream* qcout;
 
  //   QTextStream cout;
 };

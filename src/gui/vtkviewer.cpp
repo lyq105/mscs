@@ -587,9 +587,9 @@ VTKviewer::show_cell(std::string filename)
         vtkSmartPointer<vtkParametricFunctionSource> ellipSource =
                 vtkSmartPointer<vtkParametricFunctionSource>::New();
         ellipSource->SetParametricFunction(ellip);
-        ellipSource->SetUResolution(40);
-        ellipSource->SetVResolution(40);
-        ellipSource->SetWResolution(40);
+        ellipSource->SetUResolution(10);
+        ellipSource->SetVResolution(10);
+        ellipSource->SetWResolution(10);
 
         ellipSource->Update();
         //ellipSource->setx
@@ -772,6 +772,5 @@ VTKviewer::show_cell(std::string filename)
     renderer->AddActor(actorcube);
     renderer->ResetCamera();
     render();
-
 }
 

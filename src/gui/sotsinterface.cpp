@@ -477,4 +477,5 @@ int SOTSinterface::process_cell_solution()
 //    intValue->SetNumberOfComponents(1);
 //    intValue->SetName("subdomainid");
 //    celldata->GetPointData()->SetScalars(intValue);
+	return 0;
 }

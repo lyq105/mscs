@@ -1,16 +1,16 @@
-#include "materiel.h"
-
+﻿#include "materiel.h"
+#include <iostream>
 materiel::materiel(QWidget *parent) :
     QDialog(parent)
 {
     ui.setupUi(this);
- //   ui.comboBox->
+    //   ui.comboBox->
     ui.tab->setDisabled(1);
     ui.tab_2->setDisabled(0);
     ui.tab_3->setDisabled(1);
     ui.tabWidget->setCurrentIndex(0);
     connect(ui.comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onChanged(int)));
- //   ui.tableWidget->item(0,1)->text();
+
 
 }
 
@@ -28,25 +28,26 @@ void materiel::changeEvent(QEvent *e)
 
 void materiel::onChanged(int index)
 {
+    std::cout << ">>>>" <<ui.tableWidget->item(0,0)->text().toStdString() <<std::endl;
     if (index == 0)
     {
-    ui.tab->setDisabled(1);
-    ui.tab_2->setDisabled(0);
-    ui.tab_3->setDisabled(1);
-    ui.tabWidget->setCurrentIndex(0);
+        ui.tab->setDisabled(1);
+        ui.tab_2->setDisabled(0);
+        ui.tab_3->setDisabled(1);
+        ui.tabWidget->setCurrentIndex(0);
     }
     if (index == 1)
     {
-    ui.tab->setDisabled(0);
-    ui.tab_2->setDisabled(1);
-    ui.tab_3->setDisabled(1);
-    ui.tabWidget->setCurrentIndex(1);
+        ui.tab->setDisabled(0);
+        ui.tab_2->setDisabled(1);
+        ui.tab_3->setDisabled(1);
+        ui.tabWidget->setCurrentIndex(1);
     }
     if (index == 2)
     {
-    ui.tab->setDisabled(1);
-    ui.tab_2->setDisabled(1);
-    ui.tab_3->setDisabled(0);
-    ui.tabWidget->setCurrentIndex(2);
+        ui.tab->setDisabled(1);
+        ui.tab_2->setDisabled(1);
+        ui.tab_3->setDisabled(0);
+        ui.tabWidget->setCurrentIndex(2);
     }
 }
