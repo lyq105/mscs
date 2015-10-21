@@ -99,6 +99,8 @@
 #include <vtkCubeSource.h>
 #include <vtkLookupTable.h>
 #include <vtkAssignAttribute.h>
+#include <vtkDoubleArray.h>
+#include <fstream>
 //namespace elastic{
 #include "Mscm.h"
 //}
@@ -175,8 +177,8 @@ lable_pcm: ct0 = clock();
         goto lable_pcm;
     }
     ct1 = clock();
-//    cout << "    建模总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-//    cout << "^_^ 单胞建模完毕！"<<endl<<endl;
+    //    cout << "    建模总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    //    cout << "^_^ 单胞建模完毕！"<<endl<<endl;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
     //生成材料库信息
@@ -187,14 +189,14 @@ lable_pcm: ct0 = clock();
     Matrial->Generate_matbase(infile);
     //	Matrial->mats_vec[0].print();
     ct1 = clock();
-//    cout << "    读取材料信息总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-//    cout << "^_^ 读取材料信息完毕！"<<endl<<endl;
+    //    cout << "    读取材料信息总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    //    cout << "^_^ 读取材料信息完毕！"<<endl<<endl;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
     //建模并生成网格信息
     ct0 = clock();
-//    cout << "======================================================" << endl;
-//    cout << "-_- 开始生成网格......"<<endl<<endl;
+    //    cout << "======================================================" << endl;
+    //    cout << "-_- 开始生成网格......"<<endl<<endl;
     Mesher *Mesh = new Mesher(PCM);
     if( Mesh->Mesh_generate(infile) == 0)
     {
@@ -209,32 +211,32 @@ lable_pcm: ct0 = clock();
     //	Mesh->Mesh_BinaryData(0,data_file, CNum);
     //	Mesh->Mesh_data(0);
     ct1 = clock();
-//    cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-//    cout << "^_^ 网格生成完毕！"<<endl<<endl;
+    //    cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    //    cout << "^_^ 网格生成完毕！"<<endl<<endl;
 
-//    process_pmcell(Mesh);
+    //    process_pmcell(Mesh);
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-//    //求解Na1和Na1a2
-//    ct0=clock();
-//    cout << "======================================================" << endl;
-//    cout << "-_- 开始均匀化求解......"<<endl<<endl;
-//    //求解均匀化系数
-//    //读取数据，判断是否进行强度计算
-//    istringstream instr(Get_Line(infile));
-//    int elas_ana_only;
-//    instr >> elas_ana_only;
+    //    //求解Na1和Na1a2
+    //    ct0=clock();
+    //    cout << "======================================================" << endl;
+    //    cout << "-_- 开始均匀化求解......"<<endl<<endl;
+    //    //求解均匀化系数
+    //    //读取数据，判断是否进行强度计算
+    //    istringstream instr(Get_Line(infile));
+    //    int elas_ana_only;
+    //    instr >> elas_ana_only;
 
-//    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
-//    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
-//    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
-//    ct1=clock();
-//    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-//    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+    //    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
+    //    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
+    //    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
+    //    ct1=clock();
+    //    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    //    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
 
 
 
-//    delete Hsolver;
+    //    delete Hsolver;
     delete PCM;
     delete Matrial;
     delete Mesh;
@@ -257,14 +259,14 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
     {
         cout << "======================================================" << endl;
         cout << "-_- 单胞建模失败，重新尝试......"<<endl;
-    //    return 0;
+        //    return 0;
     }
     delete ellip;
     cout << "======================================================" << endl;
     cout << "-_- 颗粒增强单胞建模成功......"<<endl;
     return 1;
 
-//    process_pmcell(*Mesh);
+    //    process_pmcell(*Mesh);
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------
 //    //求解Na1和Na1a2
@@ -290,7 +292,7 @@ int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string da
 //    delete PCM;
 //    delete Matrial;
 //    delete Mesh;
-    //	delete Npara;
+//	delete Npara;
 
 //    return 1;
 //}
@@ -339,7 +341,7 @@ int SOTSinterface::solve(string in_file,string out_file,string data_file)
     //打开文件
     ifstream infile;
     infile.open(in_file.c_str());
-    if(!infile) { hout << "不能打开输入文件: "  << in_file << endl;  return 0; }
+    if(!infile) { cout << "不能打开输入文件: "  << in_file << endl;  return 0; }
 
     string s;		//读入信息一行
     getline(infile,s);	//跳过注释行
@@ -377,14 +379,14 @@ int SOTSinterface::solve(string in_file,string out_file,string data_file)
     return 1;
 }
 
-int SOTSinterface::process_pmcell(const PMMesher *mesh)
+int SOTSinterface::process_pmcell(const Mesher *mesh)
 {
     vtkIdType number_of_points, number_of_tetra;
     vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
     intValue->SetNumberOfComponents(1);
     intValue->SetName("subdomainid");
 
- //   infile >> number_of_points;
+    //   infile >> number_of_points;
     number_of_points = mesh->nodes_vec.size();
 
     vtkSmartPointer<vtkPoints> points
@@ -406,8 +408,8 @@ int SOTSinterface::process_pmcell(const PMMesher *mesh)
     for (vtkIdType i = 0; i < number_of_tetra; i++)
     {
         vtkIdType a, b, c, d;
-//        vtkIdType subdomainId;
-//        infile >> subdomainId >> a >> b >> c >> d;
+        //        vtkIdType subdomainId;
+        //        infile >> subdomainId >> a >> b >> c >> d;
         //       std::cout << a << b << c << d << std::endl;
 
         a = mesh->eles_vec[i].nodesId[0];
@@ -434,48 +436,166 @@ int SOTSinterface::process_pmcell(const PMMesher *mesh)
     celldata->SetCells(VTK_TETRA, cellArray);
     celldata->GetCellData()->SetScalars(intValue);
 
-//    // Write file
-//    vtkSmartPointer<vtkUnstructuredGridWriter> writer =
-//            vtkSmartPointer<vtkUnstructuredGridWriter>::New();
-//    writer->SetFileName("/home/yzh/mesher.vtu");
-//#if VTK_MAJOR_VERSION <= 5
-//    writer->SetInput(unstructuredGrid);
-//#else
-//    writer->SetInputData(unstructuredGrid);
-//#endif
-//    writer->Write();
+    //    // Write file
+    //    vtkSmartPointer<vtkUnstructuredGridWriter> writer =
+    //            vtkSmartPointer<vtkUnstructuredGridWriter>::New();
+    //    writer->SetFileName("/home/yzh/mesher.vtu");
+    //#if VTK_MAJOR_VERSION <= 5
+    //    writer->SetInput(unstructuredGrid);
+    //#else
+    //    writer->SetInputData(unstructuredGrid);
+    //#endif
+    //    writer->Write();
 
     return 1;
 }
 
-int SOTSinterface::solve_cell()
+int SOTSinterface::solve_cell(std::string in_file, std::string data_file)
 {
-//    cout << "======================================================" << endl;
-//    cout << "-_- 开始均匀化求解......"<<endl<<endl;
-//    //求解均匀化系数
-//    //读取数据，判断是否进行强度计算
-//    istringstream instr(Get_Line(infile));
-//    int elas_ana_only;
-//    instr >> elas_ana_only;
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //将执行过程状况输出在文件
+    clock_t ct_begin,ct_end;
+    std::ifstream infile(in_file.c_str());
+    ct_begin = clock();
+    cout << endl;
+    cout << "*******************************************************************" << endl;
+    cout << "-_- 开始计算......"<<endl;
+    cout << "*******************************************************************" << endl;
+    cout << endl;
+    clock_t ct0,ct1;
 
-//    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
-//    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
-//    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
-//    ct1=clock();
-//    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-//    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //单胞建模；
+lable_pcm: ct0 = clock();
+    cout << "======================================================" << endl;
+    cout << "-_- 开始单胞建模......"<<endl;
+    PCMCell *PCM = new PCMCell;
+    if(PCM->Cell_generate(infile,data_file)==0)        //参数0：用于艳生成的椭球，1：用韩非生成的椭球，2表示读取数据
+    {
+        infile.close();
+        infile.open(in_file.c_str());
+        //跳过注释行（这样就可以跳过样本数信息）
+        Get_Line(infile);
+        delete PCM;
+        goto lable_pcm;
+    }
+    ct1 = clock();
+    cout << "    建模总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    cout << "^_^ 单胞建模完毕！"<<endl<<endl;
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //生成材料库信息
+    ct0 = clock();
+    cout << "======================================================" << endl;
+    cout << "-_- 开始读取材料信息......"<<endl;
+    Matbase *Matrial = new Matbase;
+    Matrial->Generate_matbase(infile);
+    //	Matrial->mats_vec[0].print();
+    ct1 = clock();
+    cout << "    读取材料信息总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    cout << "^_^ 读取材料信息完毕！"<<endl<<endl;
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //建模并生成网格信息
+    ct0 = clock();
+    cout << "======================================================" << endl;
+    cout << "-_- 开始生成网格......"<<endl<<endl;
+    Mesher *Mesh = new Mesher(PCM);
+    if( Mesh->Mesh_generate(infile) == 0)
+    {
+        infile.close();
+        infile.open(in_file.c_str());
+        //跳过注释行（这样就可以跳过样本数信息）
+        Get_Line(infile);
+        delete PCM;
+        delete Matrial;
+        goto lable_pcm;
+    }
+    //	Mesh->Mesh_BinaryData(0,data_file, CNum);
+    //	Mesh->Mesh_data(0);
+    ct1 = clock();
+    cout << "    生成网格总耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    cout << "^_^ 网格生成完毕！"<<endl<<endl;
+    process_pmcell(Mesh);
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //求解Na1和Na1a2
+    ct0=clock();
+    cout << "======================================================" << endl;
+    cout << "-_- 开始均匀化求解......"<<endl<<endl;
+    //求解均匀化系数
+    //读取数据，判断是否进行强度计算
+    istringstream instr(Get_Line(infile));
+    int elas_ana_only;
+    instr >> elas_ana_only;
+
+    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
+    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
+    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
+    ct1=clock();
+    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+    process_cell_solution(Hsolver);
+
     return 0;
 }
 
-int SOTSinterface::process_cell_solution()
+int SOTSinterface::process_cell_solution(HomoSolver *Hsolver)
 {
-//    HomoSolver *Hsolver;
 
+    // if(  Hsolver->Na1a2_key == 0)
+    {
+        for (unsigned int i = 0;i< Hsolver->Na1_vec[0].size();i++ )
+        {
+            vtkSmartPointer<vtkDoubleArray> doubleValue
+                    = vtkSmartPointer<vtkDoubleArray>::New();
+            doubleValue->SetNumberOfComponents(1);
+            std::ostringstream oss;
+            oss << "N1a" << i;
+            doubleValue->SetName(oss.str().c_str());
 
-//    int np = celldata->GetNumberOfPoints();
-//    vtkSmartPointer<vtkIntArray> intValue = vtkSmartPointer<vtkIntArray>::New();
-//    intValue->SetNumberOfComponents(1);
-//    intValue->SetName("subdomainid");
-//    celldata->GetPointData()->SetScalars(intValue);
-	return 0;
+            for (unsigned int nf = 0; nf < Hsolver->Na1_vec.size(); nf++)
+            {
+                doubleValue->InsertNextValue(Hsolver->Na1_vec[nf][i]);
+            }
+            celldata->GetPointData()->SetScalars(doubleValue);
+        }
+    }
+
+    // if(  Hsolver->Na1a2_key == 1)
+    {
+
+        for (unsigned int i = 0;i< Hsolver->Na1a2_vec[0].size();i++ )
+        {
+            vtkSmartPointer<vtkDoubleArray> doubleValue
+                    = vtkSmartPointer<vtkDoubleArray>::New();
+            doubleValue->SetNumberOfComponents(1);
+            std::ostringstream oss;
+            oss << "N2a_" << i;
+            doubleValue->SetName(oss.str().c_str());
+
+            for (unsigned int nf = 0; nf < Hsolver->Na1a2_vec.size(); nf++)
+            {
+                doubleValue->InsertNextValue(Hsolver->Na1a2_vec[nf][i]);
+            }
+            celldata->GetPointData()->SetScalars(doubleValue);
+        }
+    }
+
+    return 0;
 }
+
+
+
+
+
+//int SOTSinterface::process_cell_solution(Mesher* Mesh,Material m)
+//{
+////    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
+////    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
+////    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
+////    ct1=clock();
+////    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
+////    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+//}
+

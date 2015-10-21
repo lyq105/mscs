@@ -28,7 +28,7 @@ void materiel::changeEvent(QEvent *e)
 
 void materiel::onChanged(int index)
 {
-    std::cout << ">>>>" <<ui.tableWidget->item(0,0)->text().toStdString() <<std::endl;
+ //   std::cout << ">>>>" <<ui.tableWidget->item(0,0)->text().toStdString() <<std::endl;
     if (index == 0)
     {
         ui.tab->setDisabled(1);

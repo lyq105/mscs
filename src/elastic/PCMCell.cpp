@@ -29,7 +29,7 @@ int PCMCell::Cell_generate(ifstream &infile,string data_file)
 	int mod;
 	istringstream istr(Get_Line(infile));		//读取建模信息
 	istr >> mod;
-
+cout << mod << endl;
     size_t en = data_file.rfind('.');
     string title = data_file.substr(0,en);
 	string ellips_file = title+"OutEllipDat.dat";

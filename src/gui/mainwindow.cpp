@@ -210,7 +210,6 @@ void MainWindow::set_cell()
         QString path;
         QDir dir;
         path=dir.currentPath();
-        QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);//查看路径
         QString cellfile(path+"/cellinfo.txt");
         setcell.save_cell_info(cellfile.toStdString().c_str());
         QFileInfo temp(cellfile);
@@ -218,16 +217,18 @@ void MainWindow::set_cell()
         QString datafile= temp.absolutePath()+"/data.dat";
         sots.build_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
         viewer->show_cell(outfile.toStdString());
-        sots.mesh_pmcell(outfile.toStdString(),0.02);
-        //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
-        //sumf.waitForFinished();
-        viewer->show_ug_mesh(sots.celldata);
-        viewer->write_ug(sots.celldata,cellfile.toStdString()+".vtk");
+//        QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);//查看路径
+//        sots.mesh_pmcell(outfile.toStdString(),0.02);
+
+//        //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
+//        //sumf.waitForFinished();
+//        viewer->show_ug_mesh(sots.celldata);
+//        viewer->write_ug(sots.celldata,cellfile.toStdString()+".vtk");
     }
 }
 
 
-/// 导入单胞几何并剖分
+/// 导入单胞几何
 void MainWindow::import_cell_geo()
 {
     QString sDefaultName = tr("");
@@ -300,13 +301,15 @@ void MainWindow::import_inp()
     QString datafile= temp.absolutePath()+"/data.dat";
     //sots.solve(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
     //sots.build_pmcell(infile.toStdString(),datafile.toStdString());
-    sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
-    viewer->show_cell(outfile.toStdString());
+    //sots.build_pmcell(infile.toStdString(),outfile.toStdString(),datafile.toStdString());
+    //viewer->show_cell(outfile.toStdString());
+
+    sots.solve_cell(infile.toStdString(),datafile.toStdString());
  //   sots.mesh_pmcell(outfile.toStdString(),0.02);
     //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
     //sumf.waitForFinished();
 //    viewer->show_ug_mesh(sots.celldata);
-//    viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
+    viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
     // ui->action_show_matrix->setEnabled(true);
     // ui->action_show_reinforcement->setEnabled(true);
 

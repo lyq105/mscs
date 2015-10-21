@@ -8,6 +8,7 @@
 
 class Mesher;
 class PMMesher;
+class HomoSolver;
 
 struct PMCell_Info
 {
@@ -70,9 +71,9 @@ public:
     /// 直接求解单胞问题
     int solve(std::string in_file,std::string out_file,std::string data_file);
 
-    int solve_cell();
-    int process_pmcell(const PMMesher *mesh);
-    int process_cell_solution();
+    int solve_cell(std::string in_file, std::string data_file);
+    int process_pmcell(const Mesher *mesh);
+    int process_cell_solution(HomoSolver *Hsolver);
 
     vtkUnstructuredGrid* celldata;
     vtkUnstructuredGrid* homodata;
