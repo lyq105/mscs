@@ -535,6 +535,12 @@ lable_pcm: ct0 = clock();
     ct1=clock();
     cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
     cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
+
+    for (int i =0 ;i<6;i++)
+        for(int j=0; j<6;j++)
+        {
+            homo_d[i][j] = Hsolver->Homo_D[i][j];
+        }
     process_cell_solution(Hsolver);
 
     return 0;
@@ -547,18 +553,19 @@ int SOTSinterface::process_cell_solution(HomoSolver *Hsolver)
     {
         for (unsigned int i = 0;i< Hsolver->Na1_vec[0].size();i++ )
         {
-            vtkSmartPointer<vtkDoubleArray> doubleValue
-                    = vtkSmartPointer<vtkDoubleArray>::New();
+            vtkDoubleArray* doubleValue
+                    = vtkDoubleArray::New();
             doubleValue->SetNumberOfComponents(1);
             std::ostringstream oss;
-            oss << "N1a" << i;
+            oss << "N1a_" << i;
             doubleValue->SetName(oss.str().c_str());
 
             for (unsigned int nf = 0; nf < Hsolver->Na1_vec.size(); nf++)
             {
                 doubleValue->InsertNextValue(Hsolver->Na1_vec[nf][i]);
             }
-            celldata->GetPointData()->SetScalars(doubleValue);
+            celldata->GetPointData()->AddArray(doubleValue);
+            doubleValue->Delete();
         }
     }
 
@@ -567,8 +574,8 @@ int SOTSinterface::process_cell_solution(HomoSolver *Hsolver)
 
         for (unsigned int i = 0;i< Hsolver->Na1a2_vec[0].size();i++ )
         {
-            vtkSmartPointer<vtkDoubleArray> doubleValue
-                    = vtkSmartPointer<vtkDoubleArray>::New();
+            vtkDoubleArray* doubleValue
+                    = vtkDoubleArray::New();
             doubleValue->SetNumberOfComponents(1);
             std::ostringstream oss;
             oss << "N2a_" << i;
@@ -578,7 +585,8 @@ int SOTSinterface::process_cell_solution(HomoSolver *Hsolver)
             {
                 doubleValue->InsertNextValue(Hsolver->Na1a2_vec[nf][i]);
             }
-            celldata->GetPointData()->SetScalars(doubleValue);
+            celldata->GetPointData()->AddArray(doubleValue);
+            doubleValue->Delete();
         }
     }
 

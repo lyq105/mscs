@@ -310,6 +310,10 @@ void MainWindow::import_inp()
     //sumf.waitForFinished();
 //    viewer->show_ug_mesh(sots.celldata);
     viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
+     //QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);
+    infile = "均匀化求解完毕！\n 单胞解写入文件 "+infile +".vtk";
+    QMessageBox::about(NULL, "  ", QString::fromLocal8Bit(infile.toAscii()));
+    viewer->show_ug_scalar(sots.celldata,std::string("subdomainid"));
     // ui->action_show_matrix->setEnabled(true);
     // ui->action_show_reinforcement->setEnabled(true);
 

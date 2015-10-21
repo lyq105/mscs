@@ -77,6 +77,7 @@ public:
 
     vtkUnstructuredGrid* celldata;
     vtkUnstructuredGrid* homodata;
+    double homo_d[6][6];
 private:
     std::string analysis_type;
     std::string prj_folder;
