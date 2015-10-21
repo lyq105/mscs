@@ -75,7 +75,8 @@ FORMS += forms/aboutdialog.ui \
          forms/materiel.ui \
          forms/meshpara.ui \
          forms/setcelldialog.ui \
-         forms/cellsolveroption.ui
+         forms/cellsolveroption.ui \
+    forms/cellsolveroption.ui
 SOURCES += src/mscs_main.cpp \
            src/gui/aboutdialog.cpp \
            src/gui/analysistype.cpp \
