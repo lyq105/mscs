@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = MSCS
 DEPENDPATH += . forms resources src src/gui
 INCLUDEPATH += . src/gui src/pmcell src/elastic
 unix:INCLUDEPATH +=/usr/include/vtk-5.8/
