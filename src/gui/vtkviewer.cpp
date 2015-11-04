@@ -564,41 +564,20 @@ VTKviewer::show_cell(std::string filename)
            >> angle[0] >> angle[1] >> angle[2]
            >> angle[4] >> angle[5] >> angle[6]
            >> angle[8] >> angle[9] >> angle[10];
-        //cout << a << " " << b << endl;
-        //        for (int i=0;i<16;i++)
-        //        {
-        //            cout << angle[i] << "\t";
-        //            if((i+1)%4==0)cout << endl;
-        //        }
 
-        //        vtkSmartPointer<vtkSphereSource> sphereSource =
-        //                vtkSmartPointer<vtkSphereSource>::New();
-        //        sphereSource->SetCenter(0,0,0);
-        //        sphereSource->SetRadius(1);
-        //        sphereSource->SetPhiResolution(10);
-        //        sphereSource->SetThetaResolution(10);
-
-        vtkSmartPointer<vtkParametricEllipsoid> ellip
-                = vtkSmartPointer<vtkParametricEllipsoid>::New();
-        ellip->SetXRadius(a);
-        ellip->SetYRadius(b);
-        ellip->SetZRadius(c);
-
-        vtkSmartPointer<vtkParametricFunctionSource> ellipSource =
-                vtkSmartPointer<vtkParametricFunctionSource>::New();
-        ellipSource->SetParametricFunction(ellip);
-        ellipSource->SetUResolution(10);
-        ellipSource->SetVResolution(10);
-        ellipSource->SetWResolution(10);
-
+        vtkSmartPointer<vtkSphereSource> ellipSource =
+                vtkSmartPointer<vtkSphereSource>::New();
+        ellipSource->SetCenter(0,0,0);
+        ellipSource->SetRadius(1);
+        ellipSource->SetPhiResolution(20);
+        ellipSource->SetThetaResolution(20);
         ellipSource->Update();
-        //ellipSource->setx
 
         vtkSmartPointer<vtkTransform> transform =
                 vtkSmartPointer<vtkTransform>::New();
         transform->PostMultiply();
-        //transform->Scale(a,b,c);
-        transform->SetMatrix(angle);
+        transform->Scale(a,b,c);
+        transform->Concatenate(angle);
         transform->Translate(x,y,z);
 
         vtkSmartPointer<vtkTransformFilter> transformFilter =
@@ -610,9 +589,6 @@ VTKviewer::show_cell(std::string filename)
 #else
         appendFilter->AddInputData(transformFilter);
 #endif
-
-        //if (id == 0) break;
-        id ++;
     }
 
     appendFilter->Update();
@@ -630,15 +606,6 @@ VTKviewer::show_cell(std::string filename)
     cubeSource->SetXLength(clength);
     cubeSource->SetYLength(cwidth);
     cubeSource->SetZLength(cheight);
-
-//    vtkSmartPointer<vtkBox> implicitCube =
-//            vtkSmartPointer<vtkBox>::New();
-//    implicitCube->SetBounds(cubeSource->GetOutput()->GetBounds());
-
-    //     vtkSmartPointer<vtkClipPolyData> clipper =
-    //         vtkSmartPointer<vtkClipPolyData>::New();
-    //     clipper->SetClipFunction(implicitCube);
-
 
     vtkSmartPointer<vtkPlane> plane =
             vtkSmartPointer<vtkPlane>::New();
