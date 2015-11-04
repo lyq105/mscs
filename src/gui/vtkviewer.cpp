@@ -631,9 +631,9 @@ VTKviewer::show_cell(std::string filename)
     cubeSource->SetYLength(cwidth);
     cubeSource->SetZLength(cheight);
 
-    vtkSmartPointer<vtkBox> implicitCube =
-            vtkSmartPointer<vtkBox>::New();
-    implicitCube->SetBounds(cubeSource->GetOutput()->GetBounds());
+//    vtkSmartPointer<vtkBox> implicitCube =
+//            vtkSmartPointer<vtkBox>::New();
+//    implicitCube->SetBounds(cubeSource->GetOutput()->GetBounds());
 
     //     vtkSmartPointer<vtkClipPolyData> clipper =
     //         vtkSmartPointer<vtkClipPolyData>::New();
@@ -654,7 +654,16 @@ VTKviewer::show_cell(std::string filename)
 #endif
     clipper->InsideOutOn();
     clipper->Update();
+    vtkSmartPointer<vtkFillHolesFilter> fillholes =
+            vtkSmartPointer<vtkFillHolesFilter>::New();
+    fillholes->SetInputConnection(clipper->GetOutputPort());
 
+    vtkSmartPointer<vtkPolyDataNormals> normals =
+            vtkSmartPointer<vtkPolyDataNormals>::New();
+    normals->SetInputConnection(fillholes->GetOutputPort());
+    normals->ConsistencyOn();
+    normals->SplittingOff();
+    normals->Update();
 
     vtkSmartPointer<vtkPlane> plane2 =
             vtkSmartPointer<vtkPlane>::New();
@@ -664,12 +673,23 @@ VTKviewer::show_cell(std::string filename)
             vtkSmartPointer<vtkClipPolyData>::New();
     clipper2->SetClipFunction(plane2);
 #if VTK_MAJOR_VERSION <= 5
-    clipper2->SetInputConnection(clipper->GetOutputPort());
+    clipper2->SetInputConnection(normals->GetOutputPort());
 #else
-    clipper2->SetInputData(clipper->GetOutputPort());
+    clipper2->SetInputData(normals->GetOutputPort());
 #endif
     clipper2->InsideOutOn();
     clipper2->Update();
+
+    vtkSmartPointer<vtkFillHolesFilter> fillholes2 =
+            vtkSmartPointer<vtkFillHolesFilter>::New();
+    fillholes2->SetInputConnection(clipper2->GetOutputPort());
+
+    vtkSmartPointer<vtkPolyDataNormals> normals2 =
+            vtkSmartPointer<vtkPolyDataNormals>::New();
+    normals2->SetInputConnection(fillholes2->GetOutputPort());
+    normals2->ConsistencyOn();
+    normals2->SplittingOff();
+    normals2->Update();
 
 
     vtkSmartPointer<vtkPlane> plane3 =
@@ -680,12 +700,25 @@ VTKviewer::show_cell(std::string filename)
             vtkSmartPointer<vtkClipPolyData>::New();
     clipper3->SetClipFunction(plane3);
 #if VTK_MAJOR_VERSION <= 5
-    clipper3->SetInputConnection(clipper2->GetOutputPort());
+    clipper3->SetInputConnection(normals2->GetOutputPort());
 #else
-    clipper3->SetInputData(clipper2->GetOutputPort());
+    clipper3->SetInputData(normals2->GetOutputPort());
 #endif
     clipper3->InsideOutOn();
     clipper3->Update();
+
+    vtkSmartPointer<vtkFillHolesFilter> fillholes3 =
+            vtkSmartPointer<vtkFillHolesFilter>::New();
+    fillholes3->SetInputConnection(clipper3->GetOutputPort());
+
+    vtkSmartPointer<vtkPolyDataNormals> normals3 =
+            vtkSmartPointer<vtkPolyDataNormals>::New();
+    normals3->SetInputConnection(fillholes3->GetOutputPort());
+    normals3->ConsistencyOn();
+    normals3->SplittingOff();
+    normals3->Update();
+
+
 
     vtkSmartPointer<vtkPlane> plane4 =
             vtkSmartPointer<vtkPlane>::New();
@@ -695,12 +728,24 @@ VTKviewer::show_cell(std::string filename)
             vtkSmartPointer<vtkClipPolyData>::New();
     clipper4->SetClipFunction(plane4);
 #if VTK_MAJOR_VERSION <= 5
-    clipper4->SetInputConnection(clipper3->GetOutputPort());
+    clipper4->SetInputConnection(normals3->GetOutputPort());
 #else
-    clipper4->SetInputData(clipper3->GetOutputPort());
+    clipper4->SetInputData(normals3->GetOutputPort());
 #endif
     clipper4->InsideOutOn();
     clipper4->Update();
+
+    vtkSmartPointer<vtkFillHolesFilter> fillholes4 =
+            vtkSmartPointer<vtkFillHolesFilter>::New();
+    fillholes4->SetInputConnection(clipper4->GetOutputPort());
+
+    vtkSmartPointer<vtkPolyDataNormals> normals4 =
+            vtkSmartPointer<vtkPolyDataNormals>::New();
+    normals4->SetInputConnection(fillholes4->GetOutputPort());
+    normals4->ConsistencyOn();
+    normals4->SplittingOff();
+    normals4->Update();
+
 
     vtkSmartPointer<vtkPlane> plane5 =
             vtkSmartPointer<vtkPlane>::New();
@@ -710,12 +755,23 @@ VTKviewer::show_cell(std::string filename)
             vtkSmartPointer<vtkClipPolyData>::New();
     clipper5->SetClipFunction(plane5);
 #if VTK_MAJOR_VERSION <= 5
-    clipper5->SetInputConnection(clipper4->GetOutputPort());
+    clipper5->SetInputConnection(normals4->GetOutputPort());
 #else
-    clipper5->SetInputData(clipper4->GetOutputPort());
+    clipper5->SetInputData(normals4->GetOutputPort());
 #endif
     clipper5->InsideOutOn();
     clipper5->Update();
+    vtkSmartPointer<vtkFillHolesFilter> fillholes5 =
+            vtkSmartPointer<vtkFillHolesFilter>::New();
+    fillholes5->SetInputConnection(clipper5->GetOutputPort());
+
+    vtkSmartPointer<vtkPolyDataNormals> normals5 =
+            vtkSmartPointer<vtkPolyDataNormals>::New();
+    normals5->SetInputConnection(fillholes5->GetOutputPort());
+    normals5->ConsistencyOn();
+    normals5->SplittingOff();
+    normals5->Update();
+
 
     vtkSmartPointer<vtkPlane> plane6 =
             vtkSmartPointer<vtkPlane>::New();
@@ -725,28 +781,28 @@ VTKviewer::show_cell(std::string filename)
             vtkSmartPointer<vtkClipPolyData>::New();
     clipper6->SetClipFunction(plane6);
 #if VTK_MAJOR_VERSION <= 5
-    clipper6->SetInputConnection(clipper5->GetOutputPort());
+    clipper6->SetInputConnection(normals5->GetOutputPort());
 #else
-    clipper6->SetInputData(clipper5->GetOutputPort());
+    clipper6->SetInputData(normals4->GetOutputPort());
 #endif
     clipper6->InsideOutOn();
     clipper6->Update();
 
-    vtkSmartPointer<vtkFillHolesFilter> fillholes =
+    vtkSmartPointer<vtkFillHolesFilter> fillholes6 =
             vtkSmartPointer<vtkFillHolesFilter>::New();
-    fillholes->SetInputConnection(clipper6->GetOutputPort());
+    fillholes6->SetInputConnection(clipper6->GetOutputPort());
 
-    vtkSmartPointer<vtkPolyDataNormals> normals =
+    vtkSmartPointer<vtkPolyDataNormals> normals6 =
             vtkSmartPointer<vtkPolyDataNormals>::New();
-    normals->SetInputConnection(fillholes->GetOutputPort());
-    normals->ConsistencyOn();
-    normals->SplittingOff();
-    normals->Update();
+    normals6->SetInputConnection(fillholes6->GetOutputPort());
+    normals6->ConsistencyOn();
+    normals6->SplittingOff();
+    normals6->Update();
 
     //Create a mapper and actor
     vtkSmartPointer<vtkPolyDataMapper> mapper =
             vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(normals->GetOutputPort());
+    mapper->SetInputConnection(normals6->GetOutputPort());
 
     vtkSmartPointer<vtkActor> actor =
             vtkSmartPointer<vtkActor>::New();
