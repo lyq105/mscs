@@ -246,7 +246,30 @@ lable_pcm: ct0 = clock();
 }
 
 
-int SOTSinterface::build_pmcell(string ellips_para, string ellips_file,string data_file)
+int SOTSinterface::build_pmcell(const string ellips_para, const string ellips_file,const string data_file)
+{
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    //单胞建模；
+    cout << "======================================================" << endl;
+    cout << "-_- 开始颗粒增强单胞建模......"<<endl;
+
+
+    EllipseGen *ellip = new EllipseGen;
+    while(ellip->uniell_generation(ellips_para,ellips_file,data_file)==0)
+    {
+        cout << "======================================================" << endl;
+        cout << "-_- 单胞建模失败，重新尝试......"<<endl;
+        //    return 0;
+    }
+    delete ellip;
+    cout << "======================================================" << endl;
+    cout << "-_- 颗粒增强单胞建模成功......"<<endl;
+    return 1;
+
+    //    process_pmcell(*Mesh);
+}
+
+int SOTSinterface::build_pmcell()
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
     //单胞建模；

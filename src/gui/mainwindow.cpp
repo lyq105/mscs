@@ -48,7 +48,7 @@ MainWindow::~MainWindow()
 void MainWindow::createMessageBox()
 {
     message_content = new QTextEdit;
-//    qcout = new QDebugStream(std::cout,message_content);
+    qcout = new QDebugStream(std::cout,message_content);
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
@@ -125,6 +125,9 @@ void MainWindow::set_cell_solver()
     CellSolverOption csoption;
     if(csoption.exec() == QDialog::Accepted)
     {
+        std::cout << "Cell solver has been set.\n";
+        std::cout << "单胞求解器已设置为" <<std::endl;
+        message_content->append(QString::fromLocal8Bit("<font color=red>单胞求解器已设置为</font>"));
         return;
     }
 }
@@ -215,15 +218,17 @@ void MainWindow::set_cell()
         QFileInfo temp(cellfile);
         QString outfile= temp.absolutePath()+"/out.dat";
         QString datafile= temp.absolutePath()+"/data.dat";
-        sots.build_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
+        sots.set_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
+        QFuture<int> sumf = QtConcurrent::run(&sots,&SOTSinterface::build_pmcell);
+        sumf.waitForFinished();
+        //sots.build_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
         viewer->show_cell(outfile.toStdString());
-//        QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);//查看路径
-//        sots.mesh_pmcell(outfile.toStdString(),0.02);
+        //        QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);//查看路径
+        //        sots.mesh_pmcell(outfile.toStdString(),0.02);
 
-//        //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
-//        //sumf.waitForFinished();
-//        viewer->show_ug_mesh(sots.celldata);
-//        viewer->write_ug(sots.celldata,cellfile.toStdString()+".vtk");
+        //        //sumf.waitForFinished();
+        //        viewer->show_ug_mesh(sots.celldata);
+        //        viewer->write_ug(sots.celldata,cellfile.toStdString()+".vtk");
     }
 }
 
@@ -305,12 +310,12 @@ void MainWindow::import_inp()
     //viewer->show_cell(outfile.toStdString());
 
     sots.solve_cell(infile.toStdString(),datafile.toStdString());
- //   sots.mesh_pmcell(outfile.toStdString(),0.02);
+    //   sots.mesh_pmcell(outfile.toStdString(),0.02);
     //QFuture<int> sumf =QtConcurrent::run(build_cell,this,infile.toStdString(),datafile.toStdString());
     //sumf.waitForFinished();
-//    viewer->show_ug_mesh(sots.celldata);
+    //    viewer->show_ug_mesh(sots.celldata);
     viewer->write_ug(sots.celldata,infile.toStdString()+".vtk");
-     //QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);
+    //QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);
     infile = "均匀化求解完毕！\n 单胞解写入文件 "+infile +".vtk";
     QMessageBox::about(NULL, "  ", QString::fromLocal8Bit(infile.toAscii()));
     viewer->show_ug_scalar(sots.celldata,std::string("subdomainid"));
@@ -331,7 +336,7 @@ void MainWindow::new_project()
         sots.set_prj_folder(openFilePath->selectedFiles()[0].toStdString());
     }
     std::cout << "Choose " << openFilePath->selectedFiles()[0].toStdString()
-                 << "  as work directory" << endl;
+              << "  as work directory" << endl;
     std::cout << "当前工作目录是 " << openFilePath->selectedFiles()[0].toStdString()
               << endl;
     delete openFilePath;

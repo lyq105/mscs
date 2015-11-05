@@ -54,6 +54,12 @@ public:
     void set_prj_folder(std::string folder){ prj_folder = folder;}
     void set_analysis_type(std::string type){ analysis_type = type;}
     void set_pmcell_info(PMCell_Info& cell_info);
+    void set_pmcell(const std::string e_para, const std::string e_file,const std::string d_file)
+    {
+        ellips_para = e_para;
+        ellips_file = e_file;
+        data_file = d_file;
+    }
 
 
     vtkUnstructuredGrid* get_cell_data();
@@ -64,7 +70,8 @@ public:
     void write_homo_solution(std::string filename);
     /// 生成颗粒增强单胞
     int build_pmcell(std::string in_file, std::string data_file, int CNum=1);
-    int build_pmcell(std::string ellips_para, std::string ellips_file,std::string data_file);
+    int build_pmcell(const std::string ellips_para, const std::string ellips_file,const std::string data_file);
+    int build_pmcell();
     int mesh_pmcell(std::string ellipfile,double m_size);
     std::string Get_Line(std::ifstream &infile)const;
 
@@ -82,6 +89,10 @@ private:
     std::string analysis_type;
     std::string prj_folder;
     std::string prj_name;
+    std::string ellips_para;
+    std::string ellips_file;
+    std::string data_file;
+
     PMCell_Info* cell_info;
 };
 
