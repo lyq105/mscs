@@ -118,7 +118,6 @@ SOTSinterface::~SOTSinterface()
 void SOTSinterface::set_cell_mesh()
 {
 }
-//void SOTSinterface::
 void SOTSinterface::set_material(int mat_index)
 {
 
@@ -269,6 +268,8 @@ int SOTSinterface::build_pmcell(const string ellips_para, const string ellips_fi
     //    process_pmcell(*Mesh);
 }
 
+
+/// 生成颗粒增强单胞
 int SOTSinterface::build_pmcell()
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -291,36 +292,8 @@ int SOTSinterface::build_pmcell()
 
     //    process_pmcell(*Mesh);
 }
-//-----------------------------------------------------------------------------------------------------------------------------------------
-//    //求解Na1和Na1a2
-//    ct0=clock();
-//    cout << "======================================================" << endl;
-//    cout << "-_- 开始均匀化求解......"<<endl<<endl;
-//    //求解均匀化系数
-//    //读取数据，判断是否进行强度计算
-//    istringstream instr(Get_Line(infile));
-//    int elas_ana_only;
-//    instr >> elas_ana_only;
 
-//    HomoSolver *Hsolver = new HomoSolver(elas_ana_only,data_file);
-//    Hsolver->Solve(Mesh->nodes_vec, Mesh->bnodes_vec, Mesh->elements_vec, Matrial->mats_vec,PCM->Unitcell_V);
-//    //	Hsolver->Na_BinaryData(0,Mesh->nodes_vec,data_file, CNum);
-//    ct1=clock();
-//    cout << "    均匀化求解耗时"<<(double)(ct1-ct0)/CLOCKS_PER_SEC<<"秒。"<<endl;
-//    cout << "^_^ 均匀化求解过程完毕！"<<endl<<endl;
-
-
-
-//    delete Hsolver;
-//    delete PCM;
-//    delete Matrial;
-//    delete Mesh;
-//	delete Npara;
-
-//    return 1;
-//}
-
-
+/// 生成颗粒增强单胞和网格
 int SOTSinterface::mesh_pmcell(std::string ellipfile,double m_size)
 {
     char* ep = (char*)ellipfile.c_str();
@@ -338,8 +311,6 @@ int SOTSinterface::mesh_pmcell(std::string ellipfile,double m_size)
     return 1;
 }
 
-
-
 //读入一行信息，并跳过注释行（以"%"开头）；
 string SOTSinterface::Get_Line(ifstream &infile)const
 {
@@ -352,7 +323,7 @@ string SOTSinterface::Get_Line(ifstream &infile)const
     return s;
 }
 
-/// 从输入文件直接计算
+/// 从输入文件直接求解
 int SOTSinterface::solve(string in_file,string out_file,string data_file)
 {
     ofstream datafile(data_file.c_str());
@@ -401,7 +372,7 @@ int SOTSinterface::solve(string in_file,string out_file,string data_file)
     close_deffo_stream();
     return 1;
 }
-
+/// 将单胞网格调整为VTK格式
 int SOTSinterface::process_pmcell(const Mesher *mesh)
 {
     vtkIdType number_of_points, number_of_tetra;
@@ -472,7 +443,7 @@ int SOTSinterface::process_pmcell(const Mesher *mesh)
 
     return 1;
 }
-
+/// 求解单胞问题
 int SOTSinterface::solve_cell(std::string in_file, std::string data_file)
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -568,7 +539,7 @@ lable_pcm: ct0 = clock();
 
     return 0;
 }
-
+/// 将单胞解输出为VTK格式
 int SOTSinterface::process_cell_solution(HomoSolver *Hsolver)
 {
 

@@ -67,7 +67,8 @@ HEADERS += src/gui/aboutdialog.h \
     src/elastic/Vector3D.h \
     src/gui/pmmesher.h \
     src/gui/qstream.h \
-    src/gui/cellsolveroption.h
+    src/gui/cellsolveroption.h \
+    src/gui/progress_dialog.h
 FORMS += forms/aboutdialog.ui \
          forms/analysistype.ui \
          forms/cellmodel.ui \
@@ -76,7 +77,8 @@ FORMS += forms/aboutdialog.ui \
          forms/meshpara.ui \
          forms/setcelldialog.ui \
          forms/cellsolveroption.ui \
-    forms/cellsolveroption.ui
+    forms/cellsolveroption.ui \
+    src/gui/progress_dialog.ui
 SOURCES += src/mscs_main.cpp \
            src/gui/aboutdialog.cpp \
            src/gui/analysistype.cpp \
@@ -122,5 +124,6 @@ SOURCES += src/mscs_main.cpp \
     src/elastic/Vector2D.cpp \
     src/elastic/Vector3D.cpp \
     src/gui/pmmesher.cpp \
-    src/gui/cellsolveroption.cpp
+    src/gui/cellsolveroption.cpp \
+    src/gui/progress_dialog.cpp
 RESOURCES += resources/Mscs.qrc

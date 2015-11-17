@@ -116,6 +116,7 @@
      </property>
      <addaction name="action_cell_solver_option"/>
      <addaction name="action_solve"/>
+     <addaction name="action_Paraview"/>
     </widget>
     <addaction name="menu_3"/>
     <addaction name="action_homo_solve"/>
@@ -426,6 +427,11 @@
   <action name="actionView_cell_geometry">
    <property name="text">
     <string>显示单胞几何</string>
+   </property>
+  </action>
+  <action name="action_Paraview">
+   <property name="text">
+    <string>打开Paraview</string>
    </property>
   </action>
  </widget>

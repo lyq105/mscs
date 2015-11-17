@@ -43,6 +43,7 @@ private slots:
     void import_mesh();
     void import_geo();
     void new_project();
+    void open_paraview();
 
     /// 直接导入计算文件计算
     void import_inp();

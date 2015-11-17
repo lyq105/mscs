@@ -20,6 +20,7 @@
 #include "mylogger.h"
 #include "qstream.h"
 #include "cellsolveroption.h"
+#include "progress_dialog.h"
 
 
 /// 构造和析构函数
@@ -48,7 +49,7 @@ MainWindow::~MainWindow()
 void MainWindow::createMessageBox()
 {
     message_content = new QTextEdit;
-    qcout = new QDebugStream(std::cout,message_content);
+    //qcout = new QDebugStream(std::cout,message_content);
     message_content->setReadOnly(1);
     ui->message_box->hide();
     ui->message_box->setWidget(message_content);
@@ -112,6 +113,8 @@ void MainWindow::createSlots()
 
     // solve menu
     connect(ui->action_cell_solver_option, SIGNAL(triggered()), this, SLOT(set_cell_solver()));
+    connect(ui->action_Paraview, SIGNAL(triggered()), this, SLOT(open_paraview()));
+
     // file menu
     connect(ui->action_new_project,SIGNAL(triggered()),this,SLOT(new_project()));
     connect(ui->action_openfile,SIGNAL(triggered()),this,SLOT(import_inp()));
@@ -119,6 +122,14 @@ void MainWindow::createSlots()
 }
 
 // slots ====================================================================================
+
+/// 打开Paraview
+QProcess p_paraview;
+void MainWindow::open_paraview()
+{
+    p_paraview.start("gvim");
+    std::cout << QString (p_paraview.readAll()).toStdString()<<std::endl;
+}
 
 void MainWindow::set_cell_solver()
 {
@@ -219,9 +230,11 @@ void MainWindow::set_cell()
         QString outfile= temp.absolutePath()+"/out.dat";
         QString datafile= temp.absolutePath()+"/data.dat";
         sots.set_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
-        QFuture<int> sumf = QtConcurrent::run(&sots,&SOTSinterface::build_pmcell);
-        sumf.waitForFinished();
-        //sots.build_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
+//        QFuture<int> sumf = QtConcurrent::run(&sots,&SOTSinterface::build_pmcell);
+//        sumf.waitForFinished();
+        Progress_Dialog pd(QString::fromLocal8Bit("单胞生成中..."));
+        pd.exec();
+        sots.build_pmcell(cellfile.toStdString(),outfile.toStdString(),datafile.toStdString());
         viewer->show_cell(outfile.toStdString());
         //        QMessageBox::warning(0,"PATH",path,QMessageBox::Yes);//查看路径
         //        sots.mesh_pmcell(outfile.toStdString(),0.02);
@@ -270,8 +283,9 @@ void MainWindow::import_cell_mesh()
     {
         sots.celldata = viewer->load_bdf(sFileName.toStdString());
         //       cout << sots.celldata << endl;
-        //show_pcmcell();
-        viewer->show_ug_mesh(sots.celldata);
+        show_pcmcell();
+        //viewer->show_ug_mesh(sots.celldata);
+        //viewer->show_ug_scalar(sots.celldata);
         ui->action_show_matrix->setEnabled(true);
         ui->action_show_reinforcement->setEnabled(true);
     }
