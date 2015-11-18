@@ -145,17 +145,18 @@ VTKviewer::cls()
 }
 
 
-void
-VTKviewer::show_XY()
-{
-    vtkSmartPointer<vtkCamera> camera
-            =  renderer->GetActiveCamera();
-    camera->SetPosition(0,0,1);
-    camera->SetFocalPoint(0,0,0);
-    camera->SetViewUp(0,1,0);
-    renderer->ResetCamera();
-    render();
-}
+//void
+//VTKviewer::show_XY()
+//{
+//    vtkSmartPointer<vtkCamera> camera
+//            =  renderer->GetActiveCamera();
+//    camera->SetPosition(0,0,1);
+//    camera->SetFocalPoint(0,0,0);
+//    camera->SetViewUp(0,1,0);
+//    renderer->ResetCamera();
+//    render();
+//}
+
 void
 VTKviewer::show_XZ()
 {
@@ -192,7 +193,7 @@ VTKviewer::axes_off()
     render();
 }
 
-/// è½½å…¥æ•°æ®
+/// ÔØÈëÊı¾İ
 vtkPolyData*
 VTKviewer::load_stl(std::string filename)
 {
@@ -260,7 +261,7 @@ VTKviewer::load_bdf(std::string bdf_file)
     std::string s,l;
     while (getline(infile,s))
     {
-        //è·³è¿‡æ³¨é‡Šè¡Œ
+        //Ìø¹ı×¢ÊÍĞĞ
         if(s.substr(0,1)=="$")getline(infile,s);
         std::istringstream ss(s);
         //       std::cout << s << std::endl;
@@ -277,7 +278,7 @@ VTKviewer::load_bdf(std::string bdf_file)
         std::string s,l;
         while (getline(infile,s))
         {
-            //è·³è¿‡æ³¨é‡Šè¡Œ
+            //Ìø¹ı×¢ÊÍĞĞ
             if(s.substr(0,1)=="$")getline(infile,s);
             std::istringstream ss(s);
             //std::cout << s << std::endl;
@@ -346,7 +347,7 @@ VTKviewer::write_ug(vtkUnstructuredGrid* ug,std::string ug_file)
     writer->Write();
 }
 
-/// æ˜¾ç¤º
+/// ÏÔÊ¾
 void
 VTKviewer::show_ug_mesh(vtkUnstructuredGrid* ug)
 {
@@ -523,7 +524,7 @@ VTKviewer::show_cell(std::string filename)
     std::ifstream infile(filename.c_str());
     std::string s,l;
     getline(infile,s);
-    //è·³è¿‡æ³¨é‡Šè¡Œ
+    //Ìø¹ı×¢ÊÍĞĞ
     while(!infile.eof() && s.substr(0,1)=="%")
         getline(infile,s);
     std::istringstream ss1(s);
@@ -531,7 +532,7 @@ VTKviewer::show_cell(std::string filename)
 
     double origin_x , origin_y , origin_z;
     getline(infile,s);
-    //è·³è¿‡æ³¨é‡Šè¡Œ
+    //Ìø¹ı×¢ÊÍĞĞ
     while(!infile.eof() && s.substr(0,1)=="%")
         getline(infile,s);
     std::istringstream ss2(s);
@@ -539,7 +540,7 @@ VTKviewer::show_cell(std::string filename)
 
     double clength , cwidth , cheight;
     getline(infile,s);
-    //è·³è¿‡æ³¨é‡Šè¡Œ
+    //Ìø¹ı×¢ÊÍĞĞ
     while(!infile.eof() && s.substr(0,1)=="%")
         getline(infile,s);
     std::istringstream ss3(s);
@@ -553,7 +554,7 @@ VTKviewer::show_cell(std::string filename)
     int id =0;
     while (getline(infile,s))
     {
-        //è·³è¿‡æ³¨é‡Šè¡Œ
+        //Ìø¹ı×¢ÊÍĞĞ
         double x,y,z,a,b,c,angle[16];
         for (int i=0;i<16;i++) angle[i]=0;
         angle[15]=1;

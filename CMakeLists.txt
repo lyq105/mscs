@@ -12,14 +12,9 @@ include(${VTK_USE_FILE})
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
-#if(${VTK_VERSION} VERSION_GREATER "6" AND VTK_QT_VERSION VERSION_GREATER "4")
-	## Instruct CMake to run moc automatically when needed.
-	#set(CMAKE_AUTOMOC ON)
-	#find_package(Qt5Widgets REQUIRED QUIET)
-#else()
-	#find_package(Qt4 REQUIRED)
-	#include(${QT_USE_FILE})
-#endif()
+#set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+#set(CMAKE_AUTOUIC ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} 
 										${CMAKE_CURRENT_BINARY_DIR} 
@@ -29,46 +24,40 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 file(GLOB UI_FILES forms/*.ui)
 file(GLOB QT_WRAP src/gui/*.h)
-file(GLOB CXX_FILES src/gui/*.cpp src/*.cpp src/pmcell/*.cpp)
+file(GLOB CXX_FILES src/*.cpp
+										src/gui/*.cpp 
+										src/elastic/*.cpp)
 #file(GLOB RCC_FILES resources/*.qrc)
-set(RCC_FILES resources/Mscs.qrc)
+set(RCC_FILES Mscs.qrc)
 
 qt4_wrap_ui(UISrcs ${UI_FILES})
 qt4_wrap_cpp(MOCSrcs ${QT_WRAP})
-qt4_add_resources(qrc_FILES ${RCC_FILE})
+#qt4_add_resources(QRCFILES ${RCC_FILE})
 
 add_executable(MSCS 
+	#WIN32
  	${CXX_FILES} 
 	${UISrcs} 
 	${MOCSrcs} 
-	${qrc_FILES})
+	Mscs.qrc)
+
 target_link_libraries ( MSCS
   ${VTK_LIBRARIES}
 	${QT_LIBRARIES}
   QVTK 
   )
 
-#if(${VTK_VERSION} VERSION_GREATER "6" AND VTK_QT_VERSION VERSION_GREATER "4")
-	#qt5_wrap_ui(UISrcs ${UI_FILES} )
-	## CMAKE_AUTOMOC in ON so the MocHdrs will be automatically wrapped.
-	#add_executable(MSCS MACOSX_BUNDLE
-		#${CXX_FILES} ${UISrcs} ${QT_WRAP} ${RCC_FILES})
-	#qt5_use_modules(MSCS Core Gui)
-	#qt5_add_resources(qrc_FILES ${RCC_FILES})
-	#target_link_libraries(MSCS ${VTK_LIBRARIES} ${qrc_FILES})
-#else()
-	#qt4_wrap_ui(UISrcs ${UI_FILES})
-	#qt4_wrap_cpp(MOCSrcs ${QT_WRAP})
-	#qt4_add_resources(qrc_FILES ${RCC_FILE})
-	#add_executable(MSCS  ${CXX_FILES} ${UISrcs} ${MOCSrcs} ${qrc_FILES})
-
-	#if(VTK_LIBRARIES)
-		#if(${VTK_VERSION} VERSION_LESS "6")
-			#target_link_libraries(MSCS ${VTK_LIBRARIES} QVTK)
-		#else()
-			#target_link_libraries(MSCS ${VTK_LIBRARIES})
-		#endif()
-	#else()
-		#target_link_libraries(MSCS vtkHybrid QVTK vtkViews ${QT_LIBRARIES})
-	#endif()
-#endif()
+IF(WIN32) # Check if we are on Windows
+	SET(QT_USE_QTMAIN TRUE)
+  if(MSVC) # Check if we are using the Visual Studio compiler
+		set_target_properties(MSCS PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
+  elseif(CMAKE_COMPILER_IS_GNUCXX)
+    # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows") # Not tested
+  else()
+    message(SEND_ERROR "You are using an unsupported Windows compiler! (Not MSVC or GCC)")
+  endif()
+elseif(UNIX)
+  # Nothing special required
+else()
+  message(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
+ENDIF()

@@ -180,7 +180,7 @@ void MainWindow::show_sidebar(bool checked)
 
 void MainWindow::show_XY()
 {
-    viewer->show_XY();
+//    viewer->show_XY();
 }
 
 /// 显示XZ平面

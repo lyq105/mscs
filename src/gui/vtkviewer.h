@@ -1,4 +1,4 @@
-#ifndef VTKVIEWER_H
+﻿#ifndef VTKVIEWER_H
 #define VTKVIEWER_H
 
 
@@ -25,7 +25,7 @@ public:
     void render();
 
     /// 坐标轴管理
-    void show_XY();
+//    void show_XY();
     void show_XZ();
     void show_YZ();
     void axes_on();

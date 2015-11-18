@@ -14,8 +14,10 @@ QMAKE_CXXFLAGS += -Wno-deprecated -Wno-unused-parameter
 }
 
 win32{
-INCLUDEPATH += "C:/Program Files/VTK_vs2008/include/vtk-5.10/"
-LIBS += /LIBPATH:"C:/Program Files/VTK_vs2008/lib/vtk-5.10/"
+#INCLUDEPATH += "C:/Program Files/VTK_vs2008/include/vtk-5.10/"
+#LIBS += /LIBPATH:"C:/Program Files/VTK_vs2008/lib/vtk-5.10/"
+INCLUDEPATH += "G:/vtk/include/vtk-5.10/"
+LIBS += /LIBPATH:"G:/vtk/lib/vtk-5.10/"
 LIBS +=  "QVTK.lib" "vtkRendering.lib" "vtkWidgets.lib" "vtkHybrid.lib" \
         "vtkIO.lib" "vtkFiltering.lib" "vtkCommon.lib" "vtkGraphics.lib"
 }
@@ -127,4 +129,4 @@ SOURCES += src/mscs_main.cpp \
     src/gui/pmmesher.cpp \
     src/gui/cellsolveroption.cpp \
     src/gui/progress_dialog.cpp
-RESOURCES += resources/Mscs.qrc
+RESOURCES += Mscs.qrc
